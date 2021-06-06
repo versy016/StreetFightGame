@@ -13,12 +13,16 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	Texture img;
 	public static	playerclass pclass;
 	public static GameClass gclass;
-
+	public static Menu mclass;
+	public static PlayerSelectMenu psmclass;
 	@Override
 	public void create () {
 		pclass = new playerclass(this);
 		gclass = new GameClass(this);
-		setScreen(gclass);
+		mclass = new Menu(this);
+		psmclass = new PlayerSelectMenu(this);
+
+		setScreen(mclass);
 	}
 
 	@Override
@@ -30,7 +34,6 @@ public class MyGdxGame extends Game implements ApplicationListener {
 
 	@Override
 	public void dispose () {
-		batch.dispose();
 		img.dispose();
 	}
 }

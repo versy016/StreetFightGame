@@ -88,6 +88,7 @@ public class Menu implements Screen
             public void clicked (InputEvent event, float x, float y)
             {
                 btnSound.play(1.0f);
+                game.setScreen(MyGdxGame.psmclass);
 
             }
         });
@@ -98,7 +99,7 @@ public class Menu implements Screen
             public void clicked (InputEvent event, float x, float y)
             {
                 Gdx.app.exit();
-                btnSound.play(1.0f);
+//                btnSound.play(1.0f);
 
             }
         });
