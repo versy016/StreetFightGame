@@ -12,9 +12,13 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	SpriteBatch batch;
 	Texture img;
 	public static	playerclass pclass;
+	public static GameClass gclass;
+
 	@Override
 	public void create () {
 		pclass = new playerclass(this);
+		gclass = new GameClass(this);
+		setScreen(gclass);
 	}
 
 	@Override
