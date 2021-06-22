@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class PlayerSelectMenu implements Screen {
 
@@ -105,6 +107,18 @@ public class PlayerSelectMenu implements Screen {
 
         stylebutton(Sakazaki);
         Sakazaki.setPosition(1300, 350);
+
+
+        Robert.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked (InputEvent event, float x, float y)
+            {
+               // btnSound.play(1.0f);
+                game.setScreen(MyGdxGame.gclass);
+
+            }
+        });
 
         stage.addActor(imgBackground);
         stage.addActor(menuBackground);
