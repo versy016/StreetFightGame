@@ -32,7 +32,7 @@ class PlayerClass {
 
     public static PlayerClass setPlayers(Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
         if (playerSingleObject == null)
-            playerSingleObject = new PlayerClass(walk,punch,kick,dead,win,special,health);
+            playerSingleObject = new PlayerClass(walk, punch, kick, dead, win, special, health);
         return playerSingleObject;
     }
 
@@ -41,7 +41,6 @@ class PlayerClass {
 
         return playerSingleObject;
     }
-
 
 
     public Animation<TextureRegion> getWalk() {
@@ -100,60 +99,4 @@ class PlayerClass {
         this.health = health;
     }
 
-
-
-
-//        player1 = new Texture(Gdx.files.internal("player1walk.png"));
-//        player2 = new Texture(Gdx.files.internal("Robert Garcia.png"));
-//        player3 = new Texture(Gdx.files.internal("Ryo Sakazaki.png"));
-//        player4 = new Texture(Gdx.files.internal("Ryuhaku Todoh.png"));
-//
-//
-//        switch (select){
-//
-//            case 1:
-//                player1 = new Texture(Gdx.files.internal("player1walk.png")); // #9
-//                TextureRegion[][] temp = TextureRegion.split(player1,
-//                        player1.getWidth() / 4,
-//                        player1.getHeight() / 1);
-//
-//                standFrame = new TextureRegion();
-//                standFrame = temp[0][0];
-//
-//                break;
-//
-//            case 2:
-//                player2 = new Texture(Gdx.files.internal("player2walk.png")); // #9
-//                TextureRegion[][] temp = TextureRegion.split(player2,
-//                        player2.getWidth() / 4,
-//                        player2.getHeight() / 1);
-//
-//                standFrame = new TextureRegion();
-//                standFrame = temp[0][0];
-//
-//                break;
-//
-//        }
-//        player1 = new Texture(Gdx.files.internal("player1walk.png")); // #9
-//        TextureRegion[][] temp = TextureRegion.split(player1,
-//                player1.getWidth() / 4,
-//                player1.getHeight() / 1);
-//
-//        walkFrames = new TextureRegion[4];
-//
-//        int index = 0;
-//        for (int i = 0; i < 1; i++) {
-//            for (int j = 0; j < 4; j++) {
-//                walkFrames[index++] = temp[i][j];
-//            }
-//
-//        }
-//        WalkAnimation = new Animation(0.33f, walkFrames);
-//
-//        stateTime = 0.0f;
 }
-
-
-
-
-
