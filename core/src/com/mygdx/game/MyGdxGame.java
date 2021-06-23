@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class MyGdxGame extends Game implements ApplicationListener {
 	SpriteBatch batch;
 	Texture img;
-	public static PlayerClass pclass;
+	public static	playerclass pclass;
 	public static GameClass gclass;
 	public static Menu mclass;
 	public static PlayerSelectMenu psmclass;
