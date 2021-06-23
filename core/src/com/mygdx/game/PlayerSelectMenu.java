@@ -246,7 +246,7 @@ public class PlayerSelectMenu implements Screen {
             case "ryu":
                 thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
                 thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
-                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryuunch.png")),3,1));
+                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryupunch.png")),3,1));
                 break;
         }
 
