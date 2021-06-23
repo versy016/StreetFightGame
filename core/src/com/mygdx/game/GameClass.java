@@ -30,7 +30,7 @@ public class GameClass implements Screen {
 
     //adding Sound
     //private Sound sound;
-    private Music music;
+    private Music music2;
 
 
 
@@ -81,15 +81,26 @@ public class GameClass implements Screen {
         healthbar2.setY(950);
 // sound implemented
           //sound = Gdx.audio.newSound(Gdx.files.internal("kick.wav"));
-          music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
+         music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
+
 
 
        // sound.play(1.0f,0.0f,0.8f);
 
 
-        music.setVolume(1.0f);
-        music.setLooping(false);
-        music.play();
+        music2.setVolume(1.0f);
+        music2.setLooping(false);
+
+        music2.play();
+        music2.setOnCompletionListener(new Music.OnCompletionListener()
+        {
+            @Override
+            public void onCompletion(Music music) {
+                music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
+                music.play();
+            }
+
+        });
 
 
 
@@ -97,7 +108,7 @@ public class GameClass implements Screen {
 
         TextureRegion[][] temp = TextureRegion.split(player1,
                 player1.getWidth() / 4,
-                player1.getHeight() / 1);
+                player1.getHeight());
 
         player1walkFrames = new TextureRegion[4];
 
@@ -194,6 +205,6 @@ public class GameClass implements Screen {
     @Override
     public void dispose() {
     //sound.dispose();
-    music.dispose();
+    music2.dispose();
     }
 }
