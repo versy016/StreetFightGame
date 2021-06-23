@@ -23,8 +23,6 @@ public class GameClass implements Screen {
     private Texture player2;
     private Texture player3;
     private Texture player4;
-    private Texture player1healthbar;
-    private Texture player2healthbar;
 
     private TextureRegion[][] temp;
     private TextureRegion[] player1walkFrames;
@@ -44,9 +42,17 @@ public class GameClass implements Screen {
     TiledMap tiledMap;                  //tiled map
     OrthographicCamera camera;
     OrthogonalTiledMapRenderer tiledMapRenderer; //tiled map renderer
-    private Image healthbar1;
-    private Image healthbar2;
 
+    //UI textures
+    private Texture buttonSquareTexture;
+    private Texture buttonSquareDownTexture;
+
+    //UI Buttons
+    private Button moveLeftButton;
+    private Button moveRightButton;
+    private Button kickButton;
+    private Button punchButton;
+    private Button superPowerButton;
 
     private Stage stage;
 
@@ -58,33 +64,48 @@ public class GameClass implements Screen {
 
         stage = new Stage();
 
-        player1healthbar = new Texture(Gdx.files.internal("healthbar.png"));
-        player2healthbar = new Texture(Gdx.files.internal("healthbar2.png"));
+        //Textures
+        buttonSquareTexture = new Texture("buttonSquare_blue.png");
+        buttonSquareDownTexture = new Texture("buttonSquare_beige_pressed.png");
 
-        healthbar1 = new Image(player1healthbar);
-        healthbar1.setSize(700,120);
-        healthbar1.setX(100);
-        healthbar1.setY(950);
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
 
-        healthbar2 = new Image(player2healthbar);
-        healthbar2.setSize(700,120);
-        healthbar2.setX(1300);
-        healthbar2.setY(950);
+        //Buttons
+        float buttonSize = h * 0.1f;
+        moveLeftButton = new Button(0.0f, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
+        moveRightButton = new Button(buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
 
+        kickButton = new Button(buttonSize, buttonSize*2, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
+        punchButton = new Button(buttonSize, buttonSize*3, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
+        superPowerButton = new Button(buttonSize, buttonSize*4, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
 
+        HealthBar  playerHealthBar = new HealthBar();
+        playerHealthBar.setX(100);
+        playerHealthBar.setY(950);
+        playerHealthBar.setWidthInner(700);
+        playerHealthBar.setHeightInner(40);
+        playerHealthBar.setWidthOuter(710);
+        playerHealthBar.setHeightOuter(50);
+
+        HealthBar opponentHealthBar = new HealthBar();
+        opponentHealthBar.setX(1300);
+        opponentHealthBar.setY(950);
+        opponentHealthBar.setWidthInner(700);
+        opponentHealthBar.setHeightInner(40);
+        opponentHealthBar.setWidthOuter(710);
+        opponentHealthBar.setHeightOuter(50);
 
         batch = new SpriteBatch();                // #12
 
         stateTime = 0.0f;
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 490 , 160  );
         tiledMap = new TmxMapLoader().load("fightmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
-        stage.addActor(healthbar1);
-        stage.addActor(healthbar2);
+        stage.addActor(playerHealthBar);
+        stage.addActor(opponentHealthBar);
         Gdx.input.setInputProcessor(stage);
 
     }
@@ -118,6 +139,11 @@ public class GameClass implements Screen {
         stage.draw();
         batch.draw(currentFrame,600,50,200,400);
         batch.draw(currentFrame2,1000,50,200,400);
+        moveLeftButton.draw(batch);
+            kickButton.draw(batch);
+            punchButton.draw(batch);
+        moveRightButton.draw(batch);
+            superPowerButton.draw(batch);
         batch.end();
 
     }

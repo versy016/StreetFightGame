@@ -9,6 +9,51 @@ public class HealthBar extends Actor{
 
     private ShapeRenderer healthBarOut;
     private ShapeRenderer healthBarIn;
+
+    private  int x;
+    private  int y;
+    private int widthInner;
+    private int heightInner;
+    private int widthOuter;
+    private int heightOuter;
+
+
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
+    public void setWidthInner(int width) {
+        this.widthInner = width;
+    }
+
+
+    public void setHeightInner(int height) {
+        this.heightInner = height;
+    }
+
+    public int getWidthOuter() {
+        return widthOuter;
+    }
+
+    public void setWidthOuter(int widthOuter) {
+        this.widthOuter = widthOuter;
+    }
+
+    public int getHeightOuter() {
+        return heightOuter;
+    }
+
+    public void setHeightOuter(int heightOuter) {
+        this.heightOuter = heightOuter;
+    }
+
     static private boolean projectionMatrixSet;
 
     public HealthBar(){
@@ -24,13 +69,15 @@ public class HealthBar extends Actor{
             healthBarOut.setProjectionMatrix(batch.getProjectionMatrix());
             healthBarIn.setProjectionMatrix(batch.getProjectionMatrix());
         }
+
         healthBarOut.begin(ShapeRenderer.ShapeType.Filled);
         healthBarOut.setColor(Color.DARK_GRAY);
-        healthBarOut.rect(100,950,730,60);
+        healthBarOut.rect(x-5,y-5,widthOuter,heightOuter);
         healthBarOut.end();
+
         healthBarIn.begin(ShapeRenderer.ShapeType.Filled);
         healthBarIn.setColor(Color.RED);
-        healthBarIn.rect(105, 955, 720, 50);
+        healthBarIn.rect(x, y, widthInner, heightInner);
         healthBarIn.end();
         batch.begin();
     }
