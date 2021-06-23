@@ -6,9 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -45,6 +43,8 @@ public class PlayerSelectMenu implements Screen {
     TextButton Sakazaki;
     TextButton Ryuhaku;
 
+    GameClass gamecls;
+
     boolean playerselected = false;
 
     playerclass theplayer = new playerclass(null,null,null,null,null,null,100);
@@ -57,6 +57,7 @@ public class PlayerSelectMenu implements Screen {
 
     public void create()
     {
+        gamecls = new GameClass("","");
         batch = new SpriteBatch();
         stage = new Stage();
         menuBG = new Texture("Starting Assets/assets/finishedbg.png");
@@ -123,11 +124,11 @@ public class PlayerSelectMenu implements Screen {
                     // btnSound.play(1.0f);
 
                     if(!playerselected){
-                        assignplayer("king");
+                        gamecls.setplayername("king");
                         playerselected = true;
                     }
                     else {
-                        assignopponent("king");
+                        gamecls.setopponentname("king");
                         game.setScreen(MyGdxGame.gclass);
                     }
                 }
@@ -137,11 +138,11 @@ public class PlayerSelectMenu implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     // btnSound.play(1.0f);
                     if(!playerselected){
-                        assignplayer("robert");
+                        gamecls.setplayername("robert");
                         playerselected = true;
                     }
                     else {
-                        assignopponent("robert");
+                        gamecls.setopponentname("robert");
                         game.setScreen(MyGdxGame.gclass);
                     }
 
@@ -152,11 +153,11 @@ public class PlayerSelectMenu implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     // btnSound.play(1.0f);
                     if(!playerselected){
-                        assignplayer("ryu");
+                        gamecls.setplayername("ryu");
                         playerselected = true;
                     }
                     else {
-                        assignopponent("ryu");
+                        gamecls.setopponentname("ryu");
                         game.setScreen(MyGdxGame.gclass);
                     }
 
@@ -168,11 +169,11 @@ public class PlayerSelectMenu implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     // btnSound.play(1.0f);
                     if(!playerselected){
-                        assignplayer("ryo");
+                        gamecls.setplayername("ryo");
                         playerselected = true;
                     }
                     else {
-                        assignopponent("ryo");
+                        gamecls.setopponentname("ryo");
                         game.setScreen(MyGdxGame.gclass);
                     }
                 }
