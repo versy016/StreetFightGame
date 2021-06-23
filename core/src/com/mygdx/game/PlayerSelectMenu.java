@@ -105,16 +105,16 @@ public class PlayerSelectMenu implements Screen {
         Sakaimg.setX(1300);
         Sakaimg.setY(400);
 
-        stylebutton(king);
+        styleButton(king);
         king.setPosition(600, 650);
 
-        stylebutton(Robert);
+        styleButton(Robert);
         Robert.setPosition(1300, 650);
 
-        stylebutton(Ryuhaku);
+        styleButton(Ryuhaku);
         Ryuhaku.setPosition(600, 350);
 
-        stylebutton(Sakazaki);
+        styleButton(Sakazaki);
         Sakazaki.setPosition(1300, 350);
 
 
@@ -124,11 +124,11 @@ public class PlayerSelectMenu implements Screen {
                     // btnSound.play(1.0f);
 
                     if(!playerselected){
-                        gamecls.setplayername("king");
+                        assignPlayer("king");
                         playerselected = true;
                     }
                     else {
-                        gamecls.setopponentname("king");
+                        assignOpponent("king");
                         game.setScreen(MyGdxGame.gclass);
                     }
                 }
@@ -138,11 +138,11 @@ public class PlayerSelectMenu implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     // btnSound.play(1.0f);
                     if(!playerselected){
-                        gamecls.setplayername("robert");
+                        assignPlayer("robert");
                         playerselected = true;
                     }
                     else {
-                        gamecls.setopponentname("robert");
+                        assignOpponent("robert");
                         game.setScreen(MyGdxGame.gclass);
                     }
 
@@ -153,11 +153,11 @@ public class PlayerSelectMenu implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     // btnSound.play(1.0f);
                     if(!playerselected){
-                        gamecls.setplayername("ryu");
+                        assignPlayer("ryu");
                         playerselected = true;
                     }
                     else {
-                        gamecls.setopponentname("ryu");
+                        assignOpponent("ryu");
                         game.setScreen(MyGdxGame.gclass);
                     }
 
@@ -169,11 +169,11 @@ public class PlayerSelectMenu implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     // btnSound.play(1.0f);
                     if(!playerselected){
-                        gamecls.setplayername("ryo");
+                        assignPlayer("ryo");
                         playerselected = true;
                     }
                     else {
-                        gamecls.setopponentname("ryo");
+                        assignOpponent("ryo");
                         game.setScreen(MyGdxGame.gclass);
                     }
                 }
@@ -209,7 +209,7 @@ public class PlayerSelectMenu implements Screen {
         batch.end();
     }
 
-    public void stylebutton(TextButton btn){
+    public void styleButton(TextButton btn){
         btn.setWidth(300f);
         btn.setHeight(60f);
         btn.getLabel().setFontScale(3);
@@ -220,7 +220,7 @@ public class PlayerSelectMenu implements Screen {
     public void resize(int width, int height) {
 
     }
-    public void assignplayer(String player_name){
+    public void assignPlayer(String player_name){
 
 
 
@@ -245,15 +245,15 @@ public class PlayerSelectMenu implements Screen {
                 break;
 
             case "ryu":
-                theplayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
-                theplayer.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
-                theplayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryuunch.png")),3,1));
+                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
+                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
+                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryupunch.png")),3,1));
                 break;
         }
 
     }
 
-    public void assignopponent(String player_name){
+    public void assignOpponent(String player_name){
 
 
 
