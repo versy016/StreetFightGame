@@ -46,6 +46,9 @@ public class GameClass implements Screen {
     OrthogonalTiledMapRenderer tiledMapRenderer; //tiled map renderer
     private Image healthbar1;
     private Image healthbar2;
+    playerclass theplayer = new playerclass(100);
+    opponentclass theopponent = new opponentclass(100);
+
 
     private Stage stage;
 
@@ -57,8 +60,6 @@ public class GameClass implements Screen {
 
         stage = new Stage();
 
-        player1 = new Texture(Gdx.files.internal("player1walk.png")); // #9
-        player2 = new Texture(Gdx.files.internal("player3walk.png")); // #9
         player1healthbar = new Texture(Gdx.files.internal("healthbar.png"));
         player2healthbar = new Texture(Gdx.files.internal("healthbar2.png"));
 
@@ -104,8 +105,8 @@ public class GameClass implements Screen {
         dt = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
-        currentFrame2 = (TextureRegion) walkAnimation2.getKeyFrame(stateTime, true);
+        currentFrame =  theplayer.getWalk().getKeyFrame(stateTime, true);
+        currentFrame2 = theopponent.getWalk().getKeyFrame(stateTime, true);
 
 //		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
 //		Gdx.app.log("current time",Float.toString(stateTime));

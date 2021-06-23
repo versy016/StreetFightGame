@@ -17,7 +17,6 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	public static PlayerSelectMenu psmclass;
 	@Override
 	public void create () {
-		pclass = new playerclass(this);
 		gclass = new GameClass(this);
 		mclass = new Menu(this);
 		psmclass = new PlayerSelectMenu(this);

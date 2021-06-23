@@ -12,62 +12,62 @@ public class playerclass {
     private Texture player;
     private TextureRegion[] walkFrames;
     private TextureRegion standFrame;
-    private Animation Walk;
-    private Animation punch;
-    private Animation kick;
-    private Animation dead;
-    private Animation win;
-    private Animation special;
+    private Animation<TextureRegion> Walk;
+    private Animation<TextureRegion> punch;
+    private Animation<TextureRegion> kick;
+    private Animation<TextureRegion> dead;
+    private Animation<TextureRegion> win;
+    private Animation<TextureRegion> special;
 
     private int health;
 
     private float stateTime;
 
-    public Animation getWalk() {
+    public Animation<TextureRegion> getWalk() {
         return Walk;
     }
 
-    public void setWalk(Animation walk) {
+    public void setWalk(Animation<TextureRegion> walk) {
         Walk = walk;
     }
 
-    public Animation getPunch() {
+    public Animation<TextureRegion> getPunch() {
         return punch;
     }
 
-    public void setPunch(Animation punch) {
+    public void setPunch(Animation<TextureRegion> punch) {
         this.punch = punch;
     }
 
-    public Animation getKick() {
+    public Animation<TextureRegion> getKick() {
         return kick;
     }
 
-    public void setKick(Animation kick) {
+    public void setKick(Animation<TextureRegion> kick) {
         this.kick = kick;
     }
 
-    public Animation getDead() {
+    public Animation<TextureRegion> getDead() {
         return dead;
     }
 
-    public void setDead(Animation dead) {
+    public void setDead(Animation<TextureRegion> dead) {
         this.dead = dead;
     }
 
-    public Animation getWin() {
+    public Animation<TextureRegion> getWin() {
         return win;
     }
 
-    public void setWin(Animation win) {
+    public void setWin(Animation<TextureRegion> win) {
         this.win = win;
     }
 
-    public Animation getSpecial() {
+    public Animation<TextureRegion> getSpecial() {
         return special;
     }
 
-    public void setSpecial(Animation special) {
+    public void setSpecial(Animation<TextureRegion> special) {
         this.special = special;
     }
 
@@ -79,22 +79,11 @@ public class playerclass {
         this.health = health;
     }
 
-    public playerclass(Animation walk, Animation punch, Animation kick, Animation dead, Animation win, Animation special, int health) {
-        this.Walk = walk;
-        this.punch = punch;
-        this.kick = kick;
-        this.dead = dead;
-        this.win = win;
-        this.special = special;
-        this.health = health;
+    public playerclass(int health) {
+          this.health = health;
     }
 
-    public playerclass(MyGdxGame game) {
 
-            this.game = game;
-    }
-
-    public void create(){
 
 //        player1 = new Texture(Gdx.files.internal("player1walk.png"));
 //        player2 = new Texture(Gdx.files.internal("Robert Garcia.png"));
@@ -149,4 +138,4 @@ public class playerclass {
 
 
 
-}
+
