@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +27,12 @@ public class GameClass implements Screen {
     private Texture player4;
     private Texture player1healthbar;
     private Texture player2healthbar;
+
+    //adding Sound
+    //private Sound sound;
+    private Music music;
+
+
 
     private TextureRegion[][] temp;
     private TextureRegion[] player1walkFrames;
@@ -71,6 +79,21 @@ public class GameClass implements Screen {
         healthbar2.setSize(700,120);
         healthbar2.setX(1300);
         healthbar2.setY(950);
+// sound implemented
+          //sound = Gdx.audio.newSound(Gdx.files.internal("kick.wav"));
+          music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
+
+
+       // sound.play(1.0f,0.0f,0.8f);
+
+
+        music.setVolume(1.0f);
+        music.setLooping(false);
+        music.play();
+
+
+
+
 
         TextureRegion[][] temp = TextureRegion.split(player1,
                 player1.getWidth() / 4,
@@ -170,6 +193,7 @@ public class GameClass implements Screen {
 
     @Override
     public void dispose() {
-
+    //sound.dispose();
+    music.dispose();
     }
 }
