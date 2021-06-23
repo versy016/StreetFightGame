@@ -1,13 +1,11 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class opponentclass {
+public class OpponentClass {
+
+    private static OpponentClass opponent;
     MyGdxGame game;
     private Animation<TextureRegion> Walk;
     private Animation<TextureRegion> punch;
@@ -15,6 +13,16 @@ public class opponentclass {
     private Animation<TextureRegion> dead;
     private Animation<TextureRegion> win;
     private Animation<TextureRegion> special;
+
+    public static OpponentClass setOpponent(Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health){
+        if (opponent == null)
+            opponent = new OpponentClass(walk,punch,kick,dead,win,special,health);
+        return opponent;
+    }
+    public static OpponentClass getOpponent() {
+        return opponent;
+    }
+
 
     private int health;
 
@@ -76,7 +84,7 @@ public class opponentclass {
         this.health = health;
     }
 
-    public opponentclass( Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+    public OpponentClass(Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
 
         this.Walk = Walk;
         this.punch = punch;

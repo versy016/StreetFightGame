@@ -1,13 +1,12 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class playerclass {
+class PlayerClass {
+
+    static PlayerClass playerSingleObject = null;
     MyGdxGame game;
     private Texture player;
     private TextureRegion[] walkFrames;
@@ -21,7 +20,7 @@ public class playerclass {
 
     private int health;
 
-    public playerclass(Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+    public PlayerClass(Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
         this.Walk = Walk;
         this.punch = punch;
         this.kick = kick;
@@ -30,6 +29,19 @@ public class playerclass {
         this.special = special;
         this.health = health;
     }
+
+    public static PlayerClass setPlayers(Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+        if (playerSingleObject == null)
+            playerSingleObject = new PlayerClass(walk,punch,kick,dead,win,special,health);
+        return playerSingleObject;
+    }
+
+
+    public static PlayerClass getPlayers() {
+
+        return playerSingleObject;
+    }
+
 
 
     public Animation<TextureRegion> getWalk() {
@@ -139,7 +151,7 @@ public class playerclass {
 //        WalkAnimation = new Animation(0.33f, walkFrames);
 //
 //        stateTime = 0.0f;
-    }
+}
 
 
 
