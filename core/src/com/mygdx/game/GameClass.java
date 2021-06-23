@@ -46,9 +46,12 @@ public class GameClass implements Screen {
     OrthogonalTiledMapRenderer tiledMapRenderer; //tiled map renderer
     private Image healthbar1;
     private Image healthbar2;
-    playerclass theplayer = new playerclass(100);
-    opponentclass theopponent = new opponentclass(100);
 
+//    playerclass theplayer = new playerclass(null,null,null,null,null,null,100);
+//    opponentclass theopponent = new opponentclass(null,null,null,null,null,null,100);;
+
+    playerclass theplayer;
+    playerclass theopponent;
 
     private Stage stage;
 

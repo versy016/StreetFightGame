@@ -21,7 +21,16 @@ public class playerclass {
 
     private int health;
 
-    private float stateTime;
+    public playerclass(Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+        this.Walk = Walk;
+        this.punch = punch;
+        this.kick = kick;
+        this.dead = dead;
+        this.win = win;
+        this.special = special;
+        this.health = health;
+    }
+
 
     public Animation<TextureRegion> getWalk() {
         return Walk;
@@ -79,9 +88,6 @@ public class playerclass {
         this.health = health;
     }
 
-    public playerclass(int health) {
-          this.health = health;
-    }
 
 
 
