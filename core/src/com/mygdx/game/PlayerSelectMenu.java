@@ -6,9 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -45,10 +43,12 @@ public class PlayerSelectMenu implements Screen {
     TextButton Sakazaki;
     TextButton Ryuhaku;
 
+    GameClass gamecls;
+
     boolean playerselected = false;
 
-    PlayerClass thePlayer =  PlayerClass.setPlayers(null,null,null,null,null,null,100);
-    OpponentClass theOpponent = OpponentClass.setOpponent(null,null,null,null,null,null,100);;
+    playerclass theplayer = new playerclass(null,null,null,null,null,null,100);
+    opponentclass theopponent = new opponentclass(null,null,null,null,null,null,100);;
 
     public PlayerSelectMenu(MyGdxGame game)
     {
@@ -57,6 +57,7 @@ public class PlayerSelectMenu implements Screen {
 
     public void create()
     {
+        gamecls = new GameClass("","");
         batch = new SpriteBatch();
         stage = new Stage();
         menuBG = new Texture("Starting Assets/assets/finishedbg.png");
@@ -226,21 +227,21 @@ public class PlayerSelectMenu implements Screen {
         switch (player_name){
 
             case "king":
-               thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("kingwalk.png")),4,1)); // #9
-               thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("kingkick.png")),3,1));
-               thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("kingpunch.png")),3,1));
+               theplayer.setWalk(createanimation(new Texture(Gdx.files.internal("kingwalk.png")),4,1)); // #9
+               theplayer.setKick(createanimation(new Texture(Gdx.files.internal("kingkick.png")),3,1));
+               theplayer.setPunch(createanimation(new Texture(Gdx.files.internal("kingpunch.png")),3,1));
                break;
 
             case "robert":
-                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1)); // #9
-                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),3,1));
-                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1));
+                theplayer.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1)); // #9
+                theplayer.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),3,1));
+                theplayer.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1));
                 break;
 
             case "ryo":
-                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1)); // #9
-                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),3,1));
-                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1));
+                theplayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1)); // #9
+                theplayer.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),3,1));
+                theplayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1));
                 break;
 
             case "ryu":
@@ -259,27 +260,27 @@ public class PlayerSelectMenu implements Screen {
         switch (player_name){
 
             case "king":
-                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("kingwalk.png")),4,1)); // #9
-                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("kingkick.png")),3,1));
-                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("kingpunch.png")),3,1));
+                theopponent.setWalk(createanimation(new Texture(Gdx.files.internal("kingwalk.png")),4,1)); // #9
+                theopponent.setKick(createanimation(new Texture(Gdx.files.internal("kingkick.png")),3,1));
+                theopponent.setPunch(createanimation(new Texture(Gdx.files.internal("kingpunch.png")),3,1));
                 break;
 
             case "robert":
-                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1)); // #9
-                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),4,1));
-                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1));
+                theopponent.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1)); // #9
+                theopponent.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),4,1));
+                theopponent.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1));
                 break;
 
             case "ryo":
-                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1)); // #9
-                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),5,1));
-                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1));
+                theopponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1)); // #9
+                theopponent.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),5,1));
+                theopponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1));
                 break;
 
             case "ryu":
-                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
-                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
-                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryupunch.png")),3,1));
+                theopponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
+                theopponent.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
+                theopponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryupunch.png")),3,1));
                 break;
         }
 
