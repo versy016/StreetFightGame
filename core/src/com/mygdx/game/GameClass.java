@@ -47,11 +47,6 @@ public class GameClass implements Screen {
     private Image healthbar1;
     private Image healthbar2;
 
-//    playerclass theplayer = new playerclass(null,null,null,null,null,null,100);
-//    opponentclass theopponent = new opponentclass(null,null,null,null,null,null,100);;
-
-    playerclass theplayer;
-    playerclass theopponent;
 
     private Stage stage;
 
@@ -108,8 +103,8 @@ public class GameClass implements Screen {
         dt = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame =  theplayer.getWalk().getKeyFrame(stateTime, true);
-        currentFrame2 = theopponent.getWalk().getKeyFrame(stateTime, true);
+        currentFrame =  PlayerClass.getPlayers().getWalk().getKeyFrame(stateTime, true);
+        currentFrame2 = OpponentClass.getOpponent().getWalk().getKeyFrame(stateTime, true);
 
 //		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
 //		Gdx.app.log("current time",Float.toString(stateTime));
