@@ -7,11 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class playerclass {
+public class opponentclass {
     MyGdxGame game;
-    private Texture player;
-    private TextureRegion[] walkFrames;
-    private TextureRegion standFrame;
     private Animation Walk;
     private Animation punch;
     private Animation kick;
@@ -79,7 +76,7 @@ public class playerclass {
         this.health = health;
     }
 
-    public playerclass(Animation walk, Animation punch, Animation kick, Animation dead, Animation win, Animation special, int health) {
+    public opponentclass(Animation walk, Animation punch, Animation kick, Animation dead, Animation win, Animation special, int health) {
         this.Walk = walk;
         this.punch = punch;
         this.kick = kick;
@@ -89,9 +86,9 @@ public class playerclass {
         this.health = health;
     }
 
-    public playerclass(MyGdxGame game) {
+    public opponentclass(MyGdxGame game) {
 
-            this.game = game;
+        this.game = game;
     }
 
     public void create(){

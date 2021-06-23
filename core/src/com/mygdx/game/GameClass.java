@@ -72,32 +72,7 @@ public class GameClass implements Screen {
         healthbar2.setX(1300);
         healthbar2.setY(950);
 
-        TextureRegion[][] temp = TextureRegion.split(player1,
-                player1.getWidth() / 4,
-                player1.getHeight() / 1);
 
-        player1walkFrames = new TextureRegion[4];
-
-        int index = 0;
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < 4; j++) {
-                player1walkFrames[index++] = temp[i][j];
-            }
-        }
-        walkAnimation = new Animation(0.33f, player1walkFrames);
-
-        temp = TextureRegion.split(player2,
-                player2.getWidth() / 4,
-                player2.getHeight() / 1);
-
-        player2walkFrames = new TextureRegion[4];
-       index = 0;
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < 4; j++) {
-                player2walkFrames[index++] = temp[i][j];
-            }
-        }
-        walkAnimation2 = new Animation(0.33f, player2walkFrames);
 
         batch = new SpriteBatch();                // #12
 

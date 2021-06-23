@@ -6,7 +6,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -42,6 +44,9 @@ public class PlayerSelectMenu implements Screen {
     TextButton Robert;
     TextButton Sakazaki;
     TextButton Ryuhaku;
+
+    playerclass theplayer;
+    opponentclass theopponent;
     public PlayerSelectMenu(MyGdxGame game)
     {
         this.game = game;
@@ -159,6 +164,92 @@ public class PlayerSelectMenu implements Screen {
     @Override
     public void resize(int width, int height) {
 
+    }
+    public void assignplayer(String player_name){
+
+
+
+        switch (player_name){
+
+            case "king":
+               theplayer.setWalk(createanimation(new Texture(Gdx.files.internal("kingwalk.png")),4,1)); // #9
+               theplayer.setKick(createanimation(new Texture(Gdx.files.internal("kingkick.png")),3,1));
+               theplayer.setPunch(createanimation(new Texture(Gdx.files.internal("kingpunch.png")),3,1));
+               break;
+
+            case "robert":
+                theplayer.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1)); // #9
+                theplayer.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),3,1));
+                theplayer.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1));
+                break;
+
+            case "ryo":
+                theplayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1)); // #9
+                theplayer.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),3,1));
+                theplayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1));
+                break;
+
+            case "ryu":
+                theplayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
+                theplayer.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
+                theplayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryuunch.png")),3,1));
+                break;
+        }
+
+    }
+
+    public void assignopponent(String player_name){
+
+
+
+        switch (player_name){
+
+            case "king":
+                theopponent.setWalk(createanimation(new Texture(Gdx.files.internal("kingwalk.png")),4,1)); // #9
+                theopponent.setKick(createanimation(new Texture(Gdx.files.internal("kingkick.png")),3,1));
+                theopponent.setPunch(createanimation(new Texture(Gdx.files.internal("kingpunch.png")),3,1));
+                break;
+
+            case "robert":
+                theopponent.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1)); // #9
+                theopponent.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),3,1));
+                theopponent.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1));
+                break;
+
+            case "ryo":
+                theopponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1)); // #9
+                theopponent.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),3,1));
+                theopponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1));
+                break;
+
+            case "ryu":
+                theopponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
+                theopponent.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
+                theopponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryuunch.png")),3,1));
+                break;
+        }
+
+    }
+
+    public Animation createanimation(Texture player, int width, int height){
+        int index = 0;
+        TextureRegion[] playerFrames;
+        Animation animation;
+
+        TextureRegion[][] temp = TextureRegion.split(player,
+                player.getWidth() / width,
+                player.getHeight() / height);
+
+        playerFrames = new TextureRegion[width];
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                playerFrames[index++] = temp[i][j];
+            }
+        }
+       animation = new Animation(0.33f, playerFrames);
+
+       return  animation;
     }
 
     @Override
