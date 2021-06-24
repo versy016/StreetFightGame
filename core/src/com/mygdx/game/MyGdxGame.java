@@ -11,13 +11,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class MyGdxGame extends Game implements ApplicationListener {
 	SpriteBatch batch;
 	Texture img;
-	public static	playerclass pclass;
+	public static PlayerClass pclass;
 	public static GameClass gclass;
 	public static Menu mclass;
 	public static PlayerSelectMenu psmclass;
 	@Override
 	public void create () {
-		pclass = new playerclass(this);
 		gclass = new GameClass(this);
 		mclass = new Menu(this);
 		psmclass = new PlayerSelectMenu(this);

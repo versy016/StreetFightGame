@@ -6,7 +6,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -42,6 +44,12 @@ public class PlayerSelectMenu implements Screen {
     TextButton Robert;
     TextButton Sakazaki;
     TextButton Ryuhaku;
+
+    boolean playerselected = false;
+
+    PlayerClass thePlayer =  PlayerClass.setPlayers(null,null,null,null,null,null,100);
+    OpponentClass theOpponent = OpponentClass.setOpponent(null,null,null,null,null,null,100);;
+
     public PlayerSelectMenu(MyGdxGame game)
     {
         this.game = game;
@@ -96,29 +104,80 @@ public class PlayerSelectMenu implements Screen {
         Sakaimg.setX(1300);
         Sakaimg.setY(400);
 
-        stylebutton(king);
+        styleButton(king);
         king.setPosition(600, 650);
 
-        stylebutton(Robert);
+        styleButton(Robert);
         Robert.setPosition(1300, 650);
 
-        stylebutton(Ryuhaku);
+        styleButton(Ryuhaku);
         Ryuhaku.setPosition(600, 350);
 
-        stylebutton(Sakazaki);
+        styleButton(Sakazaki);
         Sakazaki.setPosition(1300, 350);
 
 
-        Robert.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked (InputEvent event, float x, float y)
-            {
-               // btnSound.play(1.0f);
-                game.setScreen(MyGdxGame.gclass);
+            king.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // btnSound.play(1.0f);
 
-            }
-        });
+                    if(!playerselected){
+                        assignPlayer("king");
+                        playerselected = true;
+                    }
+                    else {
+                        assignOpponent("king");
+                        game.setScreen(MyGdxGame.gclass);
+                    }
+                }
+            });
+            Robert.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // btnSound.play(1.0f);
+                    if(!playerselected){
+                        assignPlayer("robert");
+                        playerselected = true;
+                    }
+                    else {
+                        assignOpponent("robert");
+                        game.setScreen(MyGdxGame.gclass);
+                    }
+
+                }
+            });
+            Ryuhaku.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // btnSound.play(1.0f);
+                    if(!playerselected){
+                        assignPlayer("ryu");
+                        playerselected = true;
+                    }
+                    else {
+                        assignOpponent("ryu");
+                        game.setScreen(MyGdxGame.gclass);
+                    }
+
+                }
+            });
+
+            Sakazaki.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // btnSound.play(1.0f);
+                    if(!playerselected){
+                        assignPlayer("ryo");
+                        playerselected = true;
+                    }
+                    else {
+                        assignOpponent("ryo");
+                        game.setScreen(MyGdxGame.gclass);
+                    }
+                }
+            });
+
 
         stage.addActor(imgBackground);
         stage.addActor(menuBackground);
@@ -149,7 +208,7 @@ public class PlayerSelectMenu implements Screen {
         batch.end();
     }
 
-    public void stylebutton(TextButton btn){
+    public void styleButton(TextButton btn){
         btn.setWidth(300f);
         btn.setHeight(60f);
         btn.getLabel().setFontScale(3);
@@ -159,6 +218,93 @@ public class PlayerSelectMenu implements Screen {
     @Override
     public void resize(int width, int height) {
 
+    }
+    public void assignPlayer(String player_name){
+
+
+
+        switch (player_name){
+
+            case "king":
+               thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("kingwalk.png")),4,1)); // #9
+               thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("kingkick.png")),3,1));
+               thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("kingpunch.png")),3,1));
+               break;
+
+            case "robert":
+                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1)); // #9
+                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),3,1));
+                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1));
+                break;
+
+            case "ryo":
+                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1)); // #9
+                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),3,1));
+                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1));
+                break;
+
+            case "ryu":
+                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
+                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
+                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryupunch.png")),3,1));
+                break;
+        }
+
+    }
+
+    public void assignOpponent(String player_name){
+
+
+
+        switch (player_name){
+
+            case "king":
+                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("kingwalk.png")),4,1)); // #9
+                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("kingkick.png")),3,1));
+                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("kingpunch.png")),3,1));
+                break;
+
+            case "robert":
+                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1)); // #9
+                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),4,1));
+                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1));
+                break;
+
+            case "ryo":
+                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1)); // #9
+                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),5,1));
+                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1));
+                break;
+
+            case "ryu":
+                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryuwalk.png")),4,1)); // #9
+                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("ryukick.png")),3,1));
+                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryupunch.png")),3,1));
+                break;
+        }
+
+    }
+
+    public Animation<TextureRegion> createanimation(Texture player, int width, int height){
+        int index = 0;
+
+        TextureRegion[] playerFrames = new TextureRegion[width*height];;
+
+        Animation<TextureRegion> animation;
+
+        TextureRegion[][] temp = TextureRegion.split(player,
+                player.getWidth() / width,
+                player.getHeight() / height);
+
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                playerFrames[index++] = temp[i][j];
+            }
+        }
+       animation = new Animation<>(0.33f, playerFrames);
+
+       return  animation;
     }
 
     @Override
