@@ -1,22 +1,34 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class OpponentClass {
+public class OpponentClass extends Sprite {
 
     private static OpponentClass opponent;
     MyGdxGame game;
     private Animation<TextureRegion> Walk;
+
+    public Animation<TextureRegion> getIdle() {
+        return idle;
+    }
+
+    public void setIdle(Animation<TextureRegion> idle) {
+        this.idle = idle;
+    }
+
+    private Animation<TextureRegion> idle;
     private Animation<TextureRegion> punch;
     private Animation<TextureRegion> kick;
     private Animation<TextureRegion> dead;
     private Animation<TextureRegion> win;
     private Animation<TextureRegion> special;
 
-    public static OpponentClass setOpponent(Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health){
+    public static OpponentClass setOpponent(Animation<TextureRegion> idle, Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health){
         if (opponent == null)
-            opponent = new OpponentClass(walk,punch,kick,dead,win,special,health);
+            opponent = new OpponentClass(idle,walk,punch,kick,dead,win,special,health);
         return opponent;
     }
     public static OpponentClass getOpponent() {
@@ -84,8 +96,9 @@ public class OpponentClass {
         this.health = health;
     }
 
-    public OpponentClass(Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+    public OpponentClass(Animation<TextureRegion> idle, Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
 
+        this.idle = idle;
         this.Walk = Walk;
         this.punch = punch;
         this.kick = kick;

@@ -2,8 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,12 +26,6 @@ public class GameClass implements Screen {
     private Texture player1healthbar;
     private Texture player2healthbar;
 
-    //adding Sound
-    //private Sound sound;
-    private Music music2;
-
-
-
     private TextureRegion[][] temp;
     private TextureRegion[] player1walkFrames;
     private TextureRegion[] player2walkFrames;
@@ -55,6 +47,7 @@ public class GameClass implements Screen {
     private Image healthbar1;
     private Image healthbar2;
 
+
     private Stage stage;
 
     public GameClass(MyGdxGame game) {
@@ -65,8 +58,6 @@ public class GameClass implements Screen {
 
         stage = new Stage();
 
-        player1 = new Texture(Gdx.files.internal("player1walk.png")); // #9
-        player2 = new Texture(Gdx.files.internal("player3walk.png")); // #9
         player1healthbar = new Texture(Gdx.files.internal("healthbar.png"));
         player2healthbar = new Texture(Gdx.files.internal("healthbar2.png"));
 
@@ -79,59 +70,8 @@ public class GameClass implements Screen {
         healthbar2.setSize(700,120);
         healthbar2.setX(1300);
         healthbar2.setY(950);
-// sound implemented
-          //sound = Gdx.audio.newSound(Gdx.files.internal("kick.wav"));
-         music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
 
 
-
-       // sound.play(1.0f,0.0f,0.8f);
-
-
-        music2.setVolume(1.0f);
-        music2.setLooping(false);
-
-        music2.play();
-        music2.setOnCompletionListener(new Music.OnCompletionListener()
-        {
-            @Override
-            public void onCompletion(Music music) {
-                music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
-                music.play();
-            }
-
-        });
-
-
-
-
-
-        TextureRegion[][] temp = TextureRegion.split(player1,
-                player1.getWidth() / 4,
-                player1.getHeight());
-
-        player1walkFrames = new TextureRegion[4];
-
-        int index = 0;
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < 4; j++) {
-                player1walkFrames[index++] = temp[i][j];
-            }
-        }
-        walkAnimation = new Animation(0.33f, player1walkFrames);
-
-        temp = TextureRegion.split(player2,
-                player2.getWidth() / 4,
-                player2.getHeight() / 1);
-
-        player2walkFrames = new TextureRegion[4];
-       index = 0;
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < 4; j++) {
-                player2walkFrames[index++] = temp[i][j];
-            }
-        }
-        walkAnimation2 = new Animation(0.33f, player2walkFrames);
 
         batch = new SpriteBatch();                // #12
 
@@ -163,8 +103,8 @@ public class GameClass implements Screen {
         dt = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
-        currentFrame2 = (TextureRegion) walkAnimation2.getKeyFrame(stateTime, true);
+        currentFrame =  PlayerClass.getPlayers().getWalk().getKeyFrame(stateTime, true);
+        currentFrame2 = OpponentClass.getOpponent().getWalk().getKeyFrame(stateTime, true);
 
 //		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
 //		Gdx.app.log("current time",Float.toString(stateTime));
@@ -204,7 +144,6 @@ public class GameClass implements Screen {
 
     @Override
     public void dispose() {
-    //sound.dispose();
-    music2.dispose();
+
     }
 }
