@@ -26,9 +26,20 @@ public class OpponentClass extends Sprite {
     private Animation<TextureRegion> win;
     private Animation<TextureRegion> special;
 
-    public static OpponentClass setOpponent(Animation<TextureRegion> idle, Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health){
+    public Animation<TextureRegion> getLoose() {
+        return Loose;
+    }
+
+    public void setLoose(Animation<TextureRegion> loose) {
+        Loose = loose;
+    }
+
+    private Animation<TextureRegion> Loose;
+
+
+    public static OpponentClass setOpponent(Animation<TextureRegion> idle, Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, Animation<TextureRegion> Loose, int health){
         if (opponent == null)
-            opponent = new OpponentClass(idle,walk,punch,kick,dead,win,special,health);
+            opponent = new OpponentClass(idle,walk,punch,kick,dead,win,special,Loose,health);
         return opponent;
     }
     public static OpponentClass getOpponent() {
@@ -96,8 +107,9 @@ public class OpponentClass extends Sprite {
         this.health = health;
     }
 
-    public OpponentClass(Animation<TextureRegion> idle, Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+    public OpponentClass(Animation<TextureRegion> idle, Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special,Animation<TextureRegion> Loose,int health) {
 
+        this.Loose = Loose;
         this.idle = idle;
         this.Walk = Walk;
         this.punch = punch;

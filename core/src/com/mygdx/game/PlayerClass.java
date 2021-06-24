@@ -30,9 +30,19 @@ class PlayerClass extends Sprite {
     private Animation<TextureRegion> win;
     private Animation<TextureRegion> special;
 
+    public Animation<TextureRegion> getLoose() {
+        return Loose;
+    }
+
+    public void setLoose(Animation<TextureRegion> loose) {
+        Loose = loose;
+    }
+
+    private Animation<TextureRegion> Loose;
+
     private int health;
 
-    public PlayerClass(Animation<TextureRegion> idle,Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+    public PlayerClass(Animation<TextureRegion> idle,Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special,Animation<TextureRegion> Loose, int health) {
         this.Walk = Walk;
         this.idle =idle;
         this.punch = punch;
@@ -43,9 +53,9 @@ class PlayerClass extends Sprite {
         this.health = health;
     }
 
-    public static PlayerClass setPlayers(Animation<TextureRegion> idle,Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+    public static PlayerClass setPlayers(Animation<TextureRegion> idle,Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, Animation<TextureRegion> Loose, int health) {
         if (playerSingleObject == null)
-            playerSingleObject = new PlayerClass(idle,walk, punch, kick, dead, win, special, health);
+            playerSingleObject = new PlayerClass(idle,walk, punch, kick, dead, win, special,Loose ,health);
         return playerSingleObject;
     }
 

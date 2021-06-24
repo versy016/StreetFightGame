@@ -47,8 +47,8 @@ public class PlayerSelectMenu implements Screen {
 
     boolean playerselected = false;
 
-    PlayerClass thePlayer =  PlayerClass.setPlayers(null,null,null,null,null,null,null,100);
-    OpponentClass theOpponent = OpponentClass.setOpponent(null,null,null,null,null,null,null,100);;
+    PlayerClass thePlayer =  PlayerClass.setPlayers(null,null,null,null,null,null,null,null,100);
+    OpponentClass theOpponent = OpponentClass.setOpponent(null,null,null,null,null,null,null,null,100);;
 
     public PlayerSelectMenu(MyGdxGame game)
     {
