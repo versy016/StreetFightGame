@@ -1,9 +1,11 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class OpponentClass {
+public class OpponentClass extends Sprite {
 
     private static OpponentClass opponent;
     MyGdxGame game;
