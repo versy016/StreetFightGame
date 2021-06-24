@@ -1,7 +1,9 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,6 +32,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class GameClass implements Screen {
 
     MyGdxGame game;
+    public enum GameState { PLAYING, COMPLETE };
+    public static final float MOVEMENT_SPEED = 200.0f;
+    GameState gameState = GameState.PLAYING;
 
     public enum State {Idle,Walking, Kicking, Punching, Special, dead, Loose, Win;}
 
@@ -62,6 +67,8 @@ public class GameClass implements Screen {
     int characterX;
     int characterY;
 
+    private Texture playerHealthBar;
+    private Texture opponentHealthBar;
 
     //UI Buttons
     private Button moveLeftButton;
@@ -163,20 +170,53 @@ public class GameClass implements Screen {
         pauseMenuStage = new Stage();
         debugRenderer = new Box2DDebugRenderer();
 
-        player1healthbar = new Texture(Gdx.files.internal("healthbar.png"));
-        player2healthbar = new Texture(Gdx.files.internal("healthbar2.png"));
+        buttonSquareTexture = new Texture("buttonSquare_blue.png");
+        buttonSquareDownTexture = new Texture("buttonSquare_beige_pressed.png");
 
-        healthbar1 = new Image(player1healthbar);
-        healthbar1.setSize(700,120);
-        healthbar1.setX(100);
-        healthbar1.setY(950);
 
-        healthbar2 = new Image(player2healthbar);
-        healthbar2.setSize(700,120);
-        healthbar2.setX(1300);
-        healthbar2.setY(950);
+        playerHealthBar = new Texture(Gdx.files.internal("healthbar.png"));
+        opponentHealthBar = new Texture(Gdx.files.internal("healthbar2.png"));
 
-         music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        //Buttons
+        float buttonSize = h * 0.1f;
+        moveLeftButton = new Button(20, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
+        moveRightButton = new Button(20+buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
+
+        world = new World(new Vector2(0,10),true);
+
+        PolygonShape playershape = new PolygonShape();
+        playershape.setAsBox(15,25);
+
+        BodyDef playerDef = new BodyDef();
+        playerDef.position.set(new Vector2(165,35));
+
+        playerDef.type = BodyDef.BodyType.DynamicBody;
+
+        b2bodyplayer = world.createBody(playerDef);
+        b2bodyplayer.createFixture(playershape, 0.0f);
+
+
+        HealthBar  playerHealthBar = new HealthBar();
+        playerHealthBar.setX(100);
+        playerHealthBar.setY(950);
+        playerHealthBar.setWidthInner(700);
+        playerHealthBar.setHeightInner(40);
+        playerHealthBar.setWidthOuter(710);
+        playerHealthBar.setHeightOuter(50);
+
+        HealthBar opponentHealthBar = new HealthBar();
+        opponentHealthBar.setX(1300);
+        opponentHealthBar.setY(950);
+        opponentHealthBar.setWidthInner(700);
+        opponentHealthBar.setHeightInner(40);
+        opponentHealthBar.setWidthOuter(710);
+        opponentHealthBar.setHeightOuter(50);
+
+
+        music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
 
 
         music2.setVolume(1.0f);
@@ -194,13 +234,11 @@ public class GameClass implements Screen {
         });
 
 
-
         batch = new SpriteBatch();                // #12
-
+        playerDelta = new Vector2();
         playerSprite = new Sprite(PlayerClass.getPlayers().getIdle().getKeyFrames()[0]);
         stateTime = 0.0f;
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 490 , 160  );
         tiledMap = new TmxMapLoader().load("fightmap.tmx");
@@ -287,6 +325,7 @@ public class GameClass implements Screen {
     }
         @Override
     public void render(float delta) {
+        update();
         dt = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
