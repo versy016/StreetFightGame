@@ -3,8 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,12 +14,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GameClass implements Screen {
 
@@ -42,8 +41,6 @@ public class GameClass implements Screen {
     private Sprite playerSprite;
     float dt;                                      //game delata time variable
     private SpriteBatch batch;                   // Spritebatch for rendering
-
-
 
     TextureRegion currentFrame;
     TextureRegion currentFrame2;
@@ -66,17 +63,10 @@ public class GameClass implements Screen {
     private Button moveLeftButton;
     private Button moveRightButton;
 
+    public Body b2bodyplayer;
+    public World world;
+    private Box2DDebugRenderer debugRenderer;
 
-    private Texture comMenuBG;
-    private Skin skin;
-
-
-    Image menuBackground;
-    TextButton btnRestartGame;
-    Sound btnSound;
-    TextButton btnBackToPlayerSelectMenu;
-    TextButton btnExit;
-    private Stage pauseMenuStage;
     private Stage stage;
 
     public GameClass(MyGdxGame game) {
@@ -85,78 +75,8 @@ public class GameClass implements Screen {
 
     public void create() {
 
-        //***********************************************************************CompleteMenuStage**************************************************************************************
-        comMenuBG = new Texture("Starting Assets/assets/finishedbg.png");
-
-        skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
-        btnRestartGame = new TextButton("Restart", skin, "default");
-        btnBackToPlayerSelectMenu = new TextButton("Back To Menu",skin,"default");
-        btnExit = new TextButton("Exit", skin, "default");
-        btnSound = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
-
-        menuBackground = new Image(comMenuBG);
-        menuBackground.setSize(1800,900);
-        menuBackground.setX(200);
-        menuBackground.setY(200);
-        menuBackground.setZIndex(2);
-        menuBackground.setVisible(false);
-
-
-        btnRestartGame.setWidth(600f);
-        btnRestartGame.setHeight(100f);
-        btnRestartGame.getLabel().setFontScale(5);
-        btnRestartGame.setColor(Color.GOLD);
-        btnRestartGame.setPosition(750, 800);
-        btnRestartGame.setVisible(false);
-
-        btnBackToPlayerSelectMenu.setWidth(600f);
-        btnBackToPlayerSelectMenu.setHeight(100f);
-        btnBackToPlayerSelectMenu.getLabel().setFontScale(5);
-        btnBackToPlayerSelectMenu.setColor(Color.GOLD);
-        btnBackToPlayerSelectMenu.setPosition(750, 600);
-        btnBackToPlayerSelectMenu.setVisible(false);
-
-        btnExit.setWidth(600f);
-        btnExit.setHeight(100f);
-        btnExit.getLabel().setFontScale(5);
-        btnExit.setColor(Color.GOLD);
-        btnExit.setPosition(750, 400);
-        btnExit.setVisible(false);
-
-
-        btnRestartGame.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked (InputEvent event, float x, float y)
-            {
-                btnSound.play(1.0f);
-                // TODO when restart the game
-
-            }
-        });
-
-        btnExit.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked (InputEvent event, float x, float y)
-            {
-                btnSound.play(1.0f);
-                Gdx.app.exit();
-            }
-        });
-
-        btnBackToPlayerSelectMenu.addListener(new ClickListener(){
-            @Override
-            public void clicked (InputEvent event, float x, float y)
-            {
-                btnSound.play(1.0f);
-            }
-        });
-
-        //***********************************************************************CompleteMenuStage**************************************************************************************
-
         stage = new Stage();
-        pauseMenuStage = new Stage();
+        debugRenderer = new Box2DDebugRenderer();
 
         //Textures
         buttonSquareTexture = new Texture("buttonSquare_blue.png");
@@ -170,6 +90,8 @@ public class GameClass implements Screen {
         moveLeftButton = new Button(20, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
         moveRightButton = new Button(20+buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
 
+        //creating box2d body for player and opponents
+        world = new World(new Vector2(0,10),true);
 
         HealthBar  playerHealthBar = new HealthBar();
         playerHealthBar.setX(100);
@@ -201,11 +123,6 @@ public class GameClass implements Screen {
 
         stage.addActor(playerHealthBar);
         stage.addActor(opponentHealthBar);
-        pauseMenuStage.addActor(menuBackground);
-        pauseMenuStage.addActor(btnRestartGame);
-        pauseMenuStage.addActor(btnExit);
-        pauseMenuStage.addActor(btnBackToPlayerSelectMenu);
-
         Gdx.input.setInputProcessor(stage);
 
 
@@ -277,26 +194,24 @@ public class GameClass implements Screen {
 
         //Update the Game State
         update();
+
         dt = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame =  PlayerClass.getPlayers().getWalk().getKeyFrame(stateTime, true);
-        currentFrame2 = OpponentClass.getOpponent().getWalk().getKeyFrame(stateTime, true);
-//		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
-//		Gdx.app.log("current time",Float.toString(stateTime));
-//		Gdx.app.log("current frame index",Integer.toString(frameIndex));
+        currentFrame =  PlayerClass.getPlayers().getIdle().getKeyFrame(stateTime, true);
+        currentFrame2 = OpponentClass.getOpponent().getIdle().getKeyFrame(stateTime, true);
+
         camera.update();
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-
+        debugRenderer.render(world, camera.combined);
         batch.begin();
         stage.draw();
         batch.draw(currentFrame,600,50,200,400);
         batch.draw(currentFrame2,1000,50,200,400);
         moveLeftButton.draw(batch);
         moveRightButton.draw(batch);
-        pauseMenuStage.draw();
         batch.end();
 
     }
