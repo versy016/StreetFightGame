@@ -169,6 +169,10 @@ public class GameClass implements Screen {
                 }
                 break;
             case COMPLETE:
+            {
+
+                break;
+            }
 
 
         }
