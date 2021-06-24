@@ -12,6 +12,16 @@ class PlayerClass {
     private TextureRegion[] walkFrames;
     private TextureRegion standFrame;
     private Animation<TextureRegion> Walk;
+
+    public Animation<TextureRegion> getIdle() {
+        return idle;
+    }
+
+    public void setIdle(Animation<TextureRegion> idle) {
+        this.idle = idle;
+    }
+
+    private Animation<TextureRegion> idle;
     private Animation<TextureRegion> punch;
     private Animation<TextureRegion> kick;
     private Animation<TextureRegion> dead;
@@ -20,8 +30,9 @@ class PlayerClass {
 
     private int health;
 
-    public PlayerClass(Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+    public PlayerClass(Animation<TextureRegion> idle,Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
         this.Walk = Walk;
+        this.idle =idle;
         this.punch = punch;
         this.kick = kick;
         this.dead = dead;
@@ -30,9 +41,9 @@ class PlayerClass {
         this.health = health;
     }
 
-    public static PlayerClass setPlayers(Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
+    public static PlayerClass setPlayers(Animation<TextureRegion> idle,Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, int health) {
         if (playerSingleObject == null)
-            playerSingleObject = new PlayerClass(walk, punch, kick, dead, win, special, health);
+            playerSingleObject = new PlayerClass(idle,walk, punch, kick, dead, win, special, health);
         return playerSingleObject;
     }
 
