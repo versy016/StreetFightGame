@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,7 +33,7 @@ public class GameClass implements Screen {
 
     private Animation walkAnimation;
     private Animation walkAnimation2;
-
+    private Music music2;
     private float stateTime;
     private Sprite playerSprite;
     float dt;               //game delata time variable
@@ -70,6 +71,23 @@ public class GameClass implements Screen {
         healthbar2.setSize(700,120);
         healthbar2.setX(1300);
         healthbar2.setY(950);
+
+         music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
+
+
+        music2.setVolume(1.0f);
+        music2.setLooping(false);
+
+        music2.play();
+        music2.setOnCompletionListener(new Music.OnCompletionListener()
+        {
+            @Override
+            public void onCompletion(Music music) {
+                music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
+                music.play();
+            }
+
+        });
 
 
 
