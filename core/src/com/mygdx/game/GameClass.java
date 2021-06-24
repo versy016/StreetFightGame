@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -31,19 +30,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class GameClass implements Screen {
 
     MyGdxGame game;
-    public enum GameState { PLAYING, COMPLETE };
-    public static final float MOVEMENT_SPEED = 200.0f;
-    GameState gameState = GameState.PLAYING;
 
     public enum State {Idle,Walking, Kicking, Punching, Special, dead, Loose, Win;}
 
     State player_CurrentState;
     State OpponentcurrentState;
 
-
+    private Animation walkAnimation;
+    private Animation walkAnimation2;
+    private Music music2;
     private float stateTime;
     private Sprite playerSprite;
-    float dt;                                      //game delata time variable
+    float dt;               //game delata time variable
     private SpriteBatch batch;                   // Spritebatch for rendering
 
     TextureRegion Player_Frame;
@@ -52,6 +50,8 @@ public class GameClass implements Screen {
     TiledMap tiledMap;                  //tiled map
     OrthographicCamera camera;
     OrthogonalTiledMapRenderer tiledMapRenderer; //tiled map renderer
+    private Image healthbar1;
+    private Image healthbar2;
 
     //UI textures
     private Texture buttonSquareTexture;
@@ -163,55 +163,44 @@ public class GameClass implements Screen {
         pauseMenuStage = new Stage();
         debugRenderer = new Box2DDebugRenderer();
 
-        //Textures
-        buttonSquareTexture = new Texture("buttonSquare_blue.png");
-        buttonSquareDownTexture = new Texture("buttonSquare_beige_pressed.png");
+        player1healthbar = new Texture(Gdx.files.internal("healthbar.png"));
+        player2healthbar = new Texture(Gdx.files.internal("healthbar2.png"));
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
+        healthbar1 = new Image(player1healthbar);
+        healthbar1.setSize(700,120);
+        healthbar1.setX(100);
+        healthbar1.setY(950);
 
-        //Buttons
-        float buttonSize = h * 0.1f;
-        moveLeftButton = new Button(20, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
-        moveRightButton = new Button(20+buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
+        healthbar2 = new Image(player2healthbar);
+        healthbar2.setSize(700,120);
+        healthbar2.setX(1300);
+        healthbar2.setY(950);
 
-        world = new World(new Vector2(0,10),true);
-
-        PolygonShape playershape = new PolygonShape();
-        playershape.setAsBox(15,25);
-
-        BodyDef playerDef = new BodyDef();
-        playerDef.position.set(new Vector2(165,35));
-
-        playerDef.type = BodyDef.BodyType.DynamicBody;
-
-        b2bodyplayer = world.createBody(playerDef);
-        b2bodyplayer.createFixture(playershape, 0.0f);
+         music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
 
 
-        HealthBar  playerHealthBar = new HealthBar();
-        playerHealthBar.setX(100);
-        playerHealthBar.setY(950);
-        playerHealthBar.setWidthInner(700);
-        playerHealthBar.setHeightInner(40);
-        playerHealthBar.setWidthOuter(710);
-        playerHealthBar.setHeightOuter(50);
+        music2.setVolume(1.0f);
+        music2.setLooping(false);
 
-        HealthBar opponentHealthBar = new HealthBar();
-        opponentHealthBar.setX(1300);
-        opponentHealthBar.setY(950);
-        opponentHealthBar.setWidthInner(700);
-        opponentHealthBar.setHeightInner(40);
-        opponentHealthBar.setWidthOuter(710);
-        opponentHealthBar.setHeightOuter(50);
+        music2.play();
+        music2.setOnCompletionListener(new Music.OnCompletionListener()
+        {
+            @Override
+            public void onCompletion(Music music) {
+                music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
+                music.play();
+            }
+
+        });
+
+
 
         batch = new SpriteBatch();                // #12
-        playerDelta = new Vector2();
-        characterX = 600;
-        characterY = 50;
 
         playerSprite = new Sprite(PlayerClass.getPlayers().getIdle().getKeyFrames()[0]);
         stateTime = 0.0f;
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 490 , 160  );
         tiledMap = new TmxMapLoader().load("fightmap.tmx");
@@ -298,21 +287,20 @@ public class GameClass implements Screen {
     }
         @Override
     public void render(float delta) {
-
-        //Update the Game State
-        update();
-
         dt = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
         Player_Frame =  get_Player_current_state();
         Opponent_Frame = OpponentClass.getOpponent().getIdle().getKeyFrame(stateTime, true);
 
+//		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
+//		Gdx.app.log("current time",Float.toString(stateTime));
+//		Gdx.app.log("current frame index",Integer.toString(frameIndex));
         camera.update();
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-        debugRenderer.render(world, camera.combined);
+
         batch.begin();
         stage.draw();
         batch.draw(Player_Frame,playerSprite.getX(),50,200,400);
@@ -414,7 +402,6 @@ public class GameClass implements Screen {
 
     @Override
     public void dispose() {
-        buttonSquareTexture.dispose();
-        buttonSquareDownTexture.dispose();
+
     }
 }

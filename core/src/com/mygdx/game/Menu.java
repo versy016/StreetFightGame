@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,7 +25,7 @@ public class Menu implements Screen
     private SpriteBatch batch;
     private Stage stage;
     private Skin skin;
-
+    private Music music;
     Image imgBackground;
     Image menuBackground;
     TextButton btnPlay;
@@ -59,6 +60,13 @@ public class Menu implements Screen
         menuBackground.setX(200);
         menuBackground.setY(200);
         menuBackground.setZIndex(2);
+
+        //music
+        music= Gdx.audio.newMusic(Gdx.files.internal("Starting Music.wav"));
+
+        music.setVolume(1.0f);
+        music.setLooping(true);
+        music.play();
 
 
         btnPlay.setWidth(600f);
@@ -164,5 +172,6 @@ public class Menu implements Screen
         skin.dispose();
         menuBG.dispose();
         btnSound.dispose();
+        music.dispose();
     }
 }
