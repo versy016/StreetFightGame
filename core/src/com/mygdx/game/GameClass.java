@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,7 +26,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -81,7 +84,13 @@ public class GameClass implements Screen {
     Sound btnSound;
     TextButton btnHowToPlay;
     TextButton btnExit;
+    TextButton btnPause;
+    Label roundWins;
+    Label roundTime;
     private Stage pauseMenuStage;
+
+
+    int winCount=0;
 
     public Body b2bodyplayer;
     public World world;
@@ -103,6 +112,7 @@ public class GameClass implements Screen {
         btnHowToPlay = new TextButton("HowToPlay",skin,"default");
         btnExit = new TextButton("Exit", skin, "default");
         btnSound = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
+        btnPause = new TextButton("Pause",skin,"default");
 
         menuBackground = new Image(comMenuBG);
         menuBackground.setSize(1800,900);
@@ -110,7 +120,6 @@ public class GameClass implements Screen {
         menuBackground.setY(200);
         menuBackground.setZIndex(2);
         menuBackground.setVisible(false);
-
 
         btnRestartGame.setWidth(600f);
         btnRestartGame.setHeight(100f);
@@ -133,6 +142,25 @@ public class GameClass implements Screen {
         btnExit.setPosition(750, 400);
         btnExit.setVisible(false);
 
+        btnPause.setWidth(100f);
+        btnPause.setHeight(100f);
+        btnPause.getLabel().setFontScale(2);
+        btnPause.setColor(Color.GOLD);
+        btnPause.setPosition(2100, 950);
+        btnPause.setVisible(true);
+
+        btnPause.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked (InputEvent event, float x, float y)
+            {
+                btnSound.play(1.0f);
+                menuBackground.setVisible(true);
+                btnRestartGame.setVisible(true);
+                btnHowToPlay.setVisible(true);
+                btnExit.setVisible(true);
+            }
+        });
 
         btnRestartGame.addListener(new ClickListener()
         {
@@ -141,7 +169,6 @@ public class GameClass implements Screen {
             {
                 btnSound.play(1.0f);
                 newGame();
-
             }
         });
 
@@ -172,10 +199,18 @@ public class GameClass implements Screen {
 
         buttonSquareTexture = new Texture("buttonSquare_blue.png");
         buttonSquareDownTexture = new Texture("buttonSquare_beige_pressed.png");
+        roundWins = new Label("Wins "+winCount, new Label.LabelStyle(new BitmapFont(), Color.GOLDENROD));
+        roundTime = new Label("99", new Label.LabelStyle(new BitmapFont(), Color.GOLDENROD));
 
+        roundWins.setFontScale(3,2);
+        roundWins.getStyle().fontColor = Color.WHITE;
+        roundWins.setPosition(100,1000);
+        roundWins.setVisible(true);
 
-        playerHealthBar = new Texture(Gdx.files.internal("healthbar.png"));
-        opponentHealthBar = new Texture(Gdx.files.internal("healthbar2.png"));
+        roundTime.setFontScale(8,6);
+        roundTime.getStyle().fontColor = Color.WHITE;
+        roundTime.setPosition(1050,950);
+        roundTime.setVisible(true);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -251,7 +286,9 @@ public class GameClass implements Screen {
         pauseMenuStage.addActor(btnHowToPlay);
         stage.addActor(playerHealthBar);
         stage.addActor(opponentHealthBar);
-
+        stage.addActor(roundTime);
+        stage.addActor(roundWins);
+        pauseMenuStage.addActor(btnPause);
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setInputProcessor(pauseMenuStage);
         newGame();
@@ -353,7 +390,11 @@ public class GameClass implements Screen {
     private void newGame() {
 //        camera.position.x = 1000;
 //        camera.position.y = 100;
-
+        menuBackground.setVisible(false);
+        btnRestartGame.setVisible(false);
+        btnHowToPlay.setVisible(false);
+        btnExit.setVisible(false);
+        winCount = 0;
 
         playerSprite.setPosition(600,0);
 
