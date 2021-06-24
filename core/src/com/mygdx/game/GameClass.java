@@ -90,8 +90,19 @@ public class GameClass implements Screen {
         moveLeftButton = new Button(20, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
         moveRightButton = new Button(20+buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
 
-        //creating box2d body for player and opponents
         world = new World(new Vector2(0,10),true);
+
+        PolygonShape playershape = new PolygonShape();
+        playershape.setAsBox(15,25);
+
+        BodyDef playerDef = new BodyDef();
+        playerDef.position.set(new Vector2(165,35));
+
+        playerDef.type = BodyDef.BodyType.DynamicBody;
+
+        b2bodyplayer = world.createBody(playerDef);
+        b2bodyplayer.createFixture(playershape, 0.0f);
+
 
         HealthBar  playerHealthBar = new HealthBar();
         playerHealthBar.setX(100);
@@ -209,7 +220,7 @@ public class GameClass implements Screen {
         batch.begin();
         stage.draw();
         batch.draw(currentFrame,600,50,200,400);
-        batch.draw(currentFrame2,1000,50,200,400);
+        batch.draw(currentFrame2,1000+220,50,-220,400);
         moveLeftButton.draw(batch);
         moveRightButton.draw(batch);
         batch.end();
