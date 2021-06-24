@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,17 +13,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class GameClass implements Screen {
 
     MyGdxGame game;
+    public enum GameState { PLAYING, COMPLETE };
+    public static final float MOVEMENT_SPEED = 200.0f;
+    GameState gameState = GameState.PLAYING;
 
-    private Texture player1;
-    private Texture player2;
-    private Texture player3;
-    private Texture player4;
 
     private TextureRegion[][] temp;
     private TextureRegion[] player1walkFrames;
@@ -33,7 +34,7 @@ public class GameClass implements Screen {
 
     private float stateTime;
     private Sprite playerSprite;
-    float dt;               //game delata time variable
+    float dt;                                      //game delata time variable
     private SpriteBatch batch;                   // Spritebatch for rendering
 
     TextureRegion currentFrame;
@@ -47,12 +48,16 @@ public class GameClass implements Screen {
     private Texture buttonSquareTexture;
     private Texture buttonSquareDownTexture;
 
+    Vector2 playerDelta;
+    //Player Coordinates
+    int characterX;
+    int characterY;
+
+
     //UI Buttons
     private Button moveLeftButton;
     private Button moveRightButton;
-    private Button kickButton;
-    private Button punchButton;
-    private Button superPowerButton;
+
 
     private Stage stage;
 
@@ -73,12 +78,9 @@ public class GameClass implements Screen {
 
         //Buttons
         float buttonSize = h * 0.1f;
-        moveLeftButton = new Button(0.0f, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
-        moveRightButton = new Button(buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
+        moveLeftButton = new Button(20, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
+        moveRightButton = new Button(20+buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
 
-        kickButton = new Button(buttonSize, buttonSize*2, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
-        punchButton = new Button(buttonSize, buttonSize*3, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
-        superPowerButton = new Button(buttonSize, buttonSize*4, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
 
         HealthBar  playerHealthBar = new HealthBar();
         playerHealthBar.setX(100);
@@ -97,7 +99,11 @@ public class GameClass implements Screen {
         opponentHealthBar.setHeightOuter(50);
 
         batch = new SpriteBatch();                // #12
+        playerDelta = new Vector2();
+        characterX = 600;
+        characterY = 50;
 
+        playerSprite = new Sprite(PlayerClass.getPlayers().getWalk().getKeyFrames()[0]);
         stateTime = 0.0f;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 490 , 160  );
@@ -108,6 +114,7 @@ public class GameClass implements Screen {
         stage.addActor(opponentHealthBar);
         Gdx.input.setInputProcessor(stage);
 
+
     }
     @Override
     public void show() {
@@ -116,17 +123,68 @@ public class GameClass implements Screen {
     }
 
     private void update() {
+        dt = Gdx.graphics.getDeltaTime();
+        //Touch Input Info
+        boolean checkTouch = Gdx.input.isTouched();
+        int touchX = Gdx.input.getX();
+        int touchY = Gdx.input.getY();
 
+        //Update Game State based on input
+        switch (gameState) {
+
+            case PLAYING:
+                //Poll user for input
+                moveLeftButton.update(checkTouch, touchX, touchY);
+                moveRightButton.update(checkTouch, touchX, touchY);
+
+                int moveX = 0;
+                int moveY = 0;
+                if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || moveLeftButton.isDown) {
+                    moveLeftButton.isDown = true;
+                    moveX -= 1;
+                } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || moveRightButton.isDown) {
+                    moveRightButton.isDown = true;
+                    moveX += 1;
+                }
+                //TODO Determine Character Movement Distance
+                playerDelta.x = moveX * MOVEMENT_SPEED * dt;
+                playerDelta.y = moveY * MOVEMENT_SPEED * dt;
+                //Movement update
+                if (playerDelta.len2()>0) { //Don't move every frame
+
+                    //TODO Retrieve Collision layer
+
+                    //Don't do anything if we're not moving
+                    if ((moveX != 0 || moveY != 0)
+                        //TODO Also check map bounds to prevent exceptions when accessing map cells
+                    ) {
+
+                        //TODO Retrieve Target Tile
+
+                        //TODO Move only if the target cell is empty
+                        PlayerClass.getPlayers().translate(playerDelta.x, playerDelta.y);
+                        camera.translate(playerDelta);
+
+                    }
+                }
+                break;
+            case COMPLETE:
+
+
+        }
 
     }
         @Override
     public void render(float delta) {
+
+        //Update the Game State
+        update();
+
         dt = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame =  PlayerClass.getPlayers().getWalk().getKeyFrame(stateTime, true);
         currentFrame2 = OpponentClass.getOpponent().getWalk().getKeyFrame(stateTime, true);
-
 //		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
 //		Gdx.app.log("current time",Float.toString(stateTime));
 //		Gdx.app.log("current frame index",Integer.toString(frameIndex));
@@ -140,10 +198,7 @@ public class GameClass implements Screen {
         batch.draw(currentFrame,600,50,200,400);
         batch.draw(currentFrame2,1000,50,200,400);
         moveLeftButton.draw(batch);
-            kickButton.draw(batch);
-            punchButton.draw(batch);
         moveRightButton.draw(batch);
-            superPowerButton.draw(batch);
         batch.end();
 
     }
@@ -170,6 +225,7 @@ public class GameClass implements Screen {
 
     @Override
     public void dispose() {
-
+        buttonSquareTexture.dispose();
+        buttonSquareDownTexture.dispose();
     }
 }
