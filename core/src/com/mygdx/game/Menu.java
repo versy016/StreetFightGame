@@ -28,8 +28,6 @@ public class Menu implements Screen
     private Music music;
     Image imgBackground;
     Image menuBackground;
-    //Animation<TextureRegion> animation;
-    float elapsed;
     TextButton btnPlay;
     Sound btnSound;
     TextButton btnOption;
