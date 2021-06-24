@@ -33,6 +33,5 @@ public class MyGdxGame extends Game implements ApplicationListener {
 
 	@Override
 	public void dispose () {
-		img.dispose();
 	}
 }
