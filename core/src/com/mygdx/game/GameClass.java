@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,8 +16,12 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GameClass implements Screen {
 
@@ -36,6 +42,8 @@ public class GameClass implements Screen {
     private Sprite playerSprite;
     float dt;                                      //game delata time variable
     private SpriteBatch batch;                   // Spritebatch for rendering
+
+
 
     TextureRegion currentFrame;
     TextureRegion currentFrame2;
@@ -59,6 +67,16 @@ public class GameClass implements Screen {
     private Button moveRightButton;
 
 
+    private Texture comMenuBG;
+    private Skin skin;
+
+
+    Image menuBackground;
+    TextButton btnRestartGame;
+    Sound btnSound;
+    TextButton btnBackToPlayerSelectMenu;
+    TextButton btnExit;
+    private Stage pauseMenuStage;
     private Stage stage;
 
     public GameClass(MyGdxGame game) {
@@ -67,7 +85,78 @@ public class GameClass implements Screen {
 
     public void create() {
 
+        //***********************************************************************CompleteMenuStage**************************************************************************************
+        comMenuBG = new Texture("Starting Assets/assets/finishedbg.png");
+
+        skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
+        btnRestartGame = new TextButton("Restart", skin, "default");
+        btnBackToPlayerSelectMenu = new TextButton("Back To Menu",skin,"default");
+        btnExit = new TextButton("Exit", skin, "default");
+        btnSound = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
+
+        menuBackground = new Image(comMenuBG);
+        menuBackground.setSize(1800,900);
+        menuBackground.setX(200);
+        menuBackground.setY(200);
+        menuBackground.setZIndex(2);
+        menuBackground.setVisible(false);
+
+
+        btnRestartGame.setWidth(600f);
+        btnRestartGame.setHeight(100f);
+        btnRestartGame.getLabel().setFontScale(5);
+        btnRestartGame.setColor(Color.GOLD);
+        btnRestartGame.setPosition(750, 800);
+        btnRestartGame.setVisible(false);
+
+        btnBackToPlayerSelectMenu.setWidth(600f);
+        btnBackToPlayerSelectMenu.setHeight(100f);
+        btnBackToPlayerSelectMenu.getLabel().setFontScale(5);
+        btnBackToPlayerSelectMenu.setColor(Color.GOLD);
+        btnBackToPlayerSelectMenu.setPosition(750, 600);
+        btnBackToPlayerSelectMenu.setVisible(false);
+
+        btnExit.setWidth(600f);
+        btnExit.setHeight(100f);
+        btnExit.getLabel().setFontScale(5);
+        btnExit.setColor(Color.GOLD);
+        btnExit.setPosition(750, 400);
+        btnExit.setVisible(false);
+
+
+        btnRestartGame.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked (InputEvent event, float x, float y)
+            {
+                btnSound.play(1.0f);
+                // TODO when restart the game
+
+            }
+        });
+
+        btnExit.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked (InputEvent event, float x, float y)
+            {
+                btnSound.play(1.0f);
+                Gdx.app.exit();
+            }
+        });
+
+        btnBackToPlayerSelectMenu.addListener(new ClickListener(){
+            @Override
+            public void clicked (InputEvent event, float x, float y)
+            {
+                btnSound.play(1.0f);
+            }
+        });
+
+        //***********************************************************************CompleteMenuStage**************************************************************************************
+
         stage = new Stage();
+        pauseMenuStage = new Stage();
 
         //Textures
         buttonSquareTexture = new Texture("buttonSquare_blue.png");
@@ -112,6 +201,11 @@ public class GameClass implements Screen {
 
         stage.addActor(playerHealthBar);
         stage.addActor(opponentHealthBar);
+        pauseMenuStage.addActor(menuBackground);
+        pauseMenuStage.addActor(btnRestartGame);
+        pauseMenuStage.addActor(btnExit);
+        pauseMenuStage.addActor(btnBackToPlayerSelectMenu);
+
         Gdx.input.setInputProcessor(stage);
 
 
@@ -183,7 +277,6 @@ public class GameClass implements Screen {
 
         //Update the Game State
         update();
-
         dt = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
@@ -203,6 +296,7 @@ public class GameClass implements Screen {
         batch.draw(currentFrame2,1000,50,200,400);
         moveLeftButton.draw(batch);
         moveRightButton.draw(batch);
+        pauseMenuStage.draw();
         batch.end();
 
     }
