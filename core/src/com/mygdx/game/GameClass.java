@@ -55,8 +55,7 @@ public class GameClass implements Screen {
     TiledMap tiledMap;                  //tiled map
     OrthographicCamera camera;
     OrthogonalTiledMapRenderer tiledMapRenderer; //tiled map renderer
-    private Image healthbar1;
-    private Image healthbar2;
+
 
     //UI textures
     private Texture buttonSquareTexture;
@@ -80,7 +79,7 @@ public class GameClass implements Screen {
     Image menuBackground;
     TextButton btnRestartGame;
     Sound btnSound;
-    TextButton btnBackToPlayerSelectMenu;
+    TextButton btnHowToPlay;
     TextButton btnExit;
     private Stage pauseMenuStage;
 
@@ -101,7 +100,7 @@ public class GameClass implements Screen {
 
         skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
         btnRestartGame = new TextButton("Restart", skin, "default");
-        btnBackToPlayerSelectMenu = new TextButton("Back To Menu",skin,"default");
+        btnHowToPlay = new TextButton("HowToPlay",skin,"default");
         btnExit = new TextButton("Exit", skin, "default");
         btnSound = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
 
@@ -120,12 +119,12 @@ public class GameClass implements Screen {
         btnRestartGame.setPosition(750, 800);
         btnRestartGame.setVisible(false);
 
-        btnBackToPlayerSelectMenu.setWidth(600f);
-        btnBackToPlayerSelectMenu.setHeight(100f);
-        btnBackToPlayerSelectMenu.getLabel().setFontScale(5);
-        btnBackToPlayerSelectMenu.setColor(Color.GOLD);
-        btnBackToPlayerSelectMenu.setPosition(750, 600);
-        btnBackToPlayerSelectMenu.setVisible(false);
+        btnHowToPlay.setWidth(600f);
+        btnHowToPlay.setHeight(100f);
+        btnHowToPlay.getLabel().setFontScale(5);
+        btnHowToPlay.setColor(Color.GOLD);
+        btnHowToPlay.setPosition(750, 600);
+        btnHowToPlay.setVisible(false);
 
         btnExit.setWidth(600f);
         btnExit.setHeight(100f);
@@ -141,7 +140,7 @@ public class GameClass implements Screen {
             public void clicked (InputEvent event, float x, float y)
             {
                 btnSound.play(1.0f);
-                // TODO when restart the game
+                newGame();
 
             }
         });
@@ -156,11 +155,12 @@ public class GameClass implements Screen {
             }
         });
 
-        btnBackToPlayerSelectMenu.addListener(new ClickListener(){
+        btnHowToPlay.addListener(new ClickListener(){
             @Override
             public void clicked (InputEvent event, float x, float y)
             {
                 btnSound.play(1.0f);
+                //TODO Show Game Help Menu
             }
         });
 
@@ -245,15 +245,15 @@ public class GameClass implements Screen {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
 
-        stage.addActor(menuBackground);
-        stage.addActor(btnRestartGame);
-        stage.addActor(btnExit);
-        stage.addActor(btnBackToPlayerSelectMenu);
+        pauseMenuStage.addActor(menuBackground);
+        pauseMenuStage.addActor(btnRestartGame);
+        pauseMenuStage.addActor(btnExit);
+        pauseMenuStage.addActor(btnHowToPlay);
         stage.addActor(playerHealthBar);
         stage.addActor(opponentHealthBar);
 
         Gdx.input.setInputProcessor(stage);
-
+        Gdx.input.setInputProcessor(pauseMenuStage);
         newGame();
 
         player_CurrentState = State.Idle;
@@ -346,7 +346,7 @@ public class GameClass implements Screen {
         batch.draw(Opponent_Frame,1000+220,50,-220,400);
         moveLeftButton.draw(batch);
         moveRightButton.draw(batch);
-//        pauseMenuStage.draw();
+        pauseMenuStage.draw();
         batch.end();
 
     }
