@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,14 +31,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 
 public class GameClass implements Screen {
 
     MyGdxGame game;
     public enum GameState { PLAYING, COMPLETE };
-    public static final float MOVEMENT_SPEED = 200.0f;
+    public static final float MOVEMENT_SPEED = 4.0f;
     GameState gameState = GameState.PLAYING;
 
     public enum State {Idle,Walking, Kicking, Punching, Special, dead, Loose, Win;}
@@ -97,8 +97,10 @@ public class GameClass implements Screen {
     int playerWinCount=0;
     int opponentWinCount=0;
 
-    public Body b2bodyplayer;
-    public World world;
+    private Body b2bodyplayer;
+    private BodyDef playerDef;
+    private World world;
+    private PolygonShape playershape;
     private Box2DDebugRenderer debugRenderer;
 
     private Stage stage;
@@ -201,8 +203,6 @@ public class GameClass implements Screen {
         timer = new Timer();
         stage = new Stage();
         pauseMenuStage = new Stage();
-        debugRenderer = new Box2DDebugRenderer();
-
         buttonSquareTexture = new Texture("buttonSquare_blue.png");
         buttonSquareDownTexture = new Texture("buttonSquare_beige_pressed.png");
         playerRoundWins = new Label("Wins "+playerWinCount, new Label.LabelStyle(new BitmapFont(), Color.GOLDENROD));
@@ -234,17 +234,18 @@ public class GameClass implements Screen {
         moveRightButton = new Button(20+buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
 
         world = new World(new Vector2(0,10),true);
+        debugRenderer = new Box2DDebugRenderer();
 
-        PolygonShape playershape = new PolygonShape();
+        playershape = new PolygonShape();
         playershape.setAsBox(15,25);
 
-        BodyDef playerDef = new BodyDef();
+        playerDef = new BodyDef();
         playerDef.position.set(new Vector2(165,35));
-
         playerDef.type = BodyDef.BodyType.DynamicBody;
 
         b2bodyplayer = world.createBody(playerDef);
-        b2bodyplayer.createFixture(playershape, 0.0f);
+        b2bodyplayer.createFixture(playershape, 0.5f);
+
 
 
         HealthBar  playerHealthBar = new HealthBar();
@@ -286,7 +287,7 @@ public class GameClass implements Screen {
         batch = new SpriteBatch();                // #12
         playerDelta = new Vector2();
         playerSprite = new Sprite(PlayerClass.getPlayers().getIdle().getKeyFrames()[0]);
-        stateTime = 0.0f;
+        stateTime = 0.33f;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 490 , 160  );
@@ -339,19 +340,21 @@ public class GameClass implements Screen {
 
                 int moveX = 0;
                 int moveY = 0;
-                if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || moveLeftButton.isDown) {
+                if (Gdx.input.isKeyPressed(Input.Keys.UP) || moveLeftButton.isDown) {
+
                     moveLeftButton.isDown = true;
                     player_CurrentState = State.Walking;
                     moveX -= 1;
-                    playerDelta.x = moveX * MOVEMENT_SPEED * dt;
+                    playerDelta.x = moveX * MOVEMENT_SPEED;
                     playerSprite.translateX(playerDelta.x);
-
-                } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || moveRightButton.isDown) {
+//                   b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || moveRightButton.isDown) {
                     moveRightButton.isDown = true;
                     moveX += 1;
-                    playerDelta.x = moveX * MOVEMENT_SPEED * dt;
+                    playerDelta.x = moveX * MOVEMENT_SPEED;
                     playerSprite.translateX(playerDelta.x);
                     player_CurrentState = State.Walking;
+                    b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
 
                 }
                 //TODO Determine Character Movement Distance
@@ -360,9 +363,22 @@ public class GameClass implements Screen {
                 //playerSprite.translateX(playerDelta.x);
                // camera.position.x += MOVEMENT_SPEED*dt;
 
-                //TODO Retrieve Collision layer
+                if(Gdx.input.justTouched()){
 
-                //Don't do anything if we're not moving
+                    //condition to check if the player has touched the upper half of screen then make the player jump
+                    if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2){
+                        player_CurrentState = State.Punching;
+                        Timer.schedule(new Timer.Task() { @Override public void run() {  player_CurrentState = State.Idle; }}, 0.5f);
+
+                    }
+                    //condition to check if the player has touched the bottom half of screen then make the player slide
+                    else {
+                        player_CurrentState = State.Kicking;
+                        Timer.schedule(new Timer.Task() { @Override public void run() {  player_CurrentState = State.Idle; }},0.5f);
+
+                    }
+                }
+
 
                 //TODO Move only if the target cell is empty
 //                PlayerClass.getPlayers().translate(playerDelta.x, playerDelta.y);
@@ -380,7 +396,8 @@ public class GameClass implements Screen {
             default:
                 throw new IllegalStateException("Unexpected value: " + gameState);
         }
-
+        camera.update();
+        tiledMapRenderer.setView(camera);
     }
         @Override
     public void render(float delta) {
@@ -397,17 +414,18 @@ public class GameClass implements Screen {
         Player_Frame =  get_Player_current_state();
         Opponent_Frame = OpponentClass.getOpponent().getIdle().getKeyFrame(stateTime, true);
 
+
 //		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
 //		Gdx.app.log("current time",Float.toString(stateTime));
 //		Gdx.app.log("current frame index",Integer.toString(frameIndex));
-        camera.update();
 
-        tiledMapRenderer.setView(camera);
+
         tiledMapRenderer.render();
+        debugRenderer.render(world,camera.combined);
 
         batch.begin();
         stage.draw();
-        batch.draw(Player_Frame,playerSprite.getX(),50,200,400);
+        batch.draw(Player_Frame,playerSprite.getX(),50,220,400);
         batch.draw(Opponent_Frame,1000+220,50,-220,400);
         moveLeftButton.draw(batch);
         moveRightButton.draw(batch);
@@ -440,7 +458,7 @@ public class GameClass implements Screen {
             Player_Frame = PlayerClass.getPlayers().getWalk().getKeyFrame(stateTime, true);
         }
         if(player_CurrentState == State.Punching){
-            Player_Frame =  PlayerClass.getPlayers().getPunch().getKeyFrame(stateTime, false);
+            Player_Frame =  PlayerClass.getPlayers().getPunch().getKeyFrame(0.33f, false);
         }
         if(player_CurrentState == State.Kicking){
             Player_Frame = PlayerClass.getPlayers().getKick().getKeyFrame(stateTime, false);
@@ -492,7 +510,10 @@ public class GameClass implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+// Camera is updated here to support changes in screen size
+//        camera.viewportWidth = 640;
+//        camera.viewportHeight = camera.viewportWidth * (float)height / (float)width;
+//        camera.update();
     }
 
     @Override
