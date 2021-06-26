@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,7 +35,7 @@ public class GameClass implements Screen {
 
     MyGdxGame game;
     public enum GameState { PLAYING, COMPLETE };
-    public static final float MOVEMENT_SPEED = 200.0f;
+    public static final float MOVEMENT_SPEED = 4.0f;
     GameState gameState = GameState.PLAYING;
 
     public enum State {Idle,Walking, Kicking, Punching, Special, dead, Loose, Win;}
@@ -85,8 +86,10 @@ public class GameClass implements Screen {
     TextButton btnExit;
     private Stage pauseMenuStage;
 
-    public Body b2bodyplayer;
-    public World world;
+    private Body b2bodyplayer;
+    private BodyDef playerDef;
+    private World world;
+    private PolygonShape playershape;
     private Box2DDebugRenderer debugRenderer;
 
     private Stage stage;
@@ -169,8 +172,6 @@ public class GameClass implements Screen {
 
         stage = new Stage();
         pauseMenuStage = new Stage();
-        debugRenderer = new Box2DDebugRenderer();
-
         buttonSquareTexture = new Texture("buttonSquare_blue.png");
         buttonSquareDownTexture = new Texture("buttonSquare_beige_pressed.png");
 
@@ -187,17 +188,18 @@ public class GameClass implements Screen {
         moveRightButton = new Button(20+buttonSize*2, buttonSize, buttonSize, buttonSize, buttonSquareTexture, buttonSquareDownTexture);
 
         world = new World(new Vector2(0,10),true);
+        debugRenderer = new Box2DDebugRenderer();
 
-        PolygonShape playershape = new PolygonShape();
+        playershape = new PolygonShape();
         playershape.setAsBox(15,25);
 
-        BodyDef playerDef = new BodyDef();
+        playerDef = new BodyDef();
         playerDef.position.set(new Vector2(165,35));
-
         playerDef.type = BodyDef.BodyType.DynamicBody;
 
         b2bodyplayer = world.createBody(playerDef);
-        b2bodyplayer.createFixture(playershape, 0.0f);
+        b2bodyplayer.createFixture(playershape, 0.5f);
+
 
 
         HealthBar  playerHealthBar = new HealthBar();
@@ -284,18 +286,20 @@ public class GameClass implements Screen {
                 int moveX = 0;
                 int moveY = 0;
                 if (Gdx.input.isKeyPressed(Input.Keys.UP) || moveLeftButton.isDown) {
+
                     moveLeftButton.isDown = true;
                     player_CurrentState = State.Walking;
                     moveX -= 1;
-                    playerDelta.x = moveX * MOVEMENT_SPEED * dt;
+                    playerDelta.x = moveX * MOVEMENT_SPEED;
                     playerSprite.translateX(playerDelta.x);
-
+//                   b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || moveRightButton.isDown) {
                     moveRightButton.isDown = true;
                     moveX += 1;
-                    playerDelta.x = moveX * MOVEMENT_SPEED * dt;
+                    playerDelta.x = moveX * MOVEMENT_SPEED;
                     playerSprite.translateX(playerDelta.x);
                     player_CurrentState = State.Walking;
+                    b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
 
                 }
                 //TODO Determine Character Movement Distance
@@ -335,7 +339,8 @@ public class GameClass implements Screen {
             }
 
         }
-
+        camera.update();
+        tiledMapRenderer.setView(camera);
     }
         @Override
     public void render(float delta) {
@@ -346,13 +351,14 @@ public class GameClass implements Screen {
         Player_Frame =  get_Player_current_state();
         Opponent_Frame = OpponentClass.getOpponent().getIdle().getKeyFrame(stateTime, true);
 
+
 //		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
 //		Gdx.app.log("current time",Float.toString(stateTime));
 //		Gdx.app.log("current frame index",Integer.toString(frameIndex));
-        camera.update();
 
-        tiledMapRenderer.setView(camera);
+
         tiledMapRenderer.render();
+        debugRenderer.render(world,camera.combined);
 
         batch.begin();
         stage.draw();
@@ -435,7 +441,10 @@ public class GameClass implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+// Camera is updated here to support changes in screen size
+//        camera.viewportWidth = 640;
+//        camera.viewportHeight = camera.viewportWidth * (float)height / (float)width;
+//        camera.update();
     }
 
     @Override
