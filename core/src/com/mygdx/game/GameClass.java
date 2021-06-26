@@ -28,9 +28,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
 
 public class GameClass implements Screen {
 
@@ -85,12 +86,16 @@ public class GameClass implements Screen {
     TextButton btnHowToPlay;
     TextButton btnExit;
     TextButton btnPause;
-    Label roundWins;
+    Label playerRoundWins;
+    Label opponentRoundWins;
     Label roundTime;
     private Stage pauseMenuStage;
+    static long roundTim;
+    static Timer timer;
 
 
-    int winCount=0;
+    int playerWinCount=0;
+    int opponentWinCount=0;
 
     public Body b2bodyplayer;
     public World world;
@@ -162,6 +167,7 @@ public class GameClass implements Screen {
             }
         });
 
+
         btnRestartGame.addListener(new ClickListener()
         {
             @Override
@@ -192,25 +198,32 @@ public class GameClass implements Screen {
         });
 
         //***********************************************************************CompleteMenuStage**************************************************************************
-
+        timer = new Timer();
         stage = new Stage();
         pauseMenuStage = new Stage();
         debugRenderer = new Box2DDebugRenderer();
 
         buttonSquareTexture = new Texture("buttonSquare_blue.png");
         buttonSquareDownTexture = new Texture("buttonSquare_beige_pressed.png");
-        roundWins = new Label("Wins "+winCount, new Label.LabelStyle(new BitmapFont(), Color.GOLDENROD));
-        roundTime = new Label("99", new Label.LabelStyle(new BitmapFont(), Color.GOLDENROD));
+        playerRoundWins = new Label("Wins "+playerWinCount, new Label.LabelStyle(new BitmapFont(), Color.GOLDENROD));
+        opponentRoundWins = new Label("Wins "+opponentWinCount, new Label.LabelStyle(new BitmapFont(), Color.GOLDENROD));
+        roundTime = new Label("", new Label.LabelStyle(new BitmapFont(), Color.GOLDENROD));
 
-        roundWins.setFontScale(3,2);
-        roundWins.getStyle().fontColor = Color.WHITE;
-        roundWins.setPosition(100,1000);
-        roundWins.setVisible(true);
+        playerRoundWins.setFontScale(3,2);
+        playerRoundWins.getStyle().fontColor = Color.WHITE;
+        playerRoundWins.setPosition(100,1000);
+        playerRoundWins.setVisible(true);
+
+        opponentRoundWins.setFontScale(3,2);
+        opponentRoundWins.getStyle().fontColor = Color.WHITE;
+        opponentRoundWins.setPosition(1300,1000);
+        opponentRoundWins.setVisible(true);
 
         roundTime.setFontScale(8,6);
         roundTime.getStyle().fontColor = Color.WHITE;
         roundTime.setPosition(1050,950);
         roundTime.setVisible(true);
+
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -267,6 +280,7 @@ public class GameClass implements Screen {
             }
 
         });
+        roundTim = TimeUtils.millis();
 
 
         batch = new SpriteBatch();                // #12
@@ -287,7 +301,8 @@ public class GameClass implements Screen {
         stage.addActor(playerHealthBar);
         stage.addActor(opponentHealthBar);
         stage.addActor(roundTime);
-        stage.addActor(roundWins);
+        stage.addActor(playerRoundWins);
+        stage.addActor(opponentRoundWins);
         pauseMenuStage.addActor(btnPause);
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setInputProcessor(pauseMenuStage);
@@ -302,7 +317,10 @@ public class GameClass implements Screen {
         create();
     }
 
+
     private void update() {
+
+
         dt = Gdx.graphics.getDeltaTime();
         //Touch Input Info
         boolean checkTouch = Gdx.input.isTouched();
@@ -312,7 +330,9 @@ public class GameClass implements Screen {
         //Update Game State based on input
         switch (gameState) {
 
+
             case PLAYING:
+
                 //Poll user for input
                 moveLeftButton.update(checkTouch, touchX, touchY);
                 moveRightButton.update(checkTouch, touchX, touchY);
@@ -357,6 +377,8 @@ public class GameClass implements Screen {
                 break;
             }
 
+            default:
+                throw new IllegalStateException("Unexpected value: " + gameState);
         }
 
     }
@@ -364,6 +386,12 @@ public class GameClass implements Screen {
     public void render(float delta) {
         update();
         dt = Gdx.graphics.getDeltaTime();
+
+        if(TimeUtils.timeSinceMillis(roundTim)/1000 < 91 && TimeUtils.timeSinceMillis(roundTim)/1000 >= 0 )
+        roundTime.setText(String.valueOf(TimeUtils.timeSinceMillis(roundTim)/1000));
+
+
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
         Player_Frame =  get_Player_current_state();
@@ -386,6 +414,8 @@ public class GameClass implements Screen {
         pauseMenuStage.draw();
         batch.end();
 
+
+
     }
     private void newGame() {
 //        camera.position.x = 1000;
@@ -394,10 +424,10 @@ public class GameClass implements Screen {
         btnRestartGame.setVisible(false);
         btnHowToPlay.setVisible(false);
         btnExit.setVisible(false);
-        winCount = 0;
+        playerWinCount = 0;
 
         playerSprite.setPosition(600,0);
-
+        roundTim = TimeUtils.millis();
         dt = 0.0f;
     }
 
