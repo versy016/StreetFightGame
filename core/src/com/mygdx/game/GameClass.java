@@ -21,7 +21,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -37,8 +36,8 @@ import com.badlogic.gdx.utils.Timer;
 public class GameClass implements Screen {
 
     MyGdxGame game;
-    public enum GameState { PLAYING, COMPLETE };
-    public static final float MOVEMENT_SPEED = 4.0f;
+    public enum GameState { PLAYING, COMPLETE ,PAUSE};
+    public static final float MOVEMENT_SPEED = 200.0f;
     GameState gameState = GameState.PLAYING;
 
     public enum State {Idle,Walking, Kicking, Punching, Special, dead, Loose, Win;}
@@ -85,7 +84,7 @@ public class GameClass implements Screen {
     TextButton btnRestartGame;
     Sound btnSound;
     TextButton btnHowToPlay;
-    TextButton btnExit;
+    TextButton btnUnpause;
     TextButton btnPause;
     Label playerRoundWins;
     Label opponentRoundWins;
@@ -93,7 +92,11 @@ public class GameClass implements Screen {
     private Stage pauseMenuStage;
     static long roundTim;
     static Timer timer;
+    Image messageBoxBackGround;
 
+
+    //Variable for save currentRoundTime to build pause functionality
+    long currentRoundTime = 0;
 
     int playerWinCount=0;
     int opponentWinCount=0;
@@ -112,13 +115,17 @@ public class GameClass implements Screen {
 
     public void create() {
 
+
+
+
+
         //***********************************************************************CompleteMenuStage**************************************************************************************
         comMenuBG = new Texture("Starting Assets/assets/finishedbg.png");
 
         skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
         btnRestartGame = new TextButton("Restart", skin, "default");
         btnHowToPlay = new TextButton("HowToPlay",skin,"default");
-        btnExit = new TextButton("Exit", skin, "default");
+        btnUnpause = new TextButton("Unpause", skin, "default");
         btnSound = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
         btnPause = new TextButton("Pause",skin,"default");
 
@@ -143,12 +150,12 @@ public class GameClass implements Screen {
         btnHowToPlay.setPosition(750, 600);
         btnHowToPlay.setVisible(false);
 
-        btnExit.setWidth(600f);
-        btnExit.setHeight(100f);
-        btnExit.getLabel().setFontScale(5);
-        btnExit.setColor(Color.GOLD);
-        btnExit.setPosition(750, 400);
-        btnExit.setVisible(false);
+        btnUnpause.setWidth(600f);
+        btnUnpause.setHeight(100f);
+        btnUnpause.getLabel().setFontScale(5);
+        btnUnpause.setColor(Color.GOLD);
+        btnUnpause.setPosition(750, 400);
+        btnUnpause.setVisible(false);
 
         btnPause.setWidth(100f);
         btnPause.setHeight(100f);
@@ -162,11 +169,13 @@ public class GameClass implements Screen {
             @Override
             public void clicked (InputEvent event, float x, float y)
             {
+                currentRoundTime = TimeUtils.millis();
                 btnSound.play(1.0f);
                 menuBackground.setVisible(true);
                 btnRestartGame.setVisible(true);
                 btnHowToPlay.setVisible(true);
-                btnExit.setVisible(true);
+                btnUnpause.setVisible(true);
+                gameState = GameState.PAUSE;
             }
         });
 
@@ -181,13 +190,19 @@ public class GameClass implements Screen {
             }
         });
 
-        btnExit.addListener(new ClickListener()
+        btnUnpause.addListener(new ClickListener()
         {
             @Override
             public void clicked (InputEvent event, float x, float y)
             {
                 btnSound.play(1.0f);
-                Gdx.app.exit();
+                menuBackground.setVisible(false);
+                btnRestartGame.setVisible(false);
+                btnHowToPlay.setVisible(false);
+                btnUnpause.setVisible(false);
+                long pauseTime = roundTim - currentRoundTime;
+                roundTim = roundTim-pauseTime;
+                gameState = GameState.PLAYING;
             }
         });
 
@@ -201,6 +216,19 @@ public class GameClass implements Screen {
         });
 
         //***********************************************************************CompleteMenuStage**************************************************************************
+
+        //***********************************************************************MessageBox*********************************************************************************************
+        messageBoxBackGround = new Image(comMenuBG);
+        messageBoxBackGround.setSize(900,450);
+        messageBoxBackGround.setX(200);
+        messageBoxBackGround.setY(200);
+        messageBoxBackGround.setZIndex(2);
+        messageBoxBackGround.setVisible(false);
+        //***********************************************************************MessageBox*********************************************************************************************
+
+
+
+
         timer = new Timer();
         stage = new Stage();
         pauseMenuStage = new Stage();
@@ -298,7 +326,7 @@ public class GameClass implements Screen {
 
         pauseMenuStage.addActor(menuBackground);
         pauseMenuStage.addActor(btnRestartGame);
-        pauseMenuStage.addActor(btnExit);
+        pauseMenuStage.addActor(btnUnpause);
         pauseMenuStage.addActor(btnHowToPlay);
         stage.addActor(playerHealthBar);
         stage.addActor(opponentHealthBar);
@@ -406,10 +434,12 @@ public class GameClass implements Screen {
         update();
         dt = Gdx.graphics.getDeltaTime();
 
-        if(TimeUtils.timeSinceMillis(roundTim)/1000 < 91 && TimeUtils.timeSinceMillis(roundTim)/1000 >= 0 )
-        roundTime.setText(String.valueOf(TimeUtils.timeSinceMillis(roundTim)/1000));
-
-
+        //Round Timer
+        if(gameState != GameState.PAUSE){
+            if(TimeUtils.timeSinceMillis(roundTim)/1000 < 91 && TimeUtils.timeSinceMillis(roundTim)/1000 >= 0 ){
+                roundTime.setText(String.valueOf(TimeUtils.timeSinceMillis(roundTim)/1000));
+            }
+        }
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
@@ -437,17 +467,17 @@ public class GameClass implements Screen {
 
     }
     private void newGame() {
-//        camera.position.x = 1000;
-//        camera.position.y = 100;
+
         menuBackground.setVisible(false);
         btnRestartGame.setVisible(false);
         btnHowToPlay.setVisible(false);
-        btnExit.setVisible(false);
+        btnUnpause.setVisible(false);
         playerWinCount = 0;
 
         playerSprite.setPosition(600,0);
         roundTim = TimeUtils.millis();
         dt = 0.0f;
+        gameState = GameState.PLAYING;
     }
 
     public TextureRegion get_Player_current_state(){
