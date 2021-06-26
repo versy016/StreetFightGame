@@ -37,7 +37,7 @@ public class GameClass implements Screen {
 
     MyGdxGame game;
     public enum GameState { PLAYING, COMPLETE ,PAUSE};
-    public static final float MOVEMENT_SPEED = 200.0f;
+    public static final float MOVEMENT_SPEED = 4.0f;
     GameState gameState = GameState.PLAYING;
 
     public enum State {Idle,Walking, Kicking, Punching, Special, dead, Loose, Win;}
