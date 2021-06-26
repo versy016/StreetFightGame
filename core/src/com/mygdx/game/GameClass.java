@@ -31,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 
 public class GameClass implements Screen {
@@ -347,7 +348,7 @@ public class GameClass implements Screen {
                     moveX -= 1;
                     playerDelta.x = moveX * MOVEMENT_SPEED;
                     playerSprite.translateX(playerDelta.x);
-//                   b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
+                   b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || moveRightButton.isDown) {
                     moveRightButton.isDown = true;
                     moveX += 1;
@@ -396,6 +397,7 @@ public class GameClass implements Screen {
             default:
                 throw new IllegalStateException("Unexpected value: " + gameState);
         }
+        world.step(1/60f,6,2);
         camera.update();
         tiledMapRenderer.setView(camera);
     }
@@ -431,7 +433,6 @@ public class GameClass implements Screen {
         moveRightButton.draw(batch);
         pauseMenuStage.draw();
         batch.end();
-
 
 
     }
