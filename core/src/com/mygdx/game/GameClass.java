@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 
 public class GameClass implements Screen {
 
@@ -237,7 +238,7 @@ public class GameClass implements Screen {
         batch = new SpriteBatch();                // #12
         playerDelta = new Vector2();
         playerSprite = new Sprite(PlayerClass.getPlayers().getIdle().getKeyFrames()[0]);
-        stateTime = 0.0f;
+        stateTime = 0.33f;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 490 , 160  );
@@ -282,14 +283,14 @@ public class GameClass implements Screen {
 
                 int moveX = 0;
                 int moveY = 0;
-                if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || moveLeftButton.isDown) {
+                if (Gdx.input.isKeyPressed(Input.Keys.UP) || moveLeftButton.isDown) {
                     moveLeftButton.isDown = true;
                     player_CurrentState = State.Walking;
                     moveX -= 1;
                     playerDelta.x = moveX * MOVEMENT_SPEED * dt;
                     playerSprite.translateX(playerDelta.x);
 
-                } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || moveRightButton.isDown) {
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || moveRightButton.isDown) {
                     moveRightButton.isDown = true;
                     moveX += 1;
                     playerDelta.x = moveX * MOVEMENT_SPEED * dt;
@@ -303,9 +304,22 @@ public class GameClass implements Screen {
                 //playerSprite.translateX(playerDelta.x);
                // camera.position.x += MOVEMENT_SPEED*dt;
 
-                //TODO Retrieve Collision layer
+                if(Gdx.input.justTouched()){
 
-                //Don't do anything if we're not moving
+                    //condition to check if the player has touched the upper half of screen then make the player jump
+                    if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2){
+                        player_CurrentState = State.Punching;
+                        Timer.schedule(new Timer.Task() { @Override public void run() {  player_CurrentState = State.Idle; }}, 0.5f);
+
+                    }
+                    //condition to check if the player has touched the bottom half of screen then make the player slide
+                    else {
+                        player_CurrentState = State.Kicking;
+                        Timer.schedule(new Timer.Task() { @Override public void run() {  player_CurrentState = State.Idle; }},0.5f);
+
+                    }
+                }
+
 
                 //TODO Move only if the target cell is empty
 //                PlayerClass.getPlayers().translate(playerDelta.x, playerDelta.y);
@@ -342,7 +356,7 @@ public class GameClass implements Screen {
 
         batch.begin();
         stage.draw();
-        batch.draw(Player_Frame,playerSprite.getX(),50,200,400);
+        batch.draw(Player_Frame,playerSprite.getX(),50,220,400);
         batch.draw(Opponent_Frame,1000+220,50,-220,400);
         moveLeftButton.draw(batch);
         moveRightButton.draw(batch);
@@ -369,7 +383,7 @@ public class GameClass implements Screen {
             Player_Frame = PlayerClass.getPlayers().getWalk().getKeyFrame(stateTime, true);
         }
         if(player_CurrentState == State.Punching){
-            Player_Frame =  PlayerClass.getPlayers().getPunch().getKeyFrame(stateTime, false);
+            Player_Frame =  PlayerClass.getPlayers().getPunch().getKeyFrame(0.33f, false);
         }
         if(player_CurrentState == State.Kicking){
             Player_Frame = PlayerClass.getPlayers().getKick().getKeyFrame(stateTime, false);
