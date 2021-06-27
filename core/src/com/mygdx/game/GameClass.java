@@ -46,11 +46,13 @@ public class GameClass implements Screen {
     public enum State {Idle,Walking, Kicking, Punching, Special, dead, Loose, Win;}
 
     State player_CurrentState;
-    State OpponentcurrentState;
+    State opponent_CurrentState;
 
     private Music music2;
     private float stateTime;
     private Sprite playerSprite;
+    private Sprite opponentSprite;
+
     float dt;               //game delata time variable
     private SpriteBatch batch;                   // Spritebatch for rendering
 
@@ -70,6 +72,11 @@ public class GameClass implements Screen {
     private Texture buttonSquareTextureForSuperPower;
 
     Vector2 playerDelta;
+    Vector2 opponentDelta;
+
+    //Player Coordinates
+    int characterX;
+    int characterY;
 
 
     //UI Buttons
@@ -107,10 +114,14 @@ public class GameClass implements Screen {
     int playerWinCount=0;
     int opponentWinCount=0;
 
-    private Body b2bodyplayer;
+    private Body b2bodyPlayer;
     private BodyDef playerDef;
     private World world;
-    private PolygonShape playershape;
+    private PolygonShape playerShape;
+
+    private Body b2bodyOpponent;
+    private BodyDef opponentDef;
+    private PolygonShape opponentShape;
     private Box2DDebugRenderer debugRenderer;
 
     private Stage stage;
@@ -266,18 +277,26 @@ public class GameClass implements Screen {
         moveForwardButton = new Button(90+buttonSize, 150, buttonSize, buttonSize, buttonSquareTextureForForward, buttonSquareTextureForForward);
 
 
-        world = new World(new Vector2(0,10),true);
+        world = new World(new Vector2(0,0),true);
         debugRenderer = new Box2DDebugRenderer();
 
-        playershape = new PolygonShape();
-        playershape.setAsBox(15,25);
+        playerShape = new PolygonShape();
+        playerShape.setAsBox(25,33);
 
         playerDef = new BodyDef();
-        playerDef.position.set(new Vector2(165,35));
+        playerDef.position.set(new Vector2(180,45));
         playerDef.type = BodyDef.BodyType.DynamicBody;
+        b2bodyPlayer = world.createBody(playerDef);
+        b2bodyPlayer.createFixture(playerShape,1.0f);
 
-        b2bodyplayer = world.createBody(playerDef);
-        b2bodyplayer.createFixture(playershape, 0.5f);
+        opponentShape = new PolygonShape();
+        opponentShape.setAsBox(25,33);
+
+        opponentDef = new BodyDef();
+        opponentDef.position.set(new Vector2(320,45));
+        opponentDef.type = BodyDef.BodyType.DynamicBody;
+        b2bodyOpponent = world.createBody(opponentDef);
+        b2bodyOpponent.createFixture(opponentShape,1.0f);
 
 
 
@@ -323,7 +342,11 @@ public class GameClass implements Screen {
 
         batch = new SpriteBatch();                // #12
         playerDelta = new Vector2();
+        opponentDelta = new Vector2();
         playerSprite = new Sprite(PlayerClass.getPlayers().getIdle().getKeyFrames()[0]);
+        opponentSprite = new Sprite(OpponentClass.getOpponent().getIdle().getKeyFrames()[0]);
+        playerSprite.setX((Gdx.graphics.getWidth()/2)-500);
+        opponentSprite.setX((Gdx.graphics.getWidth()/2)+500);
         stateTime = 0.33f;
 
         camera = new OrthographicCamera();
@@ -347,7 +370,7 @@ public class GameClass implements Screen {
         newGame();
 
         player_CurrentState = State.Idle;
-
+        opponent_CurrentState = State.Idle;
     }
     @Override
     public void show() {
@@ -356,7 +379,7 @@ public class GameClass implements Screen {
     }
 
 
-    private void update() {
+    private void updateplayer() {
 
 
 
@@ -368,7 +391,6 @@ public class GameClass implements Screen {
 
         //Update Game State based on input
         switch (gameState) {
-
 
             case PLAYING:
 
@@ -390,24 +412,34 @@ public class GameClass implements Screen {
 
 
                 int moveX = 0;
-                int moveY = 0;
-                if (Gdx.input.isKeyPressed(Input.Keys.UP) || moveBackwardButton.isDown) {
+                if (Gdx.input.isKeyPressed(Input.Keys.UP) || moveLeftButton.isDown ) {
+                    //b2bodyplayer.applyLinearImpulse(new Vector2(-4f,0), b2bodyplayer.getWorldCenter(),true);
 
                     moveBackwardButton.isDown = true;
                     player_CurrentState = State.Walking;
                     moveX -= 1;
                     playerDelta.x = moveX * MOVEMENT_SPEED;
                     playerSprite.translateX(playerDelta.x);
-                   b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || moveForwardButton.isDown) {
-                    moveForwardButton.isDown = true;
-                    moveX += 1;
-                    playerDelta.x = moveX * MOVEMENT_SPEED;
-                    playerSprite.translateX(playerDelta.x);
-                    player_CurrentState = State.Walking;
-                    b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
+                    b2bodyPlayer.setLinearVelocity(moveX*57+dt, b2bodyPlayer.getLinearVelocity().y);
 
                 }
+                else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || moveRightButton.isDown ) {
+                    //b2bodyplayer.applyLinearImpulse(new Vector2(4f,0), b2bodyplayer.getWorldCenter(),true);
+                    moveRightButton.isDown = true;
+                    moveX += 1;
+                    playerDelta.x = moveX * MOVEMENT_SPEED;
+                    player_CurrentState = State.Walking;
+                    b2bodyPlayer.setLinearVelocity(moveX*57-dt, b2bodyPlayer.getLinearVelocity().y);
+                    playerSprite.translateX(playerDelta.x);
+
+                }
+                else
+                    b2bodyPlayer.setLinearVelocity(0f, 0f);
+               // TODO Determine Character Movement Distance
+               // playerDelta.x = moveX * MOVEMENT_SPEED * dt;
+                //Movement update
+                //playerSprite.translateX(playerDelta.x);
+               // camera.position.x += MOVEMENT_SPEED*dt;
 
                 if(Gdx.input.justTouched()){
 
@@ -430,8 +462,6 @@ public class GameClass implements Screen {
 //                PlayerClass.getPlayers().translate(playerDelta.x, playerDelta.y);
 //                camera.translate(playerDelta);
 
-
-
                 break;
             case COMPLETE:
             {
@@ -448,9 +478,29 @@ public class GameClass implements Screen {
         camera.update();
         tiledMapRenderer.setView(camera);
     }
+
+    private void updateOpponent() {
+        opponentDelta.x = 2;
+
+        switch (gameState) {
+            case PLAYING:
+                if(playerSprite.getX()+700 < opponentSprite.getX()){
+                    opponent_CurrentState = State.Walking;
+                    opponentSprite.translateX(-opponentDelta.x);
+                    b2bodyOpponent.setLinearVelocity((-1*28)-dt, b2bodyOpponent.getLinearVelocity().y);
+
+                }
+                else if(opponentSprite.getX() > playerSprite.getX()+300){
+                    opponent_CurrentState = State.Idle;
+                    b2bodyOpponent.setLinearVelocity(0f, 0f);
+
+              }
+        }
+    }
         @Override
     public void render(float delta) {
-        update();
+        updateplayer();
+        updateOpponent();
         dt = Gdx.graphics.getDeltaTime();
 
         timer.scheduleTask(new Timer.Task() {
@@ -473,19 +523,17 @@ public class GameClass implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
         Player_Frame =  get_Player_current_state();
-        Opponent_Frame = OpponentClass.getOpponent().getIdle().getKeyFrame(stateTime, true);
-
-
-//		frameIndex = walkAnimation.getKeyFrameIndex(stateTime);
-//		Gdx.app.log("current time",Float.toString(stateTime));
-//		Gdx.app.log("current frame index",Integer.toString(frameIndex));
-
+        Opponent_Frame = get_Opponent_current_state();
 
         tiledMapRenderer.render();
         debugRenderer.render(world,camera.combined);
 
         batch.begin();
         stage.draw();
+        batch.draw(Player_Frame,playerSprite.getX(),50,350,500);
+        batch.draw(Opponent_Frame,opponentSprite.getX(),50,-350,500);
+        moveLeftButton.draw(batch);
+        moveRightButton.draw(batch);
         batch.draw(Player_Frame,playerSprite.getX(),50,220,400);
         batch.draw(Opponent_Frame,1000+220,50,-220,400);
         moveBackwardButton.draw(batch);
@@ -519,13 +567,14 @@ public class GameClass implements Screen {
             Player_Frame = PlayerClass.getPlayers().getIdle().getKeyFrame(stateTime, true);
         }
         if(player_CurrentState == State.Walking){
-            Player_Frame = PlayerClass.getPlayers().getWalk().getKeyFrame(stateTime, true);
+            Player_Frame = PlayerClass.getPlayers().getWalk().getKeyFrame(0.025f, true);
         }
         if(player_CurrentState == State.Punching){
             Player_Frame =  PlayerClass.getPlayers().getPunch().getKeyFrame(0.33f, false);
         }
         if(player_CurrentState == State.Kicking){
             Player_Frame = PlayerClass.getPlayers().getKick().getKeyFrame(stateTime, false);
+
         }
         if(player_CurrentState == State.Special){
             Player_Frame =  PlayerClass.getPlayers().getSpecial().getKeyFrame(stateTime, false);
@@ -546,25 +595,28 @@ public class GameClass implements Screen {
 
     public TextureRegion get_Opponent_current_state(){
 
-        if(OpponentcurrentState == State.Walking){
+        if(opponent_CurrentState == State.Idle){
+            Opponent_Frame = OpponentClass.getOpponent().getIdle().getKeyFrame(stateTime, true);
+        }
+        if(opponent_CurrentState == State.Walking){
            Opponent_Frame = OpponentClass.getOpponent().getWalk().getKeyFrame(stateTime, true);
         }
-        if(OpponentcurrentState == State.Punching){
+        if(opponent_CurrentState == State.Punching){
             Opponent_Frame =  OpponentClass.getOpponent().getPunch().getKeyFrame(stateTime, false);
         }
-        if(OpponentcurrentState == State.Kicking){
+        if(opponent_CurrentState == State.Kicking){
             Opponent_Frame = OpponentClass.getOpponent().getKick().getKeyFrame(stateTime, false);
         }
-        if(OpponentcurrentState == State.Special){
+        if(opponent_CurrentState == State.Special){
             Opponent_Frame =  OpponentClass.getOpponent().getSpecial().getKeyFrame(stateTime, false);
         }
-        if(OpponentcurrentState == State.Win){
+        if(opponent_CurrentState == State.Win){
             Opponent_Frame = OpponentClass.getOpponent().getWin().getKeyFrame(stateTime, false);
         }
-        if(OpponentcurrentState == State.dead){
+        if(opponent_CurrentState == State.dead){
             Opponent_Frame = OpponentClass.getOpponent().getDead().getKeyFrame(stateTime, false);
         }
-        if(OpponentcurrentState == State.Loose){
+        if(opponent_CurrentState == State.Loose){
             Opponent_Frame = OpponentClass.getOpponent().getLoose().getKeyFrame(stateTime, false);
         }
 
