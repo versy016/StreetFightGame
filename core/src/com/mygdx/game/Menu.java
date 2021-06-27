@@ -95,6 +95,7 @@ public class Menu implements Screen
             {
                 btnSound.play(1.0f);
                 game.setScreen(MyGdxGame.psmclass);
+                music.stop();
 
             }
         });

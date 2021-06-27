@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -35,10 +37,12 @@ public class PlayerSelectMenu implements Screen {
 
     Image imgBackground;
     Image menuBackground;
+    Image messageBoxBackGround;
     Image kingimg;
     Image Robertimg;
     Image Ryuimg;
     Image Sakaimg;
+    Label message;
 
     //Animation<TextureRegion> animation;
     float elapsed;
@@ -47,6 +51,7 @@ public class PlayerSelectMenu implements Screen {
     TextButton Robert;
     TextButton Sakazaki;
     TextButton Ryuhaku;
+    TextButton btnMessageBox;
 
     boolean playerselected = false;
 
@@ -75,6 +80,8 @@ public class PlayerSelectMenu implements Screen {
         Robertpotrait = new Texture("Robertpotrait.png");
         Ryupotrait = new Texture("Ryuhakupotrait.png");
         Sakapotrait = new Texture("Sakazakipotrait.png");
+
+
 
 
         imgBackground = new Image(background);
@@ -127,6 +134,9 @@ public class PlayerSelectMenu implements Screen {
 
                     if(!playerselected){
                         assignPlayer("king");
+                        messageBoxBackGround.setVisible(true);
+                        message.setVisible(true);
+                        btnMessageBox.setVisible(true);
                         playerselected = true;
                     }
                     else {
@@ -141,6 +151,9 @@ public class PlayerSelectMenu implements Screen {
                     // btnSound.play(1.0f);
                     if(!playerselected){
                         assignPlayer("robert");
+                        messageBoxBackGround.setVisible(true);
+                        message.setVisible(true);
+                        btnMessageBox.setVisible(true);
                         playerselected = true;
                     }
                     else {
@@ -156,6 +169,9 @@ public class PlayerSelectMenu implements Screen {
                     // btnSound.play(1.0f);
                     if(!playerselected){
                         assignPlayer("ryu");
+                        messageBoxBackGround.setVisible(true);
+                        message.setVisible(true);
+                        btnMessageBox.setVisible(true);
                         playerselected = true;
                     }
                     else {
@@ -172,6 +188,9 @@ public class PlayerSelectMenu implements Screen {
                     // btnSound.play(1.0f);
                     if(!playerselected){
                         assignPlayer("ryo");
+                        messageBoxBackGround.setVisible(true);
+                        message.setVisible(true);
+                        btnMessageBox.setVisible(true);
                         playerselected = true;
                     }
                     else {
@@ -180,6 +199,34 @@ public class PlayerSelectMenu implements Screen {
                     }
                 }
             });
+        //***********************************************************************MessageBox*********************************************************************************************
+        message = new Label("Please Select Your Opponent Now!",new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        btnMessageBox = new TextButton("OK", skin, "default");
+        messageBoxBackGround = new Image(menuBG);
+        messageBoxBackGround.setSize(900,450);
+        messageBoxBackGround.setX(650);
+        messageBoxBackGround.setY(450);
+        messageBoxBackGround.setZIndex(2);
+        messageBoxBackGround.setVisible(false);
+
+
+        message.setFontScale(2,2);
+        message.setPosition(875,700);
+        message.setVisible(false);
+
+        styleButton(btnMessageBox);
+        btnMessageBox.setPosition(950, 550);
+        btnMessageBox.setVisible(false);
+
+        btnMessageBox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                messageBoxBackGround.setVisible(false);
+                message.setVisible(false);
+                btnMessageBox.setVisible(false);
+            }
+        });
+        //***********************************************************************MessageBox*********************************************************************************************
 
 
         stage.addActor(imgBackground);
@@ -192,6 +239,9 @@ public class PlayerSelectMenu implements Screen {
         stage.addActor(Robert);
         stage.addActor(Ryuhaku);
         stage.addActor(Sakazaki);
+        stage.addActor(messageBoxBackGround);
+        stage.addActor(message);
+        stage.addActor(btnMessageBox);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -293,6 +343,7 @@ public class PlayerSelectMenu implements Screen {
                 theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("Ryu/ryuPunch.png")),3,1, 1f));
                 break;
         }
+
 
     }
 
