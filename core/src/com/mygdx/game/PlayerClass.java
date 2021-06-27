@@ -1,18 +1,13 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 class PlayerClass extends Sprite {
 
     static PlayerClass playerSingleObject = null;
-    MyGdxGame game;
-    private Texture player;
-    private TextureRegion[] walkFrames;
-    private TextureRegion standFrame;
+
     private Animation<TextureRegion> Walk;
 
     public Animation<TextureRegion> getIdle() {

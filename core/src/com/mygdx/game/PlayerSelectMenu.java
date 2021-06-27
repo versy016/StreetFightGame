@@ -267,7 +267,7 @@ public class PlayerSelectMenu implements Screen {
 
             case "king":
                 theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("King/kingIdle.png")),4,1, 0.33f )); // #9
-                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("King/kingWalk.png")),4,1, 1f)); // #9
+                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("King/kingWalk.png")),4,1, 0.33f)); // #9
                 theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("King/kingKick.png")),3,1, 0.025f));
                 theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("King/kingPunch.png")),3,1, 0.025f));
                 break;
