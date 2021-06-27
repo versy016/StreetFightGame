@@ -252,8 +252,8 @@ public class GameClass implements Screen {
         timer = new Timer();
         stage = new Stage();
         pauseMenuStage = new Stage();
-        buttonSquareTextureForForward = new Texture("forward.png");
-        buttonSquareTextureForBackward = new Texture("backward.png");
+        buttonSquareTextureForForward = new Texture("rightArrow.png");
+        buttonSquareTextureForBackward = new Texture("leftArrow.png");
         playerRoundWins = new Label("Wins "+playerWinCount, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         opponentRoundWins = new Label("Wins "+opponentWinCount, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         roundTime = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -276,7 +276,7 @@ public class GameClass implements Screen {
         //Buttons
         float buttonSize = h * 0.1f;
         moveBackwardButton = new Button(80, 150, buttonSize, buttonSize, buttonSquareTextureForBackward, buttonSquareTextureForBackward);
-        moveForwardButton = new Button(80+buttonSize, 150, buttonSize, buttonSize, buttonSquareTextureForForward, buttonSquareTextureForForward);
+        moveForwardButton = new Button(90+buttonSize, 150, buttonSize, buttonSize, buttonSquareTextureForForward, buttonSquareTextureForForward);
 
 
         world = new World(new Vector2(0,10),true);
