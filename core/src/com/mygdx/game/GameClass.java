@@ -80,8 +80,8 @@ public class GameClass implements Screen {
 
 
     //UI Buttons
-    private Button moveBackwardButton;
-    private Button moveForwardButton;
+    private Button moveLeftButton;
+    private Button moveRightButton;
     private Button kickButton;
     private Button punchButton;
     private Button superPowerButton;
@@ -273,8 +273,8 @@ public class GameClass implements Screen {
 
         //Buttons
         float buttonSize = h * 0.1f;
-        moveBackwardButton = new Button(80, 150, buttonSize, buttonSize, buttonSquareTextureForBackward, buttonSquareTextureForBackward);
-        moveForwardButton = new Button(90+buttonSize, 150, buttonSize, buttonSize, buttonSquareTextureForForward, buttonSquareTextureForForward);
+        moveLeftButton = new Button(80, 150, buttonSize, buttonSize, buttonSquareTextureForBackward, buttonSquareTextureForBackward);
+        moveRightButton = new Button(90+buttonSize, 150, buttonSize, buttonSize, buttonSquareTextureForForward, buttonSquareTextureForForward);
 
 
         world = new World(new Vector2(0,0),true);
@@ -395,8 +395,8 @@ public class GameClass implements Screen {
             case PLAYING:
 
                 //Poll user for input
-                moveBackwardButton.update(checkTouch, touchX, touchY);
-                moveForwardButton.update(checkTouch, touchX, touchY);
+                moveLeftButton.update(checkTouch, touchX, touchY);
+                moveRightButton.update(checkTouch, touchX, touchY);
                 kickButton.update(checkTouch,touchX,touchY);
                 punchButton.update(checkTouch,touchX,touchY);
                 superPowerButton.update(checkTouch,touchX,touchY);
@@ -415,7 +415,7 @@ public class GameClass implements Screen {
                 if (Gdx.input.isKeyPressed(Input.Keys.UP) || moveLeftButton.isDown ) {
                     //b2bodyplayer.applyLinearImpulse(new Vector2(-4f,0), b2bodyplayer.getWorldCenter(),true);
 
-                    moveBackwardButton.isDown = true;
+                    moveLeftButton.isDown = true;
                     player_CurrentState = State.Walking;
                     moveX -= 1;
                     playerDelta.x = moveX * MOVEMENT_SPEED;
@@ -536,8 +536,8 @@ public class GameClass implements Screen {
         moveRightButton.draw(batch);
         batch.draw(Player_Frame,playerSprite.getX(),50,220,400);
         batch.draw(Opponent_Frame,1000+220,50,-220,400);
-        moveBackwardButton.draw(batch);
-        moveForwardButton.draw(batch);
+        moveLeftButton.draw(batch);
+        moveRightButton.draw(batch);
         kickButton.draw(batch);
         punchButton.draw(batch);
         superPowerButton.draw(batch);
