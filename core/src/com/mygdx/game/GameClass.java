@@ -273,8 +273,8 @@ public class GameClass implements Screen {
 
         //Buttons
         float buttonSize = h * 0.1f;
-        moveLeftButton = new Button(80, 150, buttonSize, buttonSize, buttonSquareTextureForBackward, buttonSquareTextureForBackward);
-        moveRightButton = new Button(90+buttonSize, 150, buttonSize, buttonSize, buttonSquareTextureForForward, buttonSquareTextureForForward);
+        moveLeftButton = new Button(75, 180, buttonSize, buttonSize, buttonSquareTextureForBackward, buttonSquareTextureForBackward);
+        moveRightButton = new Button(85+buttonSize, 180, buttonSize, buttonSize, buttonSquareTextureForForward, buttonSquareTextureForForward);
 
 
         world = new World(new Vector2(0,0),true);
