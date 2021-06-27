@@ -42,7 +42,7 @@ public class Menu implements Screen
         batch = new SpriteBatch();
         stage = new Stage();
         menuBG = new Texture("Starting Assets/assets/finishedbg.png");
-        background = new Texture("Starting Assets/assets/menuBackGround.gif");
+        background = new Texture("Starting Assets/assets/menuBackground.png");
         skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
         btnPlay = new TextButton("Play", skin, "default");
         btnOption = new TextButton("Option",skin,"default");
