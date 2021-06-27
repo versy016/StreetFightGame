@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,15 +23,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 
@@ -43,7 +39,7 @@ public class GameClass implements Screen {
     public static final float MOVEMENT_SPEED = 4.0f;
     GameState gameState = GameState.PLAYING;
 
-    public enum State {Idle,Walking, Kicking, Punching, Special, dead, Loose, Win;}
+    public enum State {Idle,Walking, Kicking, Punching, Special, Dead, Loose, Win;}
 
     State player_CurrentState;
     State opponent_CurrentState;
@@ -582,7 +578,7 @@ public class GameClass implements Screen {
         if(player_CurrentState == State.Win){
             Player_Frame = PlayerClass.getPlayers().getWin().getKeyFrame(stateTime, false);
         }
-        if(player_CurrentState == State.dead){
+        if(player_CurrentState == State.Dead){
             Player_Frame = PlayerClass.getPlayers().getDead().getKeyFrame(stateTime, false);
         }
         if(player_CurrentState == State.Loose){
@@ -613,7 +609,7 @@ public class GameClass implements Screen {
         if(opponent_CurrentState == State.Win){
             Opponent_Frame = OpponentClass.getOpponent().getWin().getKeyFrame(stateTime, false);
         }
-        if(opponent_CurrentState == State.dead){
+        if(opponent_CurrentState == State.Dead){
             Opponent_Frame = OpponentClass.getOpponent().getDead().getKeyFrame(stateTime, false);
         }
         if(opponent_CurrentState == State.Loose){
