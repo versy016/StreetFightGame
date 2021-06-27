@@ -24,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -64,6 +65,9 @@ public class GameClass implements Screen {
     //UI textures
     private Texture buttonSquareTextureForForward;
     private Texture buttonSquareTextureForBackward;
+    private Texture buttonSquareTextureForKick;
+    private Texture buttonSquareTextureForPunch;
+    private Texture buttonSquareTextureForSuperPower;
 
     Vector2 playerDelta;
 
@@ -71,12 +75,14 @@ public class GameClass implements Screen {
     //UI Buttons
     private Button moveBackwardButton;
     private Button moveForwardButton;
+    private Button kickButton;
+    private Button punchButton;
+    private Button superPowerButton;
+
+
 
     private Texture comMenuBG;
     private Skin skin;
-    private Skin glassyForKick;
-    private Skin glassyForPunch;
-    private Skin glassyForSuperPower;
 
 
     Image menuBackground;
@@ -86,9 +92,6 @@ public class GameClass implements Screen {
     TextButton btnUnpause;
     TextButton btnPause;
 
-    ImageButton btnKick;
-    ImageButton btnPunch;
-    ImageButton btnSuperPower;
 
     Label playerRoundWins;
     Label opponentRoundWins;
@@ -119,33 +122,17 @@ public class GameClass implements Screen {
     public void create() {
 
 
-        glassyForKick = new Skin(Gdx.files.internal("Starting Assets/assets/glassy/skin/glassy-ui.json"));
-        glassyForPunch = new Skin(Gdx.files.internal("Starting Assets/assets/glassy/skin/glassy-ui.json"));
-        glassyForSuperPower = new Skin(Gdx.files.internal("Starting Assets/assets/glassy/skin/glassy-ui.json"));
+        buttonSquareTextureForKick = new Texture("Kick.png");
+        buttonSquareTextureForPunch = new Texture("Punch.png");
+        buttonSquareTextureForSuperPower = new Texture("SuperPower.png");
+
+        kickButton = new Button(20, 300, 100, 100, buttonSquareTextureForKick, buttonSquareTextureForKick);
+        punchButton = new Button(130, 300, 100, 100, buttonSquareTextureForPunch, buttonSquareTextureForPunch);
+        superPowerButton = new Button(240, 300, 100, 100, buttonSquareTextureForSuperPower, buttonSquareTextureForSuperPower);
+
+
 
         checkFirstTimeRoundTime = true;
-
-        btnKick = new ImageButton(glassyForKick);
-        btnKick.setSize(100,100);
-        btnKick.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("Kick.png"))));
-        btnKick.setPosition(20,300);
-
-
-
-        btnPunch = new ImageButton(glassyForPunch);
-        btnPunch.setSize(100,100);
-        btnPunch.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("Punch.png"))));
-        btnPunch.setPosition(130,300);
-
-
-        btnSuperPower = new ImageButton(glassyForSuperPower);
-        btnSuperPower.setSize(100,100);
-        btnSuperPower.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("SuperPower.png"))));
-        btnSuperPower.setPosition(240,300);
-
-
-
-
 
 
         //***********************************************************************CompleteMenuStage**************************************************************************************
@@ -354,11 +341,6 @@ public class GameClass implements Screen {
         stage.addActor(roundTime);
         stage.addActor(playerRoundWins);
         stage.addActor(opponentRoundWins);
-        stage.addActor(btnKick);
-        stage.addActor(btnPunch);
-        stage.addActor(btnSuperPower);
-//        stage.addActor(btnBackward);
-//        stage.addActor(btnForward);
         pauseMenuStage.addActor(btnPause);
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setInputProcessor(pauseMenuStage);
@@ -377,6 +359,7 @@ public class GameClass implements Screen {
     private void update() {
 
 
+
         dt = Gdx.graphics.getDeltaTime();
         //Touch Input Info
         boolean checkTouch = Gdx.input.isTouched();
@@ -392,6 +375,19 @@ public class GameClass implements Screen {
                 //Poll user for input
                 moveBackwardButton.update(checkTouch, touchX, touchY);
                 moveForwardButton.update(checkTouch, touchX, touchY);
+                kickButton.update(checkTouch,touchX,touchY);
+                punchButton.update(checkTouch,touchX,touchY);
+                superPowerButton.update(checkTouch,touchX,touchY);
+
+                //KickButton Event
+                if( kickButton.isDown){
+                    //TODO Kick event.
+                }else if(punchButton.isDown){
+                    //TODO Punch event.
+                }else if(superPowerButton.isDown){
+                    //TODO SuperPower.
+                }
+
 
                 int moveX = 0;
                 int moveY = 0;
@@ -412,11 +408,6 @@ public class GameClass implements Screen {
                     b2bodyplayer.applyLinearImpulse(new Vector2(moveX * MOVEMENT_SPEED,0), b2bodyplayer.getWorldCenter(),true);
 
                 }
-                //TODO Determine Character Movement Distance
-               // playerDelta.x = moveX * MOVEMENT_SPEED * dt;
-                //Movement update
-                //playerSprite.translateX(playerDelta.x);
-               // camera.position.x += MOVEMENT_SPEED*dt;
 
                 if(Gdx.input.justTouched()){
 
@@ -499,6 +490,9 @@ public class GameClass implements Screen {
         batch.draw(Opponent_Frame,1000+220,50,-220,400);
         moveBackwardButton.draw(batch);
         moveForwardButton.draw(batch);
+        kickButton.draw(batch);
+        punchButton.draw(batch);
+        superPowerButton.draw(batch);
 
         pauseMenuStage.draw();
         batch.end();
