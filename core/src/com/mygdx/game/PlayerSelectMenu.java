@@ -72,8 +72,8 @@ public class PlayerSelectMenu implements Screen {
         skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
         king = new TextButton("King", skin, "default");
         Robert = new TextButton("Robert",skin,"default");
-        Sakazaki = new TextButton("Sakazaki", skin, "default");
-        Ryuhaku = new TextButton("Ryuhaku", skin, "default");
+        Sakazaki = new TextButton("Ken", skin, "default");
+        Ryuhaku = new TextButton("Ryu", skin, "default");
 
         audio1 = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
         kingpotrait = new Texture("Kingpotrait.png");
@@ -96,7 +96,7 @@ public class PlayerSelectMenu implements Screen {
 
         kingimg = new Image(kingpotrait);
         kingimg.setSize(300,200);
-        kingimg.setX(600);
+        kingimg.setX(620);
         kingimg.setY(700);
 
         Robertimg = new Image(Robertpotrait);
@@ -317,7 +317,7 @@ public class PlayerSelectMenu implements Screen {
 
             case "king":
                 theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("King/kingIdle.png")),4,1, 0.33f )); // #9
-                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("King/kingWalk.png")),4,1, 1f)); // #9
+                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("King/kingWalk.png")),4,1, 0.33f)); // #9
                 theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("King/kingKick.png")),3,1, 0.025f));
                 theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("King/kingPunch.png")),3,1, 0.025f));
                 break;
