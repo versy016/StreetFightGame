@@ -67,8 +67,8 @@ public class PlayerSelectMenu implements Screen {
         skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
         king = new TextButton("King", skin, "default");
         Robert = new TextButton("Robert",skin,"default");
-        Sakazaki = new TextButton("Sakazaki", skin, "default");
-        Ryuhaku = new TextButton("Ryuhaku", skin, "default");
+        Sakazaki = new TextButton("Ken", skin, "default");
+        Ryuhaku = new TextButton("Ryu", skin, "default");
 
         audio1 = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
         kingpotrait = new Texture("Kingpotrait.png");
@@ -89,7 +89,7 @@ public class PlayerSelectMenu implements Screen {
 
         kingimg = new Image(kingpotrait);
         kingimg.setSize(300,200);
-        kingimg.setX(600);
+        kingimg.setX(620);
         kingimg.setY(700);
 
         Robertimg = new Image(Robertpotrait);
