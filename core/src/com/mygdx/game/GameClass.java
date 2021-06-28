@@ -114,15 +114,6 @@ public class GameClass implements Screen {
     int playerWinCount=0;
     int opponentWinCount=0;
 
-    private Body b2bodyPlayer;
-    private BodyDef playerDef;
-    private World world;
-    private CircleShape playerShape;
-
-    private Body b2bodyOpponent;
-    private BodyDef opponentDef;
-    private PolygonShape opponentShape;
-    private Box2DDebugRenderer debugRenderer;
     private Stage stage;
 
     public GameClass(MyGdxGame game) {
@@ -278,34 +269,6 @@ public class GameClass implements Screen {
         moveLeftButton = new Button(80, 150, buttonSize, buttonSize, buttonSquareTextureForBackward, buttonSquareTextureForBackward);
         moveRightButton = new Button(90+buttonSize, 150, buttonSize, buttonSize, buttonSquareTextureForForward, buttonSquareTextureForForward);
 
-
-        world = new World(new Vector2(0,0),true);
-        debugRenderer = new Box2DDebugRenderer();
-
-        playerShape = new CircleShape();
-
-        playerDef = new BodyDef();
-        playerDef.position.set(new Vector2(195,70));
-        playerDef.type = BodyDef.BodyType.DynamicBody;
-        b2bodyPlayer = world.createBody(playerDef);
-
-        FixtureDef ballFixture = new FixtureDef();
-        ballFixture.shape = playerShape;
-        playerShape.setRadius(9.0f);
-
-        b2bodyPlayer.createFixture(ballFixture);
-
-        opponentShape = new PolygonShape();
-        opponentShape.setAsBox(23,33);
-
-        opponentDef = new BodyDef();
-        opponentDef.position.set(new Vector2(325,45));
-        opponentDef.type = BodyDef.BodyType.DynamicBody;
-        b2bodyOpponent = world.createBody(opponentDef);
-        b2bodyOpponent.createFixture(opponentShape,1.0f);
-
-        world.setContactListener(new WorldContactListener());
-
         HealthBar  playerHealthBar = new HealthBar();
         playerHealthBar.setX(100);
         playerHealthBar.setY(950);
@@ -409,7 +372,9 @@ public class GameClass implements Screen {
 
                 if( kickButton.isDown){
                     player_CurrentState = State.Kicking;
-                    if(playerSprite.getX()+1200 > opponentSprite.getX()) {
+                    System.out.println(opponentSprite.getX()-playerSprite.getX());
+
+                    if(opponentSprite.getX() - playerSprite.getX() <= 600) {
                         opponent_CurrentState = State.Damage;
                         OpponentClass.getOpponent().setHealth(-9);
                     }
@@ -421,7 +386,7 @@ public class GameClass implements Screen {
                 }
                 else if(specialButton.isDown){
                     player_CurrentState = State.Special;
-                    if(playerSprite.getX()+1200 > opponentSprite.getX()) {
+                    if(opponentSprite.getX() - playerSprite.getX() <= 600) {
                         System.out.println(playerSprite.getX()+"___"+opponentSprite.getX());
                         opponent_CurrentState = State.Damage;
                         OpponentClass.getOpponent().setHealth(-30);
@@ -433,7 +398,7 @@ public class GameClass implements Screen {
                 }
                 else if(punchButton.isDown){
                     player_CurrentState = State.Punching;
-                    if(playerSprite.getX()+1200 > opponentSprite.getX()) {
+                    if(opponentSprite.getX() - playerSprite.getX() <= 600) {
                         OpponentClass.getOpponent().setHealth(-7);
                         opponent_CurrentState = State.Damage;
                     }
@@ -449,7 +414,6 @@ public class GameClass implements Screen {
                     moveX -= 1;
                     playerDelta.x = moveX * MOVEMENT_SPEED;
                     playerSprite.translateX(playerDelta.x);
-                    b2bodyPlayer.setLinearVelocity(moveX*57+dt, b2bodyPlayer.getLinearVelocity().y);
 
                 }
                 else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || moveRightButton.isDown ) {
@@ -457,12 +421,10 @@ public class GameClass implements Screen {
                     moveX += 1;
                     playerDelta.x = moveX * MOVEMENT_SPEED;
                     player_CurrentState = State.Walking;
-                    b2bodyPlayer.setLinearVelocity(moveX*57-dt, b2bodyPlayer.getLinearVelocity().y);
                     playerSprite.translateX(playerDelta.x);
 
                 }
-                else
-                    b2bodyPlayer.setLinearVelocity(0f, 0f);
+
                // TODO Determine Character Movement Distance
                // playerDelta.x = moveX * MOVEMENT_SPEED * dt;
                 //Movement update
@@ -485,7 +447,6 @@ public class GameClass implements Screen {
             default:
                 throw new IllegalStateException("Unexpected value: " + gameState);
         }
-        world.step(1/60f,6,2);
         camera.update();
         tiledMapRenderer.setView(camera);
     }
@@ -495,15 +456,13 @@ public class GameClass implements Screen {
 
         switch (gameState) {
             case PLAYING:
-                if(playerSprite.getX()+700 < opponentSprite.getX()){
+                if(playerSprite.getX()+700 <  opponentSprite.getX()){
                     opponent_CurrentState = State.Walking;
                     opponentSprite.translateX(-opponentDelta.x);
-                    b2bodyOpponent.setLinearVelocity((-1*28)-dt, b2bodyOpponent.getLinearVelocity().y);
 
                 }
-                else if(opponentSprite.getX() > playerSprite.getX()+300){
+                else if(opponentSprite.getX()- playerSprite.getX() <= 300 && !player_CurrentState.equals(State.Kicking) &&!player_CurrentState.equals(State.Punching) && !player_CurrentState.equals(State.Special)){
                     opponent_CurrentState = State.Idle;
-                    b2bodyOpponent.setLinearVelocity(0f, 0f);
               }
         }
     }
@@ -551,8 +510,6 @@ public class GameClass implements Screen {
         Opponent_Frame = get_Opponent_current_state();
 
         tiledMapRenderer.render();
-        debugRenderer.render(world,camera.combined);
-
         batch.begin();
         stage.draw();
         batch.draw(Player_Frame,playerSprite.getX(),50,350,500);
