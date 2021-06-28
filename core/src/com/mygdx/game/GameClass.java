@@ -107,9 +107,6 @@ public class GameClass implements Screen {
     static long roundTim;
     static Timer timer;
 
-    boolean checkFirstTimeRoundTime;
-    //Variable for save currentRoundTime to build pause functionality
-    long currentRoundTime = 0;
 
     int playerWinCount=0;
     int opponentWinCount=0;
@@ -131,7 +128,7 @@ public class GameClass implements Screen {
         punchButton = new Button(130, 300, 100, 100, buttonSquareTextureForPunch, buttonSquareTextureForPunch);
         specialButton = new Button(240, 300, 100, 100, buttonSquareTextureForSuperPower, buttonSquareTextureForSuperPower);
 
-        checkFirstTimeRoundTime = true;
+
 
         //***********************************************************************CompleteMenuStage**************************************************************************************
         comMenuBG = new Texture("Starting Assets/assets/finishedbg.png");
@@ -174,7 +171,7 @@ public class GameClass implements Screen {
         btnPause.setHeight(60f);
         btnPause.getLabel().setFontScale(2);
         btnPause.setColor(Color.GOLD);
-        btnPause.setPosition(2000, 960);
+        btnPause.setPosition(2000, 1000);
         btnPause.setVisible(true);
 
         btnPause.addListener(new ClickListener()
@@ -182,7 +179,7 @@ public class GameClass implements Screen {
             @Override
             public void clicked (InputEvent event, float x, float y)
             {
-                currentRoundTime = TimeUtils.millis();
+                roundTime.setVisible(false);
                 btnSound.play(1.0f);
                 menuBackground.setVisible(true);
                 btnRestartGame.setVisible(true);
@@ -209,12 +206,11 @@ public class GameClass implements Screen {
             public void clicked (InputEvent event, float x, float y)
             {
                 btnSound.play(1.0f);
+                roundTime.setVisible(true);
                 menuBackground.setVisible(false);
                 btnRestartGame.setVisible(false);
                 btnHowToPlay.setVisible(false);
                 btnUnpause.setVisible(false);
-                long pauseTime = roundTim - currentRoundTime;
-                roundTim = roundTim-pauseTime;
                 gameState = GameState.PLAYING;
             }
         });
@@ -252,14 +248,15 @@ public class GameClass implements Screen {
 
         roundTime.setFontScale(8,6);
         roundTime.setPosition(1050,950);
-        roundTime.setVisible(true);
+        roundTime.setVisible(false);
 
-        Countdown.setFontScale(10,8);
-        Countdown.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
-        Countdown.setVisible(true);
+        Countdown.setFontScale(20,16);
+        Countdown.setPosition(1000,800);
+        Countdown.setVisible(false);
 
         fightlabel.setFontScale(15,8);
-        fightlabel.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+        fightlabel.setPosition(800,800);
+        fightlabel.setVisible(false);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -286,25 +283,7 @@ public class GameClass implements Screen {
         opponentHealthBar.setHeightOuter(50);
 
 
-        music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
 
-
-        music2.setVolume(1.0f);
-        music2.setLooping(false);
-
-        music2.play();
-        music2.setOnCompletionListener(new Music.OnCompletionListener()
-        {
-            @Override
-            public void onCompletion(Music music) {
-                music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
-                music.setVolume(1.0f);
-                music.play();
-
-
-            }
-
-        });
 
         batch = new SpriteBatch();                // #12
         playerDelta = new Vector2();
@@ -468,17 +447,6 @@ public class GameClass implements Screen {
     }
         @Override
     public void render(float delta) {
-            roundTim = TimeUtils.millis();
-                Countdown.setText(String.valueOf(TimeUtils.timeSinceMillis(roundTim)/1000));
-                if(Countdown.getText().equals("1")) {
-                    fightlabel.setVisible(true);
-                    timer.scheduleTask(new Timer.Task() { public void run() {
-                        fightlabel.setVisible(false);
-
-                    }
-
-                    },1);
-            }
 
         updateplayer();
         updateOpponent();
@@ -486,23 +454,18 @@ public class GameClass implements Screen {
 
         stateTime += Gdx.graphics.getDeltaTime();
 
-
-
         timer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+
                 //Round Timer
-                if(gameState != GameState.PAUSE && !music2.isPlaying()){
-                    if(checkFirstTimeRoundTime){
-                        roundTim = TimeUtils.millis();
-                        checkFirstTimeRoundTime = false;
-                    }
+                if(gameState != GameState.PAUSE){
                     if(TimeUtils.timeSinceMillis(roundTim)/1000 < 91 && TimeUtils.timeSinceMillis(roundTim)/1000 >= 0 ){
                         roundTime.setText(String.valueOf(TimeUtils.timeSinceMillis(roundTim)/1000));
                     }
                 }
             }
-        },6);
+        },7);
 
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -530,8 +493,72 @@ public class GameClass implements Screen {
         btnUnpause.setVisible(false);
         playerWinCount = 0;
 
+
+        music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
+
+
+        music2.setVolume(1.0f);
+        music2.setLooping(false);
+
+        music2.play();
+        music2.setOnCompletionListener(new Music.OnCompletionListener()
+        {
+            @Override
+            public void onCompletion(Music music) {
+                music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
+                music.setVolume(1.0f);
+                music.play();
+
+
+            }
+
+        });
+
+
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                Countdown.setText(3);
+                Countdown.setVisible(true);
+
+            }
+        },2);
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                Countdown.setText(2);
+                Countdown.setVisible(true);
+
+            }
+        },3);
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                Countdown.setText(1);
+                Countdown.setVisible(true);
+
+            }
+        },4);
+
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                Countdown.setVisible(false);
+                fightlabel.setVisible(true);
+
+            }
+        },5);
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                fightlabel.setVisible(false);
+                roundTim = TimeUtils.millis();
+                roundTime.setVisible(true);
+            }
+        },6);
+
         playerSprite.setPosition(600,0);
-        roundTim = TimeUtils.millis();
+
         dt = 0.0f;
         gameState = GameState.PLAYING;
     }
