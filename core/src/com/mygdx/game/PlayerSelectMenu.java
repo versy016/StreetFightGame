@@ -18,9 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 public class PlayerSelectMenu implements Screen {
 
     MyGdxGame game;
@@ -29,7 +26,7 @@ public class PlayerSelectMenu implements Screen {
     private Texture kingpotrait;
     private Texture Robertpotrait;
     private Texture Ryupotrait;
-    private Texture Sakapotrait;
+    private Texture Kenpotrait;
 
     private SpriteBatch batch;
     private Stage stage;
@@ -41,7 +38,7 @@ public class PlayerSelectMenu implements Screen {
     Image kingimg;
     Image Robertimg;
     Image Ryuimg;
-    Image Sakaimg;
+    Image Kenimg;
     Label message;
 
     //Animation<TextureRegion> animation;
@@ -49,14 +46,14 @@ public class PlayerSelectMenu implements Screen {
     TextButton king;
     Sound audio1;
     TextButton Robert;
-    TextButton Sakazaki;
+    TextButton Ken;
     TextButton Ryuhaku;
     TextButton btnMessageBox;
 
     boolean playerselected = false;
 
-    PlayerClass thePlayer =  PlayerClass.setPlayers(null,null,null,null,null,null,null,null,100);
-    OpponentClass theOpponent = OpponentClass.setOpponent(null,null,null,null,null,null,null,null,100);;
+    PlayerClass thePlayer =  PlayerClass.setPlayers(null,null,null,null,null,null,null,null,null,100);
+    OpponentClass theOpponent = OpponentClass.setOpponent(null,null,null,null,null,null,null,null,null,100);;
 
     public PlayerSelectMenu(MyGdxGame game)
     {
@@ -72,14 +69,14 @@ public class PlayerSelectMenu implements Screen {
         skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
         king = new TextButton("King", skin, "default");
         Robert = new TextButton("Robert",skin,"default");
-        Sakazaki = new TextButton("Ken", skin, "default");
+        Ken = new TextButton("Ken", skin, "default");
         Ryuhaku = new TextButton("Ryu", skin, "default");
 
         audio1 = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
-        kingpotrait = new Texture("Kingpotrait.png");
+        kingpotrait = new Texture("King/kingPotrait.png");
         Robertpotrait = new Texture("Robertpotrait.png");
         Ryupotrait = new Texture("Ryuhakupotrait.png");
-        Sakapotrait = new Texture("Sakazakipotrait.png");
+        Kenpotrait = new Texture("Sakazakipotrait.png");
 
 
 
@@ -109,10 +106,10 @@ public class PlayerSelectMenu implements Screen {
         Ryuimg.setX(600);
         Ryuimg.setY(400);
 
-        Sakaimg = new Image(Sakapotrait);
-        Sakaimg.setSize(300,200);
-        Sakaimg.setX(1300);
-        Sakaimg.setY(400);
+        Kenimg = new Image(Kenpotrait);
+        Kenimg.setSize(300,200);
+        Kenimg.setX(1300);
+        Kenimg.setY(400);
 
         styleButton(king);
         king.setPosition(600, 650);
@@ -123,8 +120,8 @@ public class PlayerSelectMenu implements Screen {
         styleButton(Ryuhaku);
         Ryuhaku.setPosition(600, 350);
 
-        styleButton(Sakazaki);
-        Sakazaki.setPosition(1300, 350);
+        styleButton(Ken);
+        Ken.setPosition(1300, 350);
 
 
             king.addListener(new ClickListener() {
@@ -182,19 +179,19 @@ public class PlayerSelectMenu implements Screen {
                 }
             });
 
-            Sakazaki.addListener(new ClickListener() {
+            Ken.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     // btnSound.play(1.0f);
                     if(!playerselected){
-                        assignPlayer("ryo");
+                        assignPlayer("ken");
                         messageBoxBackGround.setVisible(true);
                         message.setVisible(true);
                         btnMessageBox.setVisible(true);
                         playerselected = true;
                     }
                     else {
-                        assignOpponent("ryo");
+                        assignOpponent("ken");
                         game.setScreen(MyGdxGame.gclass);
                     }
                 }
@@ -234,11 +231,11 @@ public class PlayerSelectMenu implements Screen {
         stage.addActor(kingimg);
         stage.addActor(Ryuimg);
         stage.addActor(Robertimg);
-        stage.addActor(Sakaimg);
+        stage.addActor(Kenimg);
         stage.addActor(king);
         stage.addActor(Robert);
         stage.addActor(Ryuhaku);
-        stage.addActor(Sakazaki);
+        stage.addActor(Ken);
         stage.addActor(messageBoxBackGround);
         stage.addActor(message);
         stage.addActor(btnMessageBox);
@@ -283,7 +280,21 @@ public class PlayerSelectMenu implements Screen {
                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("King/kingWalk.png")),4,1, 0.33f)); // #9
                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("King/kingKick.png")),3,1, 0.33f));
                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("King/kingPunch.png")),3,1, 0.33f));
-               break;
+
+               TextureRegion[] specialFrames = new TextureRegion[6];
+               Texture specialSheet = new Texture("King/kingSpecial.png");
+                specialFrames[0] = new TextureRegion(specialSheet,1,1,58,100);
+                specialFrames[1] = new TextureRegion(specialSheet,65,1,54,100);
+                specialFrames[2] = new TextureRegion(specialSheet,119,1,56,100);
+                specialFrames[3] = new TextureRegion(specialSheet,175,1,58,100);
+                specialFrames[4] = new TextureRegion(specialSheet,231,1,114,100);
+                specialFrames[5] = new TextureRegion(specialSheet,342,1,58,100);
+                thePlayer.setSpecial(new Animation<TextureRegion>(0.25f, specialFrames));
+                thePlayer.setDead(createanimation(new Texture(Gdx.files.internal("King/kingDead.png")),3,1, 0.33f));
+                thePlayer.setWin(createanimation(new Texture(Gdx.files.internal("King/kingWin.png")),3,1, 0.33f));
+                thePlayer.setLoose(createanimation(new Texture(Gdx.files.internal("King/kingLoose.png")),3,1, 0.33f));
+                thePlayer.setDamage(createanimation(new Texture(Gdx.files.internal("King/kingDamage.png")),3,1, 0.33f));
+                break;
 
             case "robert":
                 thePlayer.setIdle(createanimation(new Texture(Gdx.files.internal("Robertidle.png")),6,1, 0.33f)); // #9
@@ -292,11 +303,39 @@ public class PlayerSelectMenu implements Screen {
                 thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1, 1f));
                 break;
 
-            case "ryo":
-                thePlayer.setIdle(createanimation(new Texture(Gdx.files.internal("ryoIdle.png")),4,1, 0.33f)); // #9
-                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1, 0.33f)); // #9
-                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),4,1, 0.33f));
-                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1, 0.33f));
+            case "ken":
+                thePlayer.setIdle(createanimation(new Texture(Gdx.files.internal("Ken/kenIdle.png")),4,1, 0.33f)); // #9
+                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("Ken/kenWalk.png")),5,1, 0.33f)); // #9
+
+                TextureRegion[] kenKickFrames = new TextureRegion[3];
+                Texture kenKickSheet = new Texture("Ken/kenKick.png");
+                kenKickFrames[0] = new TextureRegion(kenKickSheet,1,1,43,88);
+                kenKickFrames[1] = new TextureRegion(kenKickSheet,45,1,45,88);
+                kenKickFrames[2] = new TextureRegion(kenKickSheet,90,1,70,88);
+                thePlayer.setKick(new Animation<TextureRegion>(0.33f, kenKickFrames));
+
+                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("Ken/kenPunch.png")),2,1, 0.25f));
+
+                TextureRegion[] kenSpecialFrames = new TextureRegion[3];
+                Texture kenSpecialSheet = new Texture("Ken/kenSpecial.png");
+                kenSpecialFrames[0] = new TextureRegion(kenSpecialSheet,1,1,60,88);
+                kenSpecialFrames[1] = new TextureRegion(kenSpecialSheet,60,1,60,88);
+                kenSpecialFrames[2] = new TextureRegion(kenSpecialSheet,130,1,105,88);
+                thePlayer.setSpecial(new Animation<TextureRegion>(0.25f, kenSpecialFrames));
+                thePlayer.setDamage(createanimation(new Texture(Gdx.files.internal("Ken/kenDamage.png")),2,1, 0.33f));
+                thePlayer.setDead(createanimation(new Texture(Gdx.files.internal("Ken/kenDead.png")),2,1, 0.33f));
+                thePlayer.setWin(createanimation(new Texture(Gdx.files.internal("Ken/kenWin.png")),3,1, 0.33f));
+
+                Texture walkSheet = new Texture("Ken/kenWalk.png");
+                Texture looseSheet = new Texture("Ken/kenLoose.png");
+
+                TextureRegion[] kenLooseFrames = new TextureRegion[3];
+
+                kenLooseFrames[0] = new TextureRegion(walkSheet,1,1,40,88);
+                kenLooseFrames[1] = new TextureRegion(walkSheet,40,1,40,88);
+                kenLooseFrames[2] = new TextureRegion(looseSheet,2,1,40,88);
+                thePlayer.setLoose(new Animation<TextureRegion>(0.33f, kenLooseFrames));
+
                 break;
 
             case "ryu":
@@ -304,6 +343,19 @@ public class PlayerSelectMenu implements Screen {
                 thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("Ryu/ryuWalk.png")),5,1, 0.33f)); // #9
                 thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("Ryu/ryuKick2.png")),1,1, 0.33f));
                 thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("Ryu/ryuPunch.png")),3,1, 0.33f));
+                thePlayer.setSpecial(createanimation(new Texture(Gdx.files.internal("Ryu/ryuUlt.png")),3,1, 0.33f));
+                thePlayer.setDamage(createanimation(new Texture(Gdx.files.internal("Ryu/ryuDamage.png")),3,1, 0.33f));
+                thePlayer.setDead(createanimation(new Texture(Gdx.files.internal("Ryu/ryuDead.png")),2,1, 0.33f));
+                thePlayer.setWin(createanimation(new Texture(Gdx.files.internal("Ryu/ryuWin.png")),3,1, 0.33f));
+                Texture ryuwalkSheet = new Texture("Ryu/ryuIdle.png");
+                Texture ryulooseSheet = new Texture("Ryu/ryuLoose.png");
+
+                TextureRegion[] ryuLooseFrames = new TextureRegion[2];
+
+                ryuLooseFrames[0] = new TextureRegion(ryuwalkSheet,1,1,45,88);
+                ryuLooseFrames[1] = new TextureRegion(ryulooseSheet,70,1,50,88);
+                thePlayer.setLoose(new Animation<TextureRegion>(0.33f, ryuLooseFrames));
+
                 break;
         }
 
@@ -320,6 +372,16 @@ public class PlayerSelectMenu implements Screen {
                 theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("King/kingWalk.png")),4,1, 0.33f)); // #9
                 theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("King/kingKick.png")),3,1, 0.025f));
                 theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("King/kingPunch.png")),3,1, 0.025f));
+                TextureRegion[] specialFrames = new TextureRegion[6];
+                Texture specialSheet = new Texture("King/kingSpecial.png");
+                specialFrames[0] = new TextureRegion(specialSheet,1,1,58,100);
+                specialFrames[1] = new TextureRegion(specialSheet,65,1,54,100);
+                specialFrames[2] = new TextureRegion(specialSheet,119,1,56,100);
+                specialFrames[3] = new TextureRegion(specialSheet,175,1,58,100);
+                specialFrames[4] = new TextureRegion(specialSheet,231,1,114,100);
+                specialFrames[5] = new TextureRegion(specialSheet,342,1,58,100);
+                theOpponent.setSpecial(new Animation<TextureRegion>(0.25f, specialFrames));
+
                 break;
 
             case "robert":
@@ -329,11 +391,24 @@ public class PlayerSelectMenu implements Screen {
                 theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1, 1f));
                 break;
 
-            case "ryo":
-                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("ryoIdle.png")),4,1, 0.33f)); // #9
+            case "ken":
+                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal(".png")),4,1, 0.33f)); // #9
                 theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1, 0.33f)); // #9
-                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("ryokick.png")),5,1, 0.33f));
-                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("ryopunch.png")),3,1, 0.33f));
+
+                TextureRegion[] kenKickFrames = new TextureRegion[3];
+                Texture kenKickSheet = new Texture("Ken/kenKick.png");
+                kenKickFrames[0] = new TextureRegion(kenKickSheet,1,1,43,88);
+                kenKickFrames[1] = new TextureRegion(kenKickSheet,45,1,45,88);
+                kenKickFrames[2] = new TextureRegion(kenKickSheet,90,1,70,88);
+
+                theOpponent.setKick(new Animation<TextureRegion>(0.33f, kenKickFrames));
+                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("Ken/kenPunch.png")),2,1, 0.25f));
+                TextureRegion[] kenSpecialFrames = new TextureRegion[3];
+                Texture kenSpecialSheet = new Texture("Ken/kenSpecial.png");
+                kenSpecialFrames[0] = new TextureRegion(kenSpecialSheet,1,1,60,88);
+                kenSpecialFrames[1] = new TextureRegion(kenSpecialSheet,60,1,60,88);
+                kenSpecialFrames[2] = new TextureRegion(kenSpecialSheet,130,1,105,88);
+                theOpponent.setSpecial(new Animation<TextureRegion>(0.25f, kenSpecialFrames));
                 break;
 
             case "ryu":
@@ -341,6 +416,8 @@ public class PlayerSelectMenu implements Screen {
                 theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("Ryu/ryuWalk.png")),5,1, 0.33f)); // #9
                 theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("Ryu/ryuKick.png")),4,1, 1f));
                 theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("Ryu/ryuPunch.png")),3,1, 1f));
+                theOpponent.setSpecial(createanimation(new Texture(Gdx.files.internal("Ryu/ryuUlt.png")),3,1, 0.33f));
+
                 break;
         }
 
