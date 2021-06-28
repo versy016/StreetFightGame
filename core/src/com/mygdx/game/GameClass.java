@@ -521,9 +521,6 @@ public class GameClass implements Screen {
         specialButton.draw(batch);
         pauseMenuStage.draw();
         batch.end();
-
-
-
         }
     private void newGame() {
 
