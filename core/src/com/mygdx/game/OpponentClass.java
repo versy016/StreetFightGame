@@ -26,6 +26,15 @@ public class OpponentClass extends Sprite {
     private Animation<TextureRegion> win;
     private Animation<TextureRegion> special;
     private Animation<TextureRegion> Loose;
+
+    public Animation<TextureRegion> getDamage() {
+        return damage;
+    }
+
+    public void setDamage(Animation<TextureRegion> damage) {
+        this.damage = damage;
+    }
+
     private Animation<TextureRegion> damage;
 
 

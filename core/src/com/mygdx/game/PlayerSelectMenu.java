@@ -381,7 +381,10 @@ public class PlayerSelectMenu implements Screen {
                 specialFrames[4] = new TextureRegion(specialSheet,231,1,114,100);
                 specialFrames[5] = new TextureRegion(specialSheet,342,1,58,100);
                 theOpponent.setSpecial(new Animation<TextureRegion>(0.25f, specialFrames));
-
+                theOpponent.setDead(createanimation(new Texture(Gdx.files.internal("King/kingDead.png")),3,1, 0.33f));
+                theOpponent.setWin(createanimation(new Texture(Gdx.files.internal("King/kingWin.png")),3,1, 0.33f));
+                theOpponent.setLoose(createanimation(new Texture(Gdx.files.internal("King/kingLoose.png")),3,1, 0.33f));
+                theOpponent.setDamage(createanimation(new Texture(Gdx.files.internal("King/kingDamage.png")),3,1, 0.33f));
                 break;
 
             case "robert":
@@ -392,8 +395,8 @@ public class PlayerSelectMenu implements Screen {
                 break;
 
             case "ken":
-                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal(".png")),4,1, 0.33f)); // #9
-                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("ryowalk.png")),4,1, 0.33f)); // #9
+                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("Ken/kenIdle.png")),4,1, 0.33f)); // #9
+                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("Ken/kenWalk.png")),5,1, 0.33f)); // #9
 
                 TextureRegion[] kenKickFrames = new TextureRegion[3];
                 Texture kenKickSheet = new Texture("Ken/kenKick.png");
@@ -409,6 +412,20 @@ public class PlayerSelectMenu implements Screen {
                 kenSpecialFrames[1] = new TextureRegion(kenSpecialSheet,60,1,60,88);
                 kenSpecialFrames[2] = new TextureRegion(kenSpecialSheet,130,1,105,88);
                 theOpponent.setSpecial(new Animation<TextureRegion>(0.25f, kenSpecialFrames));
+                theOpponent.setDamage(createanimation(new Texture(Gdx.files.internal("Ken/kenDamage.png")),2,1, 0.33f));
+                theOpponent.setDead(createanimation(new Texture(Gdx.files.internal("Ken/kenDead.png")),2,1, 0.33f));
+                theOpponent.setWin(createanimation(new Texture(Gdx.files.internal("Ken/kenWin.png")),3,1, 0.33f));
+
+                Texture walkSheet = new Texture("Ken/kenWalk.png");
+                Texture looseSheet = new Texture("Ken/kenLoose.png");
+
+                TextureRegion[] kenLooseFrames = new TextureRegion[3];
+
+                kenLooseFrames[0] = new TextureRegion(walkSheet,1,1,40,88);
+                kenLooseFrames[1] = new TextureRegion(walkSheet,40,1,40,88);
+                kenLooseFrames[2] = new TextureRegion(looseSheet,2,1,40,88);
+                theOpponent.setLoose(new Animation<TextureRegion>(0.33f, kenLooseFrames));
+
                 break;
 
             case "ryu":
@@ -417,7 +434,17 @@ public class PlayerSelectMenu implements Screen {
                 theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("Ryu/ryuKick.png")),4,1, 1f));
                 theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("Ryu/ryuPunch.png")),3,1, 1f));
                 theOpponent.setSpecial(createanimation(new Texture(Gdx.files.internal("Ryu/ryuUlt.png")),3,1, 0.33f));
+                theOpponent.setDamage(createanimation(new Texture(Gdx.files.internal("Ryu/ryuDamage.png")),3,1, 0.33f));
+                theOpponent.setDead(createanimation(new Texture(Gdx.files.internal("Ryu/ryuDead.png")),2,1, 0.33f));
+                theOpponent.setWin(createanimation(new Texture(Gdx.files.internal("Ryu/ryuWin.png")),3,1, 0.33f));
+                Texture ryuwalkSheet = new Texture("Ryu/ryuIdle.png");
+                Texture ryulooseSheet = new Texture("Ryu/ryuLoose.png");
 
+                TextureRegion[] ryuLooseFrames = new TextureRegion[2];
+
+                ryuLooseFrames[0] = new TextureRegion(ryuwalkSheet,1,1,45,88);
+                ryuLooseFrames[1] = new TextureRegion(ryulooseSheet,70,1,50,88);
+                theOpponent.setLoose(new Animation<TextureRegion>(0.33f, ryuLooseFrames));
                 break;
         }
 

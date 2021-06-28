@@ -41,7 +41,7 @@ public class GameClass implements Screen {
     public static final float MOVEMENT_SPEED = 4.0f;
     GameState gameState = GameState.PLAYING;
 
-    public enum State {Idle,Walking, Kicking, Punching, Special, Dead, Loose, Win;}
+    public enum State {Idle,Walking, Kicking, Punching, Special, Dead, Loose, Damage, Win;}
 
     State player_CurrentState;
     State opponent_CurrentState;
@@ -61,7 +61,6 @@ public class GameClass implements Screen {
     TiledMap tiledMap;                  //tiled map
     OrthographicCamera camera;
     OrthogonalTiledMapRenderer tiledMapRenderer; //tiled map renderer
-
 
     //UI textures
     private Texture buttonSquareTextureForForward;
@@ -150,7 +149,7 @@ public class GameClass implements Screen {
         btnHowToPlay = new TextButton("HowToPlay",skin,"default");
         btnUnpause = new TextButton("Unpause", skin, "default");
         btnSound = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
-        btnPause = new TextButton("Pause",skin,"default");
+        btnPause = new TextButton("||",skin,"default");
 
         menuBackground = new Image(comMenuBG);
         menuBackground.setSize(1800,900);
@@ -180,11 +179,11 @@ public class GameClass implements Screen {
         btnUnpause.setPosition(750, 400);
         btnUnpause.setVisible(false);
 
-        btnPause.setWidth(100f);
-        btnPause.setHeight(100f);
+        btnPause.setWidth(60f);
+        btnPause.setHeight(60f);
         btnPause.getLabel().setFontScale(2);
         btnPause.setColor(Color.GOLD);
-        btnPause.setPosition(2100, 950);
+        btnPause.setPosition(2000, 960);
         btnPause.setVisible(true);
 
         btnPause.addListener(new ClickListener()
@@ -250,7 +249,7 @@ public class GameClass implements Screen {
         opponentRoundWins = new Label("Wins "+opponentWinCount, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         roundTime = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         Countdown = new Label("", new Label.LabelStyle(new BitmapFont(), Color.RED));
-        fightlabel = new Label("", new Label.LabelStyle(new BitmapFont(), Color.GOLD));
+        fightlabel = new Label("FIGHT", new Label.LabelStyle(new BitmapFont(), Color.GOLD));
 
         playerRoundWins.setFontScale(3,2);
         playerRoundWins.setPosition(100,1000);
@@ -390,7 +389,6 @@ public class GameClass implements Screen {
     private void updateplayer() {
 
 
-
         dt = Gdx.graphics.getDeltaTime();
         //Touch Input Info
         boolean checkTouch = Gdx.input.isTouched();
@@ -411,36 +409,39 @@ public class GameClass implements Screen {
 
                 if( kickButton.isDown){
                     player_CurrentState = State.Kicking;
-                    if(playerSprite.getX()+610 >= opponentSprite.getX()) {
+                    if(playerSprite.getX()+1200 > opponentSprite.getX()) {
+                        opponent_CurrentState = State.Damage;
                         OpponentClass.getOpponent().setHealth(-9);
-                        System.out.println("collison");
                     }
                     Timer.schedule(new Timer.Task() { @Override public void run() {
                         player_CurrentState = State.Idle;
-                    } },0.25f);
+                        opponent_CurrentState = State.Idle;
+                    } },0.20f);
 
                 }
                 else if(specialButton.isDown){
                     player_CurrentState = State.Special;
-                    if(playerSprite.getX()+610 >= opponentSprite.getX()) {
+                    if(playerSprite.getX()+1200 > opponentSprite.getX()) {
+                        System.out.println(playerSprite.getX()+"___"+opponentSprite.getX());
+                        opponent_CurrentState = State.Damage;
                         OpponentClass.getOpponent().setHealth(-30);
                     }
                     Timer.schedule(new Timer.Task() { @Override public void run() {
                         player_CurrentState = State.Idle;
+                        opponent_CurrentState = State.Idle;
                     } },0.25f);
                 }
                 else if(punchButton.isDown){
                     player_CurrentState = State.Punching;
-                    if(playerSprite.getX()+610 >= opponentSprite.getX()) {
+                    if(playerSprite.getX()+1200 > opponentSprite.getX()) {
                         OpponentClass.getOpponent().setHealth(-7);
+                        opponent_CurrentState = State.Damage;
                     }
                     Timer.schedule(new Timer.Task() { @Override public void run() {
+                        opponent_CurrentState = State.Idle;
                         player_CurrentState = State.Idle;
                     } },0.25f);
 
-                }
-                else if(specialButton.isDown){
-                    //TODO SuperPower.
                 }
                 else if (Gdx.input.isKeyPressed(Input.Keys.UP) || moveLeftButton.isDown ) {
 
@@ -509,10 +510,9 @@ public class GameClass implements Screen {
         @Override
     public void render(float delta) {
             roundTim = TimeUtils.millis();
-//                Countdown.setText(String.valueOf(TimeUtils.timeSinceMillis(roundTim)/1000));
+                Countdown.setText(String.valueOf(TimeUtils.timeSinceMillis(roundTim)/1000));
                 if(Countdown.getText().equals("1")) {
                     fightlabel.setVisible(true);
-
                     timer.scheduleTask(new Timer.Task() { public void run() {
                         fightlabel.setVisible(false);
 
@@ -520,7 +520,6 @@ public class GameClass implements Screen {
 
                     },1);
             }
-
 
         updateplayer();
         updateOpponent();
@@ -610,9 +609,11 @@ public class GameClass implements Screen {
         if(player_CurrentState == State.Loose){
             Player_Frame = PlayerClass.getPlayers().getLoose().getKeyFrame(stateTime, false);
         }
+        if(player_CurrentState == State.Damage){
+            Player_Frame = PlayerClass.getPlayers().getDamage().getKeyFrame(stateTime, false);
+        }
 
         return Player_Frame;
-
     }
 
     public TextureRegion get_Opponent_current_state(){
@@ -641,7 +642,9 @@ public class GameClass implements Screen {
         if(opponent_CurrentState == State.Loose){
             Opponent_Frame = OpponentClass.getOpponent().getLoose().getKeyFrame(stateTime, false);
         }
-
+        if(opponent_CurrentState == State.Damage){
+            Opponent_Frame = OpponentClass.getOpponent().getDamage().getKeyFrame(stateTime, false);
+        }
         return Opponent_Frame;
 
     }
