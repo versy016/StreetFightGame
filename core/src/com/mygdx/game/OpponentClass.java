@@ -57,7 +57,6 @@ public class OpponentClass extends Sprite {
         return opponent;
     }
 
-
     private int health;
 
     private float stateTime;

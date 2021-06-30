@@ -278,7 +278,7 @@ public class PlayerSelectMenu implements Screen {
             case "king":
                thePlayer.setIdle(createanimation(new Texture(Gdx.files.internal("King/kingIdle.png")),4,1, 0.33f)); // #9
                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("King/kingWalk.png")),4,1, 0.33f)); // #9
-               thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("King/kingKick.png")),3,1, 0.33f));
+               thePlayer.setSpecial(createanimation(new Texture(Gdx.files.internal("King/kingKick.png")),3,1, 0.33f));
                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("King/kingPunch.png")),3,1, 0.33f));
 
                TextureRegion[] specialFrames = new TextureRegion[6];
@@ -289,7 +289,8 @@ public class PlayerSelectMenu implements Screen {
                 specialFrames[3] = new TextureRegion(specialSheet,175,1,58,100);
                 specialFrames[4] = new TextureRegion(specialSheet,231,1,114,100);
                 specialFrames[5] = new TextureRegion(specialSheet,342,1,58,100);
-                thePlayer.setSpecial(new Animation<TextureRegion>(0.25f, specialFrames));
+
+                thePlayer.setKick(new Animation<TextureRegion>(0.25f, specialFrames));
                 thePlayer.setDead(createanimation(new Texture(Gdx.files.internal("King/kingDead.png")),3,1, 0.33f));
                 thePlayer.setWin(createanimation(new Texture(Gdx.files.internal("King/kingWin.png")),3,1, 0.33f));
                 thePlayer.setLoose(createanimation(new Texture(Gdx.files.internal("King/kingLoose.png")),3,1, 0.33f));

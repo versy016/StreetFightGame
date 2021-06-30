@@ -10,6 +10,15 @@ public class Button {
     float y;
     float w;
     float h;
+
+    public boolean isDown() {
+        return isDown;
+    }
+
+    public void setDown(boolean down) {
+        isDown = down;
+    }
+
     boolean isDown;
 
     Texture textureUp;

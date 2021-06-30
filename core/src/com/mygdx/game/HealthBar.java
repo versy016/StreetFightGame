@@ -12,6 +12,13 @@ public class HealthBar extends Actor{
 
     private  int x;
     private  int y;
+
+    public int getWidthInner() {
+        if(widthInner < 0)
+            widthInner =0;
+        return widthInner;
+    }
+
     private int widthInner;
     private int heightInner;
     private int widthOuter;
