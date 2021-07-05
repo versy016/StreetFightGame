@@ -43,6 +43,7 @@ public class GameClass implements Screen {
     State player_CurrentState;
     State opponent_CurrentState;
 
+    Image messageBoxBackGround;
 
     private float stateTime;
     private Sprite playerSprite;
@@ -118,12 +119,47 @@ public class GameClass implements Screen {
 
     Skin skin;
 
+    TextButton btnMessageBox;
+    Label message;
+
     double opponentHealth;
     public GameClass(MyGdxGame game) {
         this.game = game;
     }
 
+
     public void create() {
+
+        //***********************************************************************MessageBox*********************************************************************************************
+        Texture menuBG = new Texture("Starting Assets/assets/finishedbg.png");
+        skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
+        message = new Label("Touch SP :- Special Power Attack\nTouch P :- Punch\nTouch K :- Kick\nTouch --> :- Move Forward.\nTouch <-- : Move Backward." ,new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        btnMessageBox = new TextButton("OK", skin, "default");
+        messageBoxBackGround = new Image(menuBG);
+        messageBoxBackGround.setSize(1200,600);
+        messageBoxBackGround.setX(475);
+        messageBoxBackGround.setY(300);
+        messageBoxBackGround.setZIndex(2);
+        messageBoxBackGround.setVisible(false);
+
+
+        message.setFontScale(2,2);
+        message.setPosition(875,550);
+        message.setVisible(false);
+
+        styleButton(btnMessageBox);
+        btnMessageBox.setPosition(900, 400);
+        btnMessageBox.setVisible(false);
+
+        btnMessageBox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                messageBoxBackGround.setVisible(false);
+                message.setVisible(false);
+                btnMessageBox.setVisible(false);
+            }
+        });
+        //***********************************************************************MessageBox*********************************************************************************************
 
 
         //***********************************************************************CompleteMenuStage**************************************************************************************
@@ -131,7 +167,7 @@ public class GameClass implements Screen {
          winRadioBtn = new Texture("radiobutton.png");
          looseRadioBtn = new Texture("radiobuttongrey.png");
 
-        skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
+
         btnRestartGame = new TextButton("Restart", skin, "default");
         btnHowToPlay = new TextButton("HowToPlay", skin,"default");
         btnUnpause = new TextButton("Unpause", skin, "default");
@@ -282,10 +318,11 @@ public class GameClass implements Screen {
             public void clicked (InputEvent event, float x, float y)
             {
                 btnSound.play(1.0f);
-                //TODO Show Game Help Menu
+                messageBoxBackGround.setVisible(true);
+                message.setVisible(true);
+                btnMessageBox.setVisible(true);
 
-
-                Gdx.input.setInputProcessor(stage);
+                Gdx.input.setInputProcessor(pauseMenuStage);
             }
         });
 
@@ -388,7 +425,7 @@ public class GameClass implements Screen {
         stage.addActor(winTwoOpponentgrey);
         stage.addActor(winOneOpponentgrey);
 
-        stage.addActor(winningLabel);
+
 
         pauseMenuStage.addActor(menuBackground);
         pauseMenuStage.addActor(btnUnpause);
@@ -396,7 +433,10 @@ public class GameClass implements Screen {
         pauseMenuStage.addActor(btnRestartGame);
         pauseMenuStage.addActor(mainMenuButton);
         pauseMenuStage.addActor(psmMenuButton);
-
+        pauseMenuStage.addActor(winningLabel);
+        pauseMenuStage.addActor(messageBoxBackGround);
+        pauseMenuStage.addActor(message);
+        pauseMenuStage.addActor(btnMessageBox);
 
 
         Gdx.input.setInputProcessor(stage);
@@ -1016,5 +1056,11 @@ public class GameClass implements Screen {
         pauseMenuStage.dispose();
         batch.dispose();
         game.dispose();
+    }
+    public void styleButton(TextButton btn){
+        btn.setWidth(300f);
+        btn.setHeight(60f);
+        btn.getLabel().setFontScale(3);
+        btn.setColor(Color.GOLD);
     }
 }
