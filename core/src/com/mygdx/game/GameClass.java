@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -100,6 +99,7 @@ public class GameClass implements Screen {
     static long opponentMovesTime;
     static Timer timer;
 
+    boolean roundWinStatus = false;
     int playerWinCount=0;
     int opponentWinCount=0;
 
@@ -133,6 +133,8 @@ public class GameClass implements Screen {
     Music specialMusic;
     Music damageMusic;
     Music deadMusic;
+
+    Music backGroundMusic;
 
     public GameClass(MyGdxGame game) {
         this.game = game;
@@ -673,7 +675,7 @@ public class GameClass implements Screen {
 
                 }
                 if(checkplayer ==1){
-                    opponentHealthBar.setWidthInner((int) decreaseOpponenthealth(thedamagePlayer));
+                    opponentHealthBar.setWidthInner((int) decreaseOpponentHealth(thedamagePlayer));
                     }
                 if(playerWinCount==1){
                     winOnePlayergrey.setVisible(false);
@@ -699,6 +701,7 @@ public class GameClass implements Screen {
                 if(playerHealthBar.getWidthInner() <= 0){
                     player_CurrentState = State.Dead;
                     opponent_CurrentState = State.Win;
+                    roundWinStatus = true;
                     if(!checkRoundFinishStatus){
                         checkRoundFinishStatus = true;
                         playerHealthBar.setWidthInner(0);
@@ -709,6 +712,7 @@ public class GameClass implements Screen {
                         timer.scheduleTask(new Timer.Task() {
                             @Override
                             public void run() {
+                                backGroundMusic.stop();
                                 game.setScreen(MyGdxGame.gclass);
                             }
                         },2);
@@ -718,6 +722,7 @@ public class GameClass implements Screen {
                 else if(opponentHealthBar.getWidthInner() <= 0){
                     opponent_CurrentState = State.Dead;
                     player_CurrentState = State.Win;
+                    roundWinStatus = true;
                     if(!checkRoundFinishStatus){
                         checkRoundFinishStatus = true;
                         opponentHealthBar.setWidthInner(0);
@@ -728,6 +733,7 @@ public class GameClass implements Screen {
                         timer.scheduleTask(new Timer.Task() {
                             @Override
                             public void run() {
+                                backGroundMusic.stop();
                                 game.setScreen(MyGdxGame.gclass);
                             }
                         },2);
@@ -740,6 +746,7 @@ public class GameClass implements Screen {
                     if(playerHealthBar.getWidthInner()> opponentHealthBar.getWidthInner()){
                         opponent_CurrentState = State.Loose;
                         player_CurrentState = State.Idle;
+                        roundWinStatus = true;
                         if(!checkRoundFinishStatus){
                             checkRoundFinishStatus = true;
                             playerWinCount++;
@@ -749,6 +756,7 @@ public class GameClass implements Screen {
                             timer.scheduleTask(new Timer.Task() {
                                 @Override
                                 public void run() {
+                                    backGroundMusic.stop();
                                     game.setScreen(MyGdxGame.gclass);
                                 }
                             },3);
@@ -758,6 +766,7 @@ public class GameClass implements Screen {
                     else if(playerHealthBar.getWidthInner()< opponentHealthBar.getWidthInner()){
                         opponent_CurrentState = State.Win;
                         player_CurrentState = State.Loose;
+                        roundWinStatus = true;
                         if(!checkRoundFinishStatus){
                             checkRoundFinishStatus = true;
                             Rounds++;
@@ -768,6 +777,7 @@ public class GameClass implements Screen {
                             timer.scheduleTask(new Timer.Task() {
                                 @Override
                                 public void run() {
+                                    backGroundMusic.stop();
                                     game.setScreen(MyGdxGame.gclass);
                                 }
                             },3);
@@ -801,7 +811,7 @@ public class GameClass implements Screen {
         switch (gameState) {
             case PLAYING:
 
-                if(opponentSprite.getX() - playerSprite.getX() <= 650){
+                if(opponentSprite.getX() - playerSprite.getX() <= 650 && !roundWinStatus ){
 
                     if((TimeUtils.timeSinceMillis(roundTim)/1000)%3 == 0 && TimeUtils.timeSinceMillis(opponentMovesTime)/1000 >= 2 ){
                         opponent_CurrentState = State.Punching;
@@ -884,20 +894,20 @@ public class GameClass implements Screen {
                     opponent_CurrentState = State.Idle;
                 }
                 if(checkopponent ==1){
-                    playerHealthBar.setWidthInner((int) decreasePlayerhealth(thedamageOpponent));
+                    playerHealthBar.setWidthInner((int) decreasePlayerHealth(thedamageOpponent));
                 }
             case PAUSE:
                 break;
         }
     }
 
-    private double decreaseOpponenthealth(int damage){
+    private double decreaseOpponentHealth(int damage){
         opponentHealth = opponentHealth-(0.7*damage);
         checkplayer =0;
         return opponentHealth;
 
     }
-    private double decreasePlayerhealth(int damage){
+    private double decreasePlayerHealth(int damage){
         playerHealth = playerHealth-(0.7*damage);
         checkopponent =0;
         return playerHealth;
@@ -948,6 +958,7 @@ public class GameClass implements Screen {
 
     private void newGame() {
         winningLabel.setVisible(false);
+        roundWinStatus = false;
         checkRoundFinishStatus = false;
         roundTim = TimeUtils.millis();
         opponentMovesTime = TimeUtils.millis();
@@ -1121,7 +1132,10 @@ public class GameClass implements Screen {
                     punchButton.setVisible(true);
                     specialButton.setVisible(true);
                     defendButton.setVisible(true);
-
+                    backGroundMusic = Gdx.audio.newMusic(Gdx.files.internal("backgroundloopmusic.wav"));
+                    backGroundMusic.setVolume(0.3f);
+                    backGroundMusic.setLooping(false);
+                    backGroundMusic.play();
                     go = true;
                 }
             }, 6);
