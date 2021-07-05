@@ -38,26 +38,39 @@ public class Menu implements Screen
     private Skin skin;
     //Instance of Music Class for MainMenu Background Music
     private Music music;
-
-
+    //Image for Background
     Image imgBackground;
+    //Image for menuBackGround
     Image menuBackground;
+    //Image for credits background
     Image creditsBg;
+    //TextButton for Play
     TextButton btnPlay;
+    //Sound for button click
     Sound btnSound;
+    //Text Button for How to play
     TextButton btnHowToPlay;
+    //Text Button for Credits
     TextButton btnCredits;
+    //Text Button for Exit
     TextButton btnExit;
+    //Label for Messages in Messagebox
     Label message;
+    //Text Button for MessageBox OK button
     TextButton btnMessageBox;
+    //Image for MessageBox Background
     Image messageBoxBackGround;
+    //Stage for messageBox
     Stage messageBox;
+    //Timer for schedule task
     static Timer timer;
 
+    //Constructor for initialize current game object
     public Menu(MyGdxGame game)
     {
         this.game = game;
     }
+    //Create method for initialize everything
     public void create()
     {
         timer = new Timer();
@@ -154,7 +167,7 @@ public class Menu implements Screen
         btnExit.setColor(Color.GOLD);
         btnExit.setPosition(750, 350);
 
-
+        //Play button Click Event
         btnPlay.addListener(new ClickListener()
         {
             @Override
@@ -167,6 +180,7 @@ public class Menu implements Screen
             }
         });
 
+        //Exit button Click Event
         btnExit.addListener(new ClickListener()
         {
             @Override
@@ -178,22 +192,25 @@ public class Menu implements Screen
             }
         });
 
+        //Credits button Click Event
         btnCredits.addListener(new ClickListener()
         {
             @Override
             public void clicked (InputEvent event, float x, float y)
             {
                 btnSound.play(1.0f);
+                //Hides current menu from the stage
                 btnPlay.setVisible(false);
                 btnCredits.setVisible(false);
                 btnExit.setVisible(false);
                 btnHowToPlay.setVisible(false);
                 menuBackground.setVisible(false);
                 creditsBg.setVisible(true);
-
+                //Delay 10 seconds and go back to previous menu
                 timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
+                        //Shows current menu from the stage
                         creditsBg.setVisible(false);
                         btnPlay.setVisible(true);
                         btnCredits.setVisible(true);
@@ -206,6 +223,8 @@ public class Menu implements Screen
 
             }
         });
+
+        //HowToPlay Button Click Event
         btnHowToPlay.addListener(new ClickListener(){
             @Override
             public void clicked (InputEvent event, float x, float y)
@@ -218,6 +237,8 @@ public class Menu implements Screen
 
             }
         });
+
+        //Add all actors to main stage
         stage.addActor(imgBackground);
         stage.addActor(menuBackground);
         stage.addActor(creditsBg);
@@ -226,7 +247,7 @@ public class Menu implements Screen
         stage.addActor(btnHowToPlay);
         stage.addActor(btnCredits);
 
-
+        //Add messageBox Actors to MessageBox Stage
         messageBox.addActor(messageBoxBackGround);
         messageBox.addActor(btnMessageBox);
         messageBox.addActor(message);
@@ -234,7 +255,7 @@ public class Menu implements Screen
         Gdx.input.setInputProcessor(stage);
     }
 
-
+    //Method to style button identically
     public void styleButton(TextButton btn){
         btn.setWidth(300f);
         btn.setHeight(60f);
