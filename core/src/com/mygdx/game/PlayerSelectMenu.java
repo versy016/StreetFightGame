@@ -300,10 +300,46 @@ public class PlayerSelectMenu implements Screen {
                 break;
 
             case "robert":
-                thePlayer.setIdle(createanimation(new Texture(Gdx.files.internal("Robertidle.png")),6,1, 0.33f)); // #9
-                thePlayer.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1, 0.33f)); // #9
-                thePlayer.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),3,1, 1f));
-                thePlayer.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1, 1f));
+                thePlayer.setIdle(createanimation(new Texture(Gdx.files.internal("Robert/robertIdle.png")),6,1, 0.33f)); // #9
+
+                Texture robertwalksheet = new Texture("Robert/robertWalk.png");
+
+                TextureRegion[] robertWalkFrames = new TextureRegion[3];
+
+                robertWalkFrames[0] = new TextureRegion(robertwalksheet,1,1,90,155);
+                robertWalkFrames[1] = new TextureRegion(robertwalksheet,90,1,110,135);
+                robertWalkFrames[2] = new TextureRegion(robertwalksheet,205,1,90,155);
+
+                thePlayer.setWalk(new Animation<TextureRegion>(0.33f,robertWalkFrames)); // #9
+
+
+                Texture robertkicksheet = new Texture("Robert/robertKick.png");
+
+                TextureRegion[] robertKickFrames = new TextureRegion[3];
+
+                robertKickFrames[0] = new TextureRegion(robertkicksheet,1,1,100,155);
+                robertKickFrames[1] = new TextureRegion(robertkicksheet,110,1,110,135);
+                robertKickFrames[2] = new TextureRegion(robertkicksheet,215,1,160,155);
+
+                thePlayer.setKick(new Animation<TextureRegion>(0.33f,robertKickFrames));
+
+
+                Texture punchsheet = new Texture("Robert/robertPunch.png");
+
+                TextureRegion[] robertPunchFrames = new TextureRegion[2];
+
+
+                robertPunchFrames[0] = new TextureRegion(punchsheet,1,1,100,155);
+                robertPunchFrames[1] = new TextureRegion(punchsheet,105,1,140,155);
+
+                thePlayer.setPunch(new Animation<TextureRegion>(0.33f,robertPunchFrames));
+                thePlayer.setSpecial(createanimation(new Texture(Gdx.files.internal("Robert/robertSpecial.png")),1,1, 0.33f));
+                thePlayer.setDamage(createanimation(new Texture(Gdx.files.internal("Robert/robertDamage.png")),3,1, 0.33f));
+                thePlayer.setDead(createanimation(new Texture(Gdx.files.internal("Robert/robDead.png")),6,1, 0.33f));
+                thePlayer.setWin(createanimation(new Texture(Gdx.files.internal("Robert/robertWin.png")),3,1, 0.33f));
+                thePlayer.setLoose(createanimation(new Texture(Gdx.files.internal("Robert/robertLose.jpg")),4,1, 0.33f));
+                thePlayer.setDefend(createanimation(new Texture(Gdx.files.internal("Robert/robertDefend.png")),1,1, 0.33f));
+
                 break;
 
             case "ken":
@@ -397,10 +433,46 @@ public class PlayerSelectMenu implements Screen {
                 break;
 
             case "robert":
-                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("Robertidle.png")),6,1, 0.33f)); // #9
-                theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("robertwalk.png")),3,1, 0.33f)); // #9
-                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("robertkick.png")),4,1, 1f));
-                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("robertpunch.png")),3,1, 1f));
+                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("Robert/robertIdle.png")),6,1, 0.33f)); // #9
+
+                Texture robertwalksheet = new Texture("Robert/robertWalk.png");
+
+                TextureRegion[] robertWalkFrames = new TextureRegion[3];
+
+                robertWalkFrames[0] = new TextureRegion(robertwalksheet,1,1,90,155);
+                robertWalkFrames[1] = new TextureRegion(robertwalksheet,90,1,110,135);
+                robertWalkFrames[2] = new TextureRegion(robertwalksheet,205,1,90,155);
+
+                theOpponent.setWalk(new Animation<TextureRegion>(0.33f,robertWalkFrames)); // #9
+
+
+                Texture robertkicksheet = new Texture("Robert/robertKick.png");
+
+                TextureRegion[] robertKickFrames = new TextureRegion[3];
+
+                robertKickFrames[0] = new TextureRegion(robertkicksheet,1,1,100,155);
+                robertKickFrames[1] = new TextureRegion(robertkicksheet,110,1,110,135);
+                robertKickFrames[2] = new TextureRegion(robertkicksheet,215,1,160,155);
+
+                theOpponent.setKick(new Animation<TextureRegion>(0.33f,robertKickFrames));
+
+
+                Texture punchsheet = new Texture("Robert/robertPunch.png");
+
+                TextureRegion[] robertPunchFrames = new TextureRegion[2];
+
+
+                robertPunchFrames[0] = new TextureRegion(punchsheet,1,1,100,155);
+                robertPunchFrames[1] = new TextureRegion(punchsheet,105,1,140,155);
+
+                theOpponent.setPunch(new Animation<TextureRegion>(0.33f,robertPunchFrames));
+                theOpponent.setSpecial(createanimation(new Texture(Gdx.files.internal("Robert/robertSpecial.png")),1,1, 0.33f));
+                theOpponent.setDamage(createanimation(new Texture(Gdx.files.internal("Robert/robertDamage.png")),3,1, 0.33f));
+                theOpponent.setDead(createanimation(new Texture(Gdx.files.internal("Robert/robDead.png")),6,1, 0.33f));
+                theOpponent.setWin(createanimation(new Texture(Gdx.files.internal("Robert/robertWin.png")),3,1, 0.33f));
+                theOpponent.setLoose(createanimation(new Texture(Gdx.files.internal("Robert/robertLose.jpg")),4,1, 0.33f));
+                theOpponent.setDefend(createanimation(new Texture(Gdx.files.internal("Robert/robertDefend.png")),1,1, 0.33f));
+
                 break;
 
             case "ken":
