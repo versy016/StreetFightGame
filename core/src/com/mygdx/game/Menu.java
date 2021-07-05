@@ -18,8 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 
-import java.sql.Time;
-
 public class Menu implements Screen
 {
     //MyGdxGame Instance
@@ -174,7 +172,7 @@ public class Menu implements Screen
             public void clicked (InputEvent event, float x, float y)
             {
                 btnSound.play(1.0f);
-                game.setScreen(MyGdxGame.psmclass);
+                game.setScreen(MyGdxGame.playerSelectMenu);
                 music.stop();
 
             }

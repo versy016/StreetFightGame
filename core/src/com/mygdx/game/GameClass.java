@@ -320,8 +320,8 @@ public class GameClass implements Screen {
                 opponentRoundWins.setText("Wins "+opponentWinCount);
                 playerRoundWins.setText("Wins "+playerWinCount);
 
-                MyGdxGame.psmclass.dispose();
-                game.setScreen(MyGdxGame.psmclass);
+                MyGdxGame.playerSelectMenu.dispose();
+                game.setScreen(MyGdxGame.playerSelectMenu);
             }
         });
 
@@ -341,8 +341,8 @@ public class GameClass implements Screen {
                 opponentRoundWins.setText("Wins "+opponentWinCount);
                 playerRoundWins.setText("Wins "+playerWinCount);
 
-                MyGdxGame.psmclass.dispose();
-                game.setScreen(MyGdxGame.mclass);
+                MyGdxGame.playerSelectMenu.dispose();
+                game.setScreen(MyGdxGame.menuClass);
             }
         });
 
@@ -713,7 +713,7 @@ public class GameClass implements Screen {
                             @Override
                             public void run() {
                                 backGroundMusic.stop();
-                                game.setScreen(MyGdxGame.gclass);
+                                game.setScreen(MyGdxGame.gameClass);
                             }
                         },2);
                     }
@@ -734,7 +734,7 @@ public class GameClass implements Screen {
                             @Override
                             public void run() {
                                 backGroundMusic.stop();
-                                game.setScreen(MyGdxGame.gclass);
+                                game.setScreen(MyGdxGame.gameClass);
                             }
                         },2);
                     }
@@ -757,7 +757,7 @@ public class GameClass implements Screen {
                                 @Override
                                 public void run() {
                                     backGroundMusic.stop();
-                                    game.setScreen(MyGdxGame.gclass);
+                                    game.setScreen(MyGdxGame.gameClass);
                                 }
                             },3);
                         }
@@ -778,11 +778,11 @@ public class GameClass implements Screen {
                                 @Override
                                 public void run() {
                                     backGroundMusic.stop();
-                                    game.setScreen(MyGdxGame.gclass);
+                                    game.setScreen(MyGdxGame.gameClass);
                                 }
                             },3);
                         }
-                        game.setScreen(MyGdxGame.gclass);
+                        game.setScreen(MyGdxGame.gameClass);
                     }
                 break;
             case COMPLETE:

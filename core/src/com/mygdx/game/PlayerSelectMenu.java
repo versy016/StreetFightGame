@@ -138,7 +138,7 @@ public class PlayerSelectMenu implements Screen {
                     }
                     else {
                         assignOpponent("king");
-                        game.setScreen(MyGdxGame.gclass);
+                        game.setScreen(MyGdxGame.gameClass);
                     }
                 }
             });
@@ -155,7 +155,7 @@ public class PlayerSelectMenu implements Screen {
                     }
                     else {
                         assignOpponent("robert");
-                        game.setScreen(MyGdxGame.gclass);
+                        game.setScreen(MyGdxGame.gameClass);
                     }
 
                 }
@@ -173,7 +173,7 @@ public class PlayerSelectMenu implements Screen {
                     }
                     else {
                         assignOpponent("ryu");
-                        game.setScreen(MyGdxGame.gclass);
+                        game.setScreen(MyGdxGame.gameClass);
                     }
 
                 }
@@ -192,7 +192,7 @@ public class PlayerSelectMenu implements Screen {
                     }
                     else {
                         assignOpponent("ken");
-                        game.setScreen(MyGdxGame.gclass);
+                        game.setScreen(MyGdxGame.gameClass);
                     }
                 }
             });
