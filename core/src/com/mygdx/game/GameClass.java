@@ -93,6 +93,7 @@ public class GameClass implements Screen {
     Label Countdown;
     Label fightLabel;
     Label roundLabel;
+    Label winningLabel;
 
     private Stage pauseMenuStage;
     long roundTim;
@@ -109,6 +110,8 @@ public class GameClass implements Screen {
     int check=0;
     int theDamage =0;
     int Rounds =0;
+
+    boolean checkRoundFinishStatus = false;
 
     Texture winRadioBtn;
     Texture looseRadioBtn;
@@ -301,17 +304,22 @@ public class GameClass implements Screen {
         Countdown = new Label("", new Label.LabelStyle(new BitmapFont(), Color.RED));
         fightLabel = new Label("FIGHT", new Label.LabelStyle(new BitmapFont(), Color.GOLD));
         roundLabel = new Label("", new Label.LabelStyle(new BitmapFont(), Color.GOLD));
+        winningLabel = new Label("",new Label.LabelStyle(new BitmapFont(), Color.GOLD));
 
         playerRoundWins.setFontScale(3,2);
-        playerRoundWins.setPosition(100,1000);
+        playerRoundWins.setPosition(100,1050);
         playerRoundWins.setVisible(true);
 
         roundLabel.setFontScale(12,6);
         roundLabel.setPosition((float)Gdx.graphics.getWidth()/3,(float)Gdx.graphics.getHeight()/1.5f);
         roundLabel.setVisible(true);
 
+        winningLabel.setFontScale(6,6);
+        winningLabel.setPosition((float)Gdx.graphics.getWidth()/3,(float)Gdx.graphics.getHeight()/1.5f);
+        winningLabel.setVisible(true);
+
         opponentRoundWins.setFontScale(3,2);
-        opponentRoundWins.setPosition(1300,1000);
+        opponentRoundWins.setPosition(1300,1050);
         opponentRoundWins.setVisible(true);
 
         roundTime.setFontScale(8,6);
@@ -358,9 +366,6 @@ public class GameClass implements Screen {
         opponentSprite.setX((Gdx.graphics.getWidth()/2.0f)+500);
         stateTime = 0.00f;
 
-
-
-
         stage.addActor(playerHealthBar);
         stage.addActor(opponentHealthBar);
         stage.addActor(roundTime);
@@ -383,6 +388,7 @@ public class GameClass implements Screen {
         stage.addActor(winTwoOpponentgrey);
         stage.addActor(winOneOpponentgrey);
 
+        stage.addActor(winningLabel);
 
         pauseMenuStage.addActor(menuBackground);
         pauseMenuStage.addActor(btnUnpause);
@@ -530,6 +536,8 @@ public class GameClass implements Screen {
                     playerSprite.translateX(playerDelta.x);
 
                 }
+
+
                 if(check==1){
                     opponentHealthBar.setWidthInner((int) health(theDamage));
                     }
@@ -555,28 +563,41 @@ public class GameClass implements Screen {
                 }
 
                 if(playerHealthBar.getWidthInner() <= 0){
-
-                    playerHealthBar.setWidthInner(0);
                     player_CurrentState = State.Dead;
                     opponent_CurrentState = State.Win;
-                    opponentWinCount++;
-                    Rounds++;
-                    roundLabel.setText("You Won Round"+Rounds);
-                    roundLabel.setVisible(true);
-                    game.setScreen(MyGdxGame.gclass);
-
+                    if(checkRoundFinishStatus == false){
+                        checkRoundFinishStatus = true;
+                        playerHealthBar.setWidthInner(0);
+                        winningLabel.setText("Opponent Won Round 0"+Rounds);
+                        winningLabel.setVisible(true);
+                        opponentWinCount++;
+                        Rounds++;
+                        timer.scheduleTask(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                game.setScreen(MyGdxGame.gclass);
+                            }
+                        },2);
+                    }
 
                 }
                 else if(opponentHealthBar.getWidthInner() <= 0){
-
-                    opponentHealthBar.setWidthInner(0);
                     opponent_CurrentState = State.Dead;
                     player_CurrentState = State.Win;
-                    playerWinCount++;
-                    Rounds++;
-                    roundLabel.setText("Opponent Won Round"+Rounds);
-                    roundLabel.setVisible(true);
-                    game.setScreen(MyGdxGame.gclass);
+                    if(checkRoundFinishStatus == false){
+                        checkRoundFinishStatus = true;
+                        opponentHealthBar.setWidthInner(0);
+                        playerWinCount++;
+                        Rounds++;
+                        winningLabel.setText("You Won Round 0"+Rounds);
+                        winningLabel.setVisible(true);
+                        timer.scheduleTask(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                game.setScreen(MyGdxGame.gclass);
+                            }
+                        },2);
+                    }
 
                 }
                 break;
@@ -585,15 +606,38 @@ public class GameClass implements Screen {
                     if(playerHealthBar.getWidthInner()> opponentHealthBar.getWidthInner()){
                         opponent_CurrentState = State.Loose;
                         player_CurrentState = State.Idle;
-                        playerWinCount++;
-                        Rounds++;
-                        game.setScreen(MyGdxGame.gclass);
+                        if(checkRoundFinishStatus == false){
+                            checkRoundFinishStatus = true;
+                            playerWinCount++;
+                            Rounds++;
+                            winningLabel.setText("You Won Round 0"+Rounds);
+                            winningLabel.setVisible(true);
+                            timer.scheduleTask(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    game.setScreen(MyGdxGame.gclass);
+                                }
+                            },3);
+                        }
+
                     }
                     else if(playerHealthBar.getWidthInner()< opponentHealthBar.getWidthInner()){
                         opponent_CurrentState = State.Win;
                         player_CurrentState = State.Loose;
-                        Rounds++;
-                        opponentWinCount++;
+                        if(checkRoundFinishStatus == false){
+                            checkRoundFinishStatus = true;
+                            Rounds++;
+                            opponentWinCount++;
+                            winningLabel.setText("Opponent Won Round 0"+Rounds);
+                            winningLabel.setVisible(true);
+
+                            timer.scheduleTask(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    game.setScreen(MyGdxGame.gclass);
+                                }
+                            },3);
+                        }
                         game.setScreen(MyGdxGame.gclass);
                     }
                 break;
@@ -685,6 +729,8 @@ public class GameClass implements Screen {
 
     private void newGame() {
 
+        winningLabel.setVisible(false);
+        checkRoundFinishStatus = false;
         roundTim = TimeUtils.millis();
         Gdx.input.setInputProcessor(stage);
         opponentRoundWins.setText("Wins "+opponentWinCount);
@@ -733,8 +779,6 @@ public class GameClass implements Screen {
                     music= Gdx.audio.newMusic(Gdx.files.internal("321fight.wav"));
                     music.setVolume(1.0f);
                     music.play();
-
-
                 }
 
             });
@@ -971,7 +1015,6 @@ public class GameClass implements Screen {
         stage.dispose();
         pauseMenuStage.dispose();
         batch.dispose();
-
         game.dispose();
     }
 }
