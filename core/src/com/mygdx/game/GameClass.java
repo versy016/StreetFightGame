@@ -172,8 +172,8 @@ public class GameClass implements Screen {
         punchMusic = Gdx.audio.newMusic(Gdx.files.internal("punch.wav"));
         deadMusic = Gdx.audio.newMusic(Gdx.files.internal("death.wav"));
         damageMusic = Gdx.audio.newMusic(Gdx.files.internal("Damage.wav"));
-        kickMusic = Gdx.audio.newMusic(Gdx.files.internal("kick.mp3"));
-        specialMusic = Gdx.audio.newMusic(Gdx.files.internal("special.mp3"));
+        kickMusic = Gdx.audio.newMusic(Gdx.files.internal("kick.wav"));
+        specialMusic = Gdx.audio.newMusic(Gdx.files.internal("special.wav"));
 
         punchMusic.setVolume(1.0f);
         punchMusic.setLooping(false);
@@ -184,7 +184,7 @@ public class GameClass implements Screen {
         damageMusic.setVolume(1.0f);
         damageMusic.setLooping(false);
 
-        kickMusic.setVolume(2.0f);
+        kickMusic.setVolume(1.0f);
         kickMusic.setLooping(false);
 
         specialMusic.setVolume(1.0f);
@@ -1040,9 +1040,7 @@ public class GameClass implements Screen {
             camera = new OrthographicCamera();
             camera.setToOrtho(false, 720 , 330  );
 
-            //TODO Change round1.wav into round 3.wav
-            Music music2 = Gdx.audio.newMusic(Gdx.files.internal("round1.wav"));
-
+            Music music2 = Gdx.audio.newMusic(Gdx.files.internal("round3.wav"));
 
             music2.setVolume(1.0f);
             music2.setLooping(false);
