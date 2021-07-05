@@ -300,7 +300,7 @@ public class PlayerSelectMenu implements Screen {
                 break;
 
             case "robert":
-                thePlayer.setIdle(createanimation(new Texture(Gdx.files.internal("Robert/robertIdle.png")),6,1, 0.33f)); // #9
+                thePlayer.setIdle(createAnimation(new Texture(Gdx.files.internal("Robert/robertIdle.png")),6,1, 0.33f)); // #9
 
                 Texture robertwalksheet = new Texture("Robert/robertWalk.png");
 
@@ -333,12 +333,12 @@ public class PlayerSelectMenu implements Screen {
                 robertPunchFrames[1] = new TextureRegion(punchsheet,105,1,140,155);
 
                 thePlayer.setPunch(new Animation<TextureRegion>(0.33f,robertPunchFrames));
-                thePlayer.setSpecial(createanimation(new Texture(Gdx.files.internal("Robert/robertSpecial.png")),1,1, 0.33f));
-                thePlayer.setDamage(createanimation(new Texture(Gdx.files.internal("Robert/robertDamage.png")),3,1, 0.33f));
-                thePlayer.setDead(createanimation(new Texture(Gdx.files.internal("Robert/robDead.png")),6,1, 0.33f));
-                thePlayer.setWin(createanimation(new Texture(Gdx.files.internal("Robert/robertWin.png")),3,1, 0.33f));
-                thePlayer.setLoose(createanimation(new Texture(Gdx.files.internal("Robert/robertLose.jpg")),4,1, 0.33f));
-                thePlayer.setDefend(createanimation(new Texture(Gdx.files.internal("Robert/robertDefend.png")),1,1, 0.33f));
+                thePlayer.setSpecial(createAnimation(new Texture(Gdx.files.internal("Robert/robertSpecial.png")),1,1, 0.33f));
+                thePlayer.setDamage(createAnimation(new Texture(Gdx.files.internal("Robert/robertDamage.png")),3,1, 0.33f));
+                thePlayer.setDead(createAnimation(new Texture(Gdx.files.internal("Robert/robDead.png")),6,1, 0.33f));
+                thePlayer.setWin(createAnimation(new Texture(Gdx.files.internal("Robert/robertWin.png")),3,1, 0.33f));
+                thePlayer.setLoose(createAnimation(new Texture(Gdx.files.internal("Robert/robertLose.jpg")),4,1, 0.33f));
+                thePlayer.setDefend(createAnimation(new Texture(Gdx.files.internal("Robert/robertDefend.png")),1,1, 0.33f));
 
                 break;
 
@@ -433,7 +433,7 @@ public class PlayerSelectMenu implements Screen {
                 break;
 
             case "robert":
-                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("Robert/robertIdle.png")),6,1, 0.33f)); // #9
+                theOpponent.setIdle(createAnimation(new Texture(Gdx.files.internal("Robert/robertIdle.png")),6,1, 0.33f)); // #9
 
                 Texture robertwalksheet = new Texture("Robert/robertWalk.png");
 
@@ -466,12 +466,12 @@ public class PlayerSelectMenu implements Screen {
                 robertPunchFrames[1] = new TextureRegion(punchsheet,105,1,140,155);
 
                 theOpponent.setPunch(new Animation<TextureRegion>(0.33f,robertPunchFrames));
-                theOpponent.setSpecial(createanimation(new Texture(Gdx.files.internal("Robert/robertSpecial.png")),1,1, 0.33f));
-                theOpponent.setDamage(createanimation(new Texture(Gdx.files.internal("Robert/robertDamage.png")),3,1, 0.33f));
-                theOpponent.setDead(createanimation(new Texture(Gdx.files.internal("Robert/robDead.png")),6,1, 0.33f));
-                theOpponent.setWin(createanimation(new Texture(Gdx.files.internal("Robert/robertWin.png")),3,1, 0.33f));
-                theOpponent.setLoose(createanimation(new Texture(Gdx.files.internal("Robert/robertLose.jpg")),4,1, 0.33f));
-                theOpponent.setDefend(createanimation(new Texture(Gdx.files.internal("Robert/robertDefend.png")),1,1, 0.33f));
+                theOpponent.setSpecial(createAnimation(new Texture(Gdx.files.internal("Robert/robertSpecial.png")),1,1, 0.33f));
+                theOpponent.setDamage(createAnimation(new Texture(Gdx.files.internal("Robert/robertDamage.png")),3,1, 0.33f));
+                theOpponent.setDead(createAnimation(new Texture(Gdx.files.internal("Robert/robDead.png")),6,1, 0.33f));
+                theOpponent.setWin(createAnimation(new Texture(Gdx.files.internal("Robert/robertWin.png")),3,1, 0.33f));
+                theOpponent.setLoose(createAnimation(new Texture(Gdx.files.internal("Robert/robertLose.jpg")),4,1, 0.33f));
+                theOpponent.setDefend(createAnimation(new Texture(Gdx.files.internal("Robert/robertDefend.png")),1,1, 0.33f));
 
                 break;
 
