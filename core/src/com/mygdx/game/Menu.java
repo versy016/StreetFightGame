@@ -48,7 +48,6 @@ public class Menu implements Screen
         btnOption = new TextButton("Option",skin,"default");
         btnExit = new TextButton("Exit", skin, "default");
         btnSound = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
-        //animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("Starting Assets/assets/menuBackGround.gif").read());
 
         imgBackground = new Image(background);
         imgBackground.setSize(2300,1100);
