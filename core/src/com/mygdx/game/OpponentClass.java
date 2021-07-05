@@ -9,9 +9,6 @@ public class OpponentClass extends Sprite {
 
     //Single Instance of Opponent
     private static OpponentClass opponent;
-    //MyGdxGame Instance
-    MyGdxGame game;
-
     //Walk Animation instance
     private Animation<TextureRegion> Walk;
     //Idle Animation instance
@@ -97,7 +94,7 @@ public class OpponentClass extends Sprite {
         return punch;
     }
 
-    //Method to get punch animation
+    //Method to set punch animation
     public void setPunch(Animation<TextureRegion> punch) {
         this.punch = punch;
     }
