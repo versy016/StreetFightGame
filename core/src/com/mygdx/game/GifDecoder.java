@@ -146,9 +146,6 @@ public class GifDecoder {
      *
      * @return BufferedPixmap containing first frame, or null if none.
      */
-    public Pixmap getPixmap() {
-        return getFrame(0);
-    }
 
     /**
      * Gets the "Netscape" iteration count, if any. A count of 0 means repeat indefinitely.
