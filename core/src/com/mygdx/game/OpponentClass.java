@@ -27,6 +27,16 @@ public class OpponentClass extends Sprite {
     private Animation<TextureRegion> special;
     private Animation<TextureRegion> Loose;
 
+    public Animation<TextureRegion> getDefend() {
+        return defend;
+    }
+
+    public void setDefend(Animation<TextureRegion> defend) {
+        this.defend = defend;
+    }
+
+    private Animation<TextureRegion> defend;
+
     public Animation<TextureRegion> getDamage() {
         return damage;
     }
@@ -48,9 +58,9 @@ public class OpponentClass extends Sprite {
 
 
 
-    public static OpponentClass setOpponent(Animation<TextureRegion> idle, Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, Animation<TextureRegion> Loose,Animation<TextureRegion> damage,int health){
+    public static OpponentClass setOpponent(Animation<TextureRegion> idle, Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, Animation<TextureRegion> Loose,Animation<TextureRegion> damage, Animation<TextureRegion> defend,int health){
         if (opponent == null)
-            opponent = new OpponentClass(idle,walk,punch,kick,dead,win,special,Loose,damage,health);
+            opponent = new OpponentClass(idle,walk,punch,kick,dead,win,special,Loose,damage,defend,health);
         return opponent;
     }
     public static OpponentClass getOpponent() {
@@ -117,7 +127,7 @@ public class OpponentClass extends Sprite {
         this.health = health;
     }
 
-    public OpponentClass(Animation<TextureRegion> idle, Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special,Animation<TextureRegion> Loose,Animation<TextureRegion> damage,int health) {
+    public OpponentClass(Animation<TextureRegion> idle, Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, Animation<TextureRegion> Loose, Animation<TextureRegion> damage, Animation<TextureRegion> defend, int health) {
 
         this.Loose = Loose;
         this.idle = idle;
@@ -129,7 +139,7 @@ public class OpponentClass extends Sprite {
         this.special = special;
         this.health = health;
         this.damage = damage;
-
+        this.defend = defend;
     }
 
 

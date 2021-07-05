@@ -34,7 +34,7 @@ public class GameClass implements Screen {
     public static final float MOVEMENT_SPEED = 4.0f;
     GameState gameState = GameState.PLAYING;
 
-    public enum State {Idle,Walking, Kicking, Punching, Special, Dead, Loose, Damage, Win}
+    public enum State {Idle,Walking, Kicking, Punching, Special, Dead, Loose, Damage, Win, Defend}
 
     State player_CurrentState;
     State opponent_CurrentState;
@@ -63,6 +63,7 @@ public class GameClass implements Screen {
     private TextButton kickButton;
     private TextButton punchButton;
     private TextButton specialButton;
+    private TextButton defendButton;
 
     Image menuBackground;
     Image winOnePlayer;
@@ -92,6 +93,7 @@ public class GameClass implements Screen {
 
     private Stage pauseMenuStage;
     static long roundTim;
+    static long opponentMovesTime;
     static Timer timer;
 
     int playerWinCount=0;
@@ -101,17 +103,22 @@ public class GameClass implements Screen {
 
     HealthBar playerHealthBar;
     HealthBar opponentHealthBar;
-    int hits;
-    int check=0;
-    int thedamage=0;
+    int opponentHits;
+    int playerHits;
+
+    int checkplayer =0;
+    int thedamagePlayer =0;
+    int checkopponent=0;
+    int thedamageOpponent=0;
     int Rounds =0;
 
     Texture winRadioBtn;
     Texture looseRadioBtn;
 
     Skin skin;
-
     double opponentHealth;
+    double playerHealth;
+
     public GameClass(MyGdxGame game) {
         this.game = game;
     }
@@ -128,9 +135,11 @@ public class GameClass implements Screen {
         btnRestartGame = new TextButton("Restart", skin, "default");
         btnHowToPlay = new TextButton("HowToPlay", skin,"default");
         btnUnpause = new TextButton("Unpause", skin, "default");
-        kickButton = new TextButton("K", skin, "default");
-        punchButton = new TextButton("P", skin, "default");
+        kickButton = new TextButton("KK", skin, "default");
+        punchButton = new TextButton("PU", skin, "default");
         specialButton = new TextButton("SP", skin, "default");
+        defendButton = new TextButton("DEF", skin, "default");
+
         psmMenuButton = new TextButton("Select Player", skin, "default");
         mainMenuButton = new TextButton("Main Menu", skin, "default");
         btnSound = Gdx.audio.newSound(Gdx.files.internal("Starting Assets/assets/buttonsound.wav"));
@@ -214,6 +223,13 @@ public class GameClass implements Screen {
         kickButton.setColor(Color.BLACK);
         kickButton.setPosition(200, 300);
         kickButton.setVisible(false);
+
+        defendButton.setWidth(80f);
+        defendButton.setHeight(80f);
+        defendButton.getLabel().setFontScale(3);
+        defendButton.setColor(Color.BLACK);
+        defendButton.setPosition(350, 300);
+        defendButton.setVisible(false);
 
         specialButton.setWidth(80f);
         specialButton.setHeight(80f);
@@ -333,7 +349,9 @@ public class GameClass implements Screen {
         opponentHealthBar.setHeightOuter(50);
 
         opponentHealth =700;
-        hits =0;
+        playerHealth = 700;
+        opponentHits =0;
+        playerHits = 0;
         batch = new SpriteBatch();                // #12
         playerDelta = new Vector2();
         opponentDelta = new Vector2();
@@ -342,8 +360,6 @@ public class GameClass implements Screen {
         playerSprite.setX((Gdx.graphics.getWidth()/2.0f)-500);
         opponentSprite.setX((Gdx.graphics.getWidth()/2.0f)+500);
         stateTime = 0.00f;
-
-
 
 
         stage.addActor(playerHealthBar);
@@ -356,6 +372,7 @@ public class GameClass implements Screen {
         stage.addActor(specialButton);
         stage.addActor(punchButton);
         stage.addActor(kickButton);
+        stage.addActor(defendButton);
         stage.addActor(roundLabel);
         stage.addActor(winOnePlayer);
         stage.addActor(winTwoPlayer);
@@ -419,18 +436,19 @@ public class GameClass implements Screen {
                     {
                         kickButton.setVisible(false);
                         player_CurrentState = State.Kicking;
-                        hits++;
-                        if(opponentSprite.getX() - playerSprite.getX() <= 600) {
+                        if(opponentSprite.getX() - playerSprite.getX() <= 600 && opponent_CurrentState != State.Defend )
+                        {
                             opponent_CurrentState = State.Damage;
 
-                        Timer.schedule(new Timer.Task() { @Override public void run() {
-                            player_CurrentState = State.Idle;
-                            opponent_CurrentState = State.Idle;
-                            kickButton.setVisible(true);
-                            check=1;
-                            hits++;
-                            thedamage = 10;
-                        } },0.20f);}
+                            Timer.schedule(new Timer.Task() { @Override public void run() {
+                                player_CurrentState = State.Idle;
+                                opponent_CurrentState = State.Idle;
+                                kickButton.setVisible(true);
+                                checkplayer =1;
+                                playerHits++;
+                                thedamagePlayer = 10;
+                            } },0.20f);
+                        }
                         else {
                             Timer.schedule(new Timer.Task() {
                                 @Override
@@ -449,14 +467,14 @@ public class GameClass implements Screen {
                     {
                         specialButton.setVisible(false);
                         player_CurrentState = State.Special;
-                        if(opponentSprite.getX() - playerSprite.getX() <= 600) {
+                        if(opponentSprite.getX() - playerSprite.getX() <= 600 && opponent_CurrentState != State.Defend) {
                             opponent_CurrentState = State.Damage;
                             Timer.schedule(new Timer.Task() { @Override public void run() {
                                 player_CurrentState = State.Idle;
                                 opponent_CurrentState = State.Idle;
                                 specialButton.setVisible(true);
-                                check=1;
-                                thedamage = 40;
+                                checkplayer =1;
+                                thedamagePlayer = 40;
                         } },0.20f);}
                         else {
                             Timer.schedule(new Timer.Task() {
@@ -477,15 +495,15 @@ public class GameClass implements Screen {
                         punchButton.setVisible(false);
                         player_CurrentState = State.Punching;
 
-                        if(opponentSprite.getX() - playerSprite.getX() <= 600) {
+                        if(opponentSprite.getX() - playerSprite.getX() <= 600  && opponent_CurrentState != State.Defend) {
                             opponent_CurrentState = State.Damage;
                             Timer.schedule(new Timer.Task() { @Override public void run() {
                                 opponent_CurrentState = State.Idle;
                                 player_CurrentState = State.Idle;
                                 punchButton.setVisible(true);
-                                check=1;
-                                hits++;
-                                thedamage = 8;
+                                checkplayer =1;
+                                playerHits++;
+                                thedamagePlayer = 8;
                             } },0.20f);
                         }
                         else {
@@ -497,6 +515,23 @@ public class GameClass implements Screen {
                                 }
                             }, 0.20f);
                         }
+                    }});
+                defendButton.addListener(new ClickListener()
+                {
+                    @Override
+                    public void clicked (InputEvent event, float x, float y)
+                    {
+                        defendButton.setVisible(false);
+
+                        player_CurrentState = State.Defend;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                defendButton.setVisible(true);
+                                player_CurrentState = State.Idle;
+                            }
+                        }, 0.5f);
+
                     }});
                if (Gdx.input.isKeyPressed(Input.Keys.UP) || moveLeftButton.isDown ) {
 
@@ -513,8 +548,8 @@ public class GameClass implements Screen {
                     playerSprite.translateX(playerDelta.x);
 
                 }
-                if(check==1){
-                    opponentHealthBar.setWidthInner((int) health(thedamage));
+                if(checkplayer ==1){
+                    opponentHealthBar.setWidthInner((int) decreaseOpponenthealth(thedamagePlayer));
                     }
                 if(playerWinCount==1){
                     winOnePlayergrey.setVisible(false);
@@ -601,25 +636,108 @@ public class GameClass implements Screen {
 
         switch (gameState) {
             case PLAYING:
+
+                if(opponentSprite.getX() - playerSprite.getX() <= 650){
+
+                    if((TimeUtils.timeSinceMillis(roundTim)/1000)%3 == 0 && TimeUtils.timeSinceMillis(opponentMovesTime)/1000 >= 2 ){
+                        System.out.println(TimeUtils.timeSinceMillis(opponentMovesTime)/1000);
+
+                        opponent_CurrentState = State.Punching;
+
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                player_CurrentState = State.Idle;
+                                opponent_CurrentState = State.Idle;
+
+                                if (opponentSprite.getX() - playerSprite.getX() <= 600) {
+                                    player_CurrentState = State.Damage;
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            player_CurrentState = State.Idle;
+                                        }
+                                    }, 0.25f);
+                                    checkopponent = 1;
+                                    thedamageOpponent = 8;
+                                    opponentHits++;
+                                }
+                            }
+                        }, 0.25f);
+                        opponentMovesTime = opponentMovesTime+1000;
+
+                    }
+                    if((TimeUtils.timeSinceMillis(roundTim)/1000)%11 == 0 && TimeUtils.timeSinceMillis(opponentMovesTime)/1000 >= 2 ){
+                        opponent_CurrentState = State.Special;
+                        player_CurrentState = State.Damage;
+
+                        Timer.schedule(new Timer.Task() { @Override public void run() {
+                            player_CurrentState = State.Idle;
+                            Timer.schedule(new Timer.Task() { @Override public void run() { player_CurrentState = State.Idle;}},0.25f);
+
+                            checkopponent =1;
+                            thedamageOpponent = 140;
+                        } },0.20f);
+                        opponentMovesTime = opponentMovesTime+1000;
+                    }
+                    else if((TimeUtils.timeSinceMillis(roundTim)/1000)%5 == 0 && TimeUtils.timeSinceMillis(opponentMovesTime)/1000 >= 2 ){
+
+                        opponent_CurrentState = State.Kicking;
+
+                        Timer.schedule(new Timer.Task() { @Override public void run() {
+                            player_CurrentState = State.Idle;
+                            opponent_CurrentState = State.Idle;
+
+                            if(opponentSprite.getX() - playerSprite.getX() <= 600){
+                                player_CurrentState = State.Damage;
+                                Timer.schedule(new Timer.Task() { @Override public void run() { player_CurrentState = State.Idle;}},0.25f);
+                                checkopponent =1;
+                                thedamageOpponent = 10;
+                                opponentHits++;
+                            }
+                        } },0.25f);
+                        opponentMovesTime = opponentMovesTime+1000;
+
+                    }
+                    else if ((TimeUtils.timeSinceMillis(roundTim)/1000)/7 == 0 && TimeUtils.timeSinceMillis(opponentMovesTime)/1000 >= 3) {
+                        opponent_CurrentState = State.Defend;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                opponent_CurrentState = State.Idle;
+                            }
+                        }, 0.5f);
+                    }
+                }
                 if(playerSprite.getX()+700 <  opponentSprite.getX()){
                     opponent_CurrentState = State.Walking;
                     opponentSprite.translateX(-opponentDelta.x);
 
                 }
-                else if(opponentSprite.getX()- playerSprite.getX() <= 300 && !player_CurrentState.equals(State.Kicking) &&!player_CurrentState.equals(State.Punching) && !player_CurrentState.equals(State.Special)){
+                else if(opponentSprite.getX()- playerSprite.getX() <= 300 ){
                     opponent_CurrentState = State.Idle;
-              }
+                }
+                if(checkopponent ==1){
+                    playerHealthBar.setWidthInner((int) decreasePlayerhealth(thedamageOpponent));
+                }
             case PAUSE:
                 break;
         }
     }
 
-    private double health(int damage){
+    private double decreaseOpponenthealth(int damage){
         opponentHealth = opponentHealth-(0.7*damage);
-        check=0;
+        checkplayer =0;
         return opponentHealth;
 
     }
+    private double decreasePlayerhealth(int damage){
+        playerHealth = playerHealth-(0.7*damage);
+        checkopponent =0;
+        return playerHealth;
+
+    }
+
         @Override
     public void render(float delta) {
 
@@ -635,10 +753,10 @@ public class GameClass implements Screen {
 
                 //Round Timer
                 if(gameState != GameState.PAUSE){
-                    if(TimeUtils.timeSinceMillis(roundTim)/1000 < 11 && TimeUtils.timeSinceMillis(roundTim)/1000 >= 0 ){
+                    if(TimeUtils.timeSinceMillis(roundTim)/1000 < 91 && TimeUtils.timeSinceMillis(roundTim)/1000 >= 0 ){
                         roundTime.setText(String.valueOf(TimeUtils.timeSinceMillis(roundTim)/1000));
                     }
-                    else if(TimeUtils.timeSinceMillis(roundTim)/1000 > 11) {
+                    else if(TimeUtils.timeSinceMillis(roundTim)/1000 > 91) {
 
                         //roundTim = TimeUtils.millis();
                         gameState = GameState.ROUND_FINISHED;
@@ -771,11 +889,14 @@ public class GameClass implements Screen {
             public void run() {
                 fightlabel.setVisible(false);
                 roundTim = TimeUtils.millis();
+                opponentMovesTime = TimeUtils.millis();
                 roundTime.setVisible(true);
                 gameState = GameState.PLAYING;
                 kickButton.setVisible(true);
                 punchButton.setVisible(true);
                 specialButton.setVisible(true);
+                defendButton.setVisible(true);
+
             }
         },6);
 
@@ -814,6 +935,9 @@ public class GameClass implements Screen {
         if(player_CurrentState == State.Damage){
             Player_Frame = PlayerClass.getPlayers().getDamage().getKeyFrame(stateTime, false);
         }
+        if(player_CurrentState == State.Defend){
+            Player_Frame = PlayerClass.getPlayers().getDefend().getKeyFrame(stateTime, false);
+        }
 
         return Player_Frame;
     }
@@ -827,7 +951,7 @@ public class GameClass implements Screen {
            Opponent_Frame = OpponentClass.getOpponent().getWalk().getKeyFrame(stateTime, true);
         }
         if(opponent_CurrentState == State.Punching){
-            Opponent_Frame =  OpponentClass.getOpponent().getPunch().getKeyFrame(stateTime, false);
+            Opponent_Frame =  OpponentClass.getOpponent().getPunch().getKeyFrame(0.33f, false);
         }
         if(opponent_CurrentState == State.Kicking){
             Opponent_Frame = OpponentClass.getOpponent().getKick().getKeyFrame(stateTime, false);
@@ -846,6 +970,9 @@ public class GameClass implements Screen {
         }
         if(opponent_CurrentState == State.Damage){
             Opponent_Frame = OpponentClass.getOpponent().getDamage().getKeyFrame(stateTime, false);
+        }
+        if(opponent_CurrentState == State.Defend){
+            Opponent_Frame = OpponentClass.getOpponent().getDefend().getKeyFrame(stateTime, false);
         }
         return Opponent_Frame;
 

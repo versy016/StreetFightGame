@@ -52,8 +52,8 @@ public class PlayerSelectMenu implements Screen {
 
     boolean playerselected = false;
 
-    PlayerClass thePlayer =  PlayerClass.setPlayers(null,null,null,null,null,null,null,null,null,100);
-    OpponentClass theOpponent = OpponentClass.setOpponent(null,null,null,null,null,null,null,null,null,100);;
+    PlayerClass thePlayer =  PlayerClass.setPlayers(null,null,null,null,null,null,null,null,null,null,100);
+    OpponentClass theOpponent = OpponentClass.setOpponent(null,null,null,null,null,null,null,null,null,null,100);;
 
     public PlayerSelectMenu(MyGdxGame game)
     {
@@ -295,6 +295,8 @@ public class PlayerSelectMenu implements Screen {
                 thePlayer.setWin(createanimation(new Texture(Gdx.files.internal("King/kingWin.png")),3,1, 0.33f));
                 thePlayer.setLoose(createanimation(new Texture(Gdx.files.internal("King/kingLoose.png")),3,1, 0.33f));
                 thePlayer.setDamage(createanimation(new Texture(Gdx.files.internal("King/kingDamage.png")),3,1, 0.33f));
+                thePlayer.setDefend(createanimation(new Texture(Gdx.files.internal("King/kingDefend.png")),1,1, 0.33f));
+
                 break;
 
             case "robert":
@@ -336,6 +338,7 @@ public class PlayerSelectMenu implements Screen {
                 kenLooseFrames[1] = new TextureRegion(walkSheet,40,1,40,88);
                 kenLooseFrames[2] = new TextureRegion(looseSheet,2,1,40,88);
                 thePlayer.setLoose(new Animation<TextureRegion>(0.33f, kenLooseFrames));
+                thePlayer.setDefend(createanimation(new Texture(Gdx.files.internal("Ken/kenDefend.jpg")),1,1, 0.33f));
 
                 break;
 
@@ -356,6 +359,7 @@ public class PlayerSelectMenu implements Screen {
                 ryuLooseFrames[0] = new TextureRegion(ryuwalkSheet,1,1,45,88);
                 ryuLooseFrames[1] = new TextureRegion(ryulooseSheet,70,1,50,88);
                 thePlayer.setLoose(new Animation<TextureRegion>(0.33f, ryuLooseFrames));
+                thePlayer.setDefend(createanimation(new Texture(Gdx.files.internal("Ryu/ryuDefend.png")),1,1, 0.33f));
 
                 break;
         }
@@ -369,10 +373,11 @@ public class PlayerSelectMenu implements Screen {
         switch (player_name){
 
             case "king":
-                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("King/kingIdle.png")),4,1, 0.33f )); // #9
+                theOpponent.setIdle(createanimation(new Texture(Gdx.files.internal("King/kingIdle.png")),4,1, 0.33f)); // #9
                 theOpponent.setWalk(createanimation(new Texture(Gdx.files.internal("King/kingWalk.png")),4,1, 0.33f)); // #9
-                theOpponent.setKick(createanimation(new Texture(Gdx.files.internal("King/kingKick.png")),3,1, 0.025f));
-                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("King/kingPunch.png")),3,1, 0.025f));
+                theOpponent.setSpecial(createanimation(new Texture(Gdx.files.internal("King/kingKick.png")),3,1, 0.33f));
+                theOpponent.setPunch(createanimation(new Texture(Gdx.files.internal("King/kingPunch.png")),3,1, 0.33f));
+
                 TextureRegion[] specialFrames = new TextureRegion[6];
                 Texture specialSheet = new Texture("King/kingSpecial.png");
                 specialFrames[0] = new TextureRegion(specialSheet,1,1,58,100);
@@ -381,11 +386,14 @@ public class PlayerSelectMenu implements Screen {
                 specialFrames[3] = new TextureRegion(specialSheet,175,1,58,100);
                 specialFrames[4] = new TextureRegion(specialSheet,231,1,114,100);
                 specialFrames[5] = new TextureRegion(specialSheet,342,1,58,100);
-                theOpponent.setSpecial(new Animation<TextureRegion>(0.25f, specialFrames));
+
+                theOpponent.setKick(new Animation<TextureRegion>(0.25f, specialFrames));
                 theOpponent.setDead(createanimation(new Texture(Gdx.files.internal("King/kingDead.png")),3,1, 0.33f));
                 theOpponent.setWin(createanimation(new Texture(Gdx.files.internal("King/kingWin.png")),3,1, 0.33f));
                 theOpponent.setLoose(createanimation(new Texture(Gdx.files.internal("King/kingLoose.png")),3,1, 0.33f));
                 theOpponent.setDamage(createanimation(new Texture(Gdx.files.internal("King/kingDamage.png")),3,1, 0.33f));
+                theOpponent.setDefend(createanimation(new Texture(Gdx.files.internal("King/kingDefend.png")),1,1, 0.33f));
+
                 break;
 
             case "robert":
@@ -426,6 +434,7 @@ public class PlayerSelectMenu implements Screen {
                 kenLooseFrames[1] = new TextureRegion(walkSheet,40,1,40,88);
                 kenLooseFrames[2] = new TextureRegion(looseSheet,2,1,40,88);
                 theOpponent.setLoose(new Animation<TextureRegion>(0.33f, kenLooseFrames));
+                theOpponent.setDefend(createanimation(new Texture(Gdx.files.internal("Ken/kenDefend.jpg")),1,1, 0.33f));
 
                 break;
 
@@ -446,6 +455,8 @@ public class PlayerSelectMenu implements Screen {
                 ryuLooseFrames[0] = new TextureRegion(ryuwalkSheet,1,1,45,88);
                 ryuLooseFrames[1] = new TextureRegion(ryulooseSheet,70,1,50,88);
                 theOpponent.setLoose(new Animation<TextureRegion>(0.33f, ryuLooseFrames));
+                theOpponent.setDefend(createanimation(new Texture(Gdx.files.internal("Ryu/ryuDefend.png")),1,1, 0.33f));
+
                 break;
         }
 

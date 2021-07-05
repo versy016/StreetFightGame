@@ -26,6 +26,16 @@ class PlayerClass extends Sprite {
     private Animation<TextureRegion> special;
     private Animation<TextureRegion> damage;
 
+    public Animation<TextureRegion> getDefend() {
+        return defend;
+    }
+
+    public void setDefend(Animation<TextureRegion> defend) {
+        this.defend = defend;
+    }
+
+    private Animation<TextureRegion> defend;
+
     public Animation<TextureRegion> getDamage() {
         return damage;
     }
@@ -46,7 +56,7 @@ class PlayerClass extends Sprite {
 
     private int health;
 
-    public PlayerClass(Animation<TextureRegion> idle,Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special,Animation<TextureRegion> Loose,Animation<TextureRegion> Damage, int health) {
+    public PlayerClass(Animation<TextureRegion> idle,Animation<TextureRegion> Walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special,Animation<TextureRegion> Loose,Animation<TextureRegion> Damage, Animation<TextureRegion> defend, int health) {
         this.Walk = Walk;
         this.idle =idle;
         this.punch = punch;
@@ -57,11 +67,13 @@ class PlayerClass extends Sprite {
         this.health = health;
         this.Loose = Loose;
         this.damage = Damage;
+        this.damage = defend;
+
     }
 
-    public static PlayerClass setPlayers(Animation<TextureRegion> idle,Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, Animation<TextureRegion> Loose,Animation<TextureRegion> Damage, int health) {
+    public static PlayerClass setPlayers(Animation<TextureRegion> idle,Animation<TextureRegion> walk, Animation<TextureRegion> punch, Animation<TextureRegion> kick, Animation<TextureRegion> dead, Animation<TextureRegion> win, Animation<TextureRegion> special, Animation<TextureRegion> Loose,Animation<TextureRegion> Damage, Animation<TextureRegion> defend, int health) {
         if (playerSingleObject == null)
-            playerSingleObject = new PlayerClass(idle,walk, punch, kick, dead, win, special,Loose,Damage,health);
+            playerSingleObject = new PlayerClass(idle,walk, punch, kick, dead, win, special,Loose,Damage,defend,health);
         return playerSingleObject;
     }
 
