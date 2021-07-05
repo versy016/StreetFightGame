@@ -20,7 +20,6 @@ public class MyGdxGame extends Game implements ApplicationListener {
 		gclass = new GameClass(this);
 		mclass = new Menu(this);
 		psmclass = new PlayerSelectMenu(this);
-
 		setScreen(mclass);
 	}
 
@@ -33,5 +32,8 @@ public class MyGdxGame extends Game implements ApplicationListener {
 
 	@Override
 	public void dispose () {
+		gclass.dispose();
+		mclass.dispose();
+		psmclass.dispose();
 	}
 }

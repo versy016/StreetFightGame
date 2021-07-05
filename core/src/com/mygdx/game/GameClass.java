@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -143,7 +144,7 @@ public class GameClass implements Screen {
         //***********************************************************************MessageBox*********************************************************************************************
         Texture menuBG = new Texture("Starting Assets/assets/finishedbg.png");
         skin = new Skin(Gdx.files.internal("Starting Assets/assets/uiskin.json"));
-        message = new Label("Touch SP :- Special Power Attack\nTouch P :- Punch\nTouch K :- Kick\nTouch --> :- Move Forward.\nTouch <-- : Move Backward." ,new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        message = new Label("Touch S :- Special Power Attack\nTouch P :- Punch\nTouch K :- Kick\nTouch D :- Defence\nTouch --> :- Move Forward.\nTouch <-- : Move Backward." ,new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         btnMessageBox = new TextButton("OK", skin, "default");
         messageBoxBackGround = new Image(menuBG);
         messageBoxBackGround.setSize(1200,600);
@@ -151,7 +152,23 @@ public class GameClass implements Screen {
         messageBoxBackGround.setY(300);
         messageBoxBackGround.setZIndex(2);
         messageBoxBackGround.setVisible(false);
+        message.setFontScale(2,2);
+        message.setPosition(875,550);
+        message.setVisible(false);
 
+        styleButton(btnMessageBox);
+        btnMessageBox.setPosition(900, 400);
+        btnMessageBox.setVisible(false);
+
+        btnMessageBox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                messageBoxBackGround.setVisible(false);
+                message.setVisible(false);
+                btnMessageBox.setVisible(false);
+            }
+        });
+        //***********************************************************************MessageBox*********************************************************************************************
         punchMusic = Gdx.audio.newMusic(Gdx.files.internal("punch.wav"));
         deadMusic = Gdx.audio.newMusic(Gdx.files.internal("death.wav"));
         damageMusic = Gdx.audio.newMusic(Gdx.files.internal("Damage.wav"));
@@ -172,26 +189,6 @@ public class GameClass implements Screen {
 
         specialMusic.setVolume(1.0f);
         specialMusic.setLooping(false);
-
-
-        message.setFontScale(2,2);
-        message.setPosition(875,550);
-        message.setVisible(false);
-
-        styleButton(btnMessageBox);
-        btnMessageBox.setPosition(900, 400);
-        btnMessageBox.setVisible(false);
-
-        btnMessageBox.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                messageBoxBackGround.setVisible(false);
-                message.setVisible(false);
-                btnMessageBox.setVisible(false);
-            }
-        });
-        //***********************************************************************MessageBox*********************************************************************************************
-
 
         //***********************************************************************CompleteMenuStage**************************************************************************************
         Texture comMenuBG = new Texture("Starting Assets/assets/finishedbg.png");
@@ -304,6 +301,48 @@ public class GameClass implements Screen {
         specialButton.setColor(Color.BLACK);
         specialButton.setPosition(100, 400);
         specialButton.setVisible(false);
+
+        psmMenuButton.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked (InputEvent event, float x, float y)
+            {
+                mainMenuButton.setVisible(false);
+                psmMenuButton.setVisible(false);
+                menuBackground.setVisible(false);
+                btnRestartGame.setVisible(false);
+                gameState = GameState.PLAYING;
+                Rounds = 0;
+                opponentWinCount = 0;
+                playerWinCount = 0;
+                opponentRoundWins.setText("Wins "+opponentWinCount);
+                playerRoundWins.setText("Wins "+playerWinCount);
+
+                MyGdxGame.psmclass.dispose();
+                game.setScreen(MyGdxGame.psmclass);
+            }
+        });
+
+        mainMenuButton.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked (InputEvent event, float x, float y)
+            {
+                mainMenuButton.setVisible(false);
+                psmMenuButton.setVisible(false);
+                menuBackground.setVisible(false);
+                btnRestartGame.setVisible(false);
+                gameState = GameState.PLAYING;
+                Rounds = 0;
+                opponentWinCount = 0;
+                playerWinCount = 0;
+                opponentRoundWins.setText("Wins "+opponentWinCount);
+                playerRoundWins.setText("Wins "+playerWinCount);
+
+                MyGdxGame.psmclass.dispose();
+                game.setScreen(MyGdxGame.mclass);
+            }
+        });
 
         btnPause.addListener(new ClickListener()
         {
@@ -1209,11 +1248,11 @@ public class GameClass implements Screen {
 
     @Override
     public void dispose() {
+        this.game.dispose();
         skin.dispose();
         stage.dispose();
         pauseMenuStage.dispose();
         batch.dispose();
-        game.dispose();
     }
     public void styleButton(TextButton btn){
         btn.setWidth(300f);
