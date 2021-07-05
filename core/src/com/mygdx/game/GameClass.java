@@ -30,31 +30,49 @@ import com.badlogic.gdx.utils.Timer;
 
 public class GameClass implements Screen {
 
+    //MyGdxGame instance
     MyGdxGame game;
+    //Enum for GameState
     public enum GameState { PLAYING, ROUND_FINISHED,COMPLETE ,PAUSE}
+    //Initial Player Movement Speed
     public static final float MOVEMENT_SPEED = 4.0f;
+    //Set Initial GameState as Playing
     GameState gameState = GameState.PLAYING;
-
+    //Enum for Fighter State
     public enum State {Idle,Walking, Kicking, Punching, Special, Dead, Loose, Damage, Win, Defend}
 
+    //Current State of the Player
     State player_CurrentState;
+    //Current State of the opponent
     State opponent_CurrentState;
 
+    //Image for MessageBoxBackGround
     Image messageBoxBackGround;
 
+    //State Time
     private float stateTime;
+
+    //Player Sprite
     private Sprite playerSprite;
+    //Opponent Sprite
     private Sprite opponentSprite;
 
-    float dt;               //game delata time variable
-    private SpriteBatch batch;                   // Spritebatch for rendering
+    //Game delta time variable
+    float dt;
+    //Spritebatch for rendering
+    private SpriteBatch batch;
 
+    //TextureRegion for Player
     TextureRegion Player_Frame;
+    //TextureRegion for Opponent
     TextureRegion Opponent_Frame;
 
-    TiledMap tiledMap;                  //tiled map
+    //Tiled map
+    TiledMap tiledMap;
+    //Game Camera
     OrthographicCamera camera;
-    OrthogonalTiledMapRenderer tiledMapRenderer; //tiled map renderer
+    //Tiled map renderer
+    OrthogonalTiledMapRenderer tiledMapRenderer;
 
     Vector2 playerDelta;
     Vector2 opponentDelta;
@@ -67,6 +85,7 @@ public class GameClass implements Screen {
     private TextButton specialButton;
     private TextButton defendButton;
 
+    //Images
     Image menuBackground;
     Image winOnePlayer;
     Image winTwoPlayer;
